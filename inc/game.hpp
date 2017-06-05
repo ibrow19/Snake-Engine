@@ -13,6 +13,12 @@ public:
     /// Runs the game until it is finsished
     void run();
 
+    // Options configuration.
+
+    /// Set whether vsync is used (used by default).
+    /// \param val whether vsync should be used.
+    void setVSync(bool active);
+
 private:
 
     /// Initialises SDL subsystems necessary for the game.

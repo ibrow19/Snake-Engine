@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cstdio>
 #include <SDL2/SDL_image.h>
 #include "exception.hpp"
@@ -8,8 +9,8 @@ Game::Game()
 : //mTitle(nullptr) 
   mWidth(1240),
   mHeight(720),
-  mWinFlags(0),
-  mRenFlags(0),
+  mWinFlags(SDL_WINDOW_SHOWN),  // Default window options.
+  mRenFlags(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),  // Default renderer options.
   mWin(nullptr),
   mRen(nullptr),
   running(false) {
@@ -147,5 +148,22 @@ void Game::update() {
 void Game::render() {
 
     // TODO: implement.
+
+}
+
+
+void Game::setVSync(bool active) {
+
+    if (active) {
+
+        mRenFlags |= SDL_RENDERER_PRESENTVSYNC;
+        assert(mRenFlags & SDL_RENDERER_PRESENTVSYNC);
+
+    } else {
+
+        mRenFlags &= ~SDL_RENDERER_PRESENTVSYNC;
+        assert(!(mRenFlags & SDL_RENDERER_PRESENTVSYNC));
+
+    }
 
 }
