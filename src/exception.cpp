@@ -2,4 +2,4 @@
 
 
 SDLException::SDLException() 
-: std::runtime_error("SDL error: " + std::string(SDL_GetError())) {}
+: std::runtime_error(std::string("SDL error: ") + SDL_GetError()) {}
