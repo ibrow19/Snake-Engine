@@ -1,50 +1,63 @@
 #include <cstdio>
-#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "exception.hpp"
 #include "game.hpp"
 
 
-Game::Game() {
+Game::Game() 
+: //mTitle(nullptr) 
+  mWidth(1240),
+  mHeight(720),
+  mWinFlags(0),
+  mRenFlags(0),
+  mWin(nullptr),
+  mRen(nullptr) {
 
-    init();
+    initSDL();
 
 }
 
 
 Game::~Game() {
 
-    exit();
+    SDL_DestroyRenderer(mRen);
+    SDL_DestroyWindow(mWin);
+    exitSDL();
 
 }
 
 
 void Game::run() {
 
+    // Create window and render.
+    createWin();
+    createRen();
+
     // TODO: implement.
     printf("running...\n");
+
+    // Destroy window and renderer.
+    SDL_DestroyRenderer(mRen);
+    SDL_DestroyWindow(mWin);
 
 }
 
 
-
-void Game::init() {
+void Game::initSDL() {
 
     printf("initialising...\n");
 
     if ((SDL_Init(SDL_INIT_VIDEO) < 0) ||
         (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))) {
 
-        throw SDLInitException();
+        throw SDLException();
 
     }
 
 }
 
 
-
-/// Closes SDL subsystems used by the game.
-void Game::exit() {
+void Game::exitSDL() {
 
     printf("exiting...\n");
 
@@ -52,4 +65,71 @@ void Game::exit() {
     SDL_Quit();
 
     printf("finished\n");
+
+}
+
+
+// TODO: add window settings customisation.
+void Game::createWin() {
+
+    if (mWin != nullptr) {
+
+        SDL_DestroyWindow(mWin);
+
+    }
+
+    // TODO: add title customisation.
+    mWin = SDL_CreateWindow("Game",
+                            SDL_WINDOWPOS_UNDEFINED,
+                            SDL_WINDOWPOS_UNDEFINED,
+                            mWidth,
+                            mHeight,
+                            mWinFlags);
+
+    if (mWin == nullptr) {
+
+        throw SDLException();
+
+    }
+
+}
+
+
+// TODO: add renderer settings customisation.
+void Game::createRen() {
+
+    if (mRen != nullptr) {
+
+        SDL_DestroyRenderer(mRen);
+
+    }
+
+    mRen = SDL_CreateRenderer(mWin, -1, mRenFlags);
+
+    if (mRen == nullptr) {
+
+        throw SDLException();
+
+    }
+}
+
+
+void Game::handleEvents() {
+
+    // TODO: implement.
+
+}
+
+
+void Game::update() {
+
+    // TODO: implement.
+
+}
+
+
+void Game::render() {
+
+    // TODO: implement.
+
 }

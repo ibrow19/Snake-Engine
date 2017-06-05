@@ -1,3 +1,6 @@
+#include <SDL2/SDL.h>
+
+
 class Game {
 public:
 
@@ -13,9 +16,29 @@ public:
 private:
 
     /// Initialises SDL subsystems necessary for the game.
-    void init();
+    void initSDL();
 
     /// Closes SDL subsystems used by the game.
-    void exit();
+    void exitSDL();
+
+    void createWin();
+    void createRen();
+
+    void handleEvents();
+    void update();
+    void render();
+
+private:
+
+    //char* mTitle;
+
+    int mWidth;
+    int mHeight;
+
+    Uint32 mWinFlags;
+    Uint32 mRenFlags;
+
+    SDL_Window* mWin;
+    SDL_Renderer* mRen; 
 
 };
