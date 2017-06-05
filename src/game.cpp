@@ -11,7 +11,8 @@ Game::Game()
   mWinFlags(0),
   mRenFlags(0),
   mWin(nullptr),
-  mRen(nullptr) {
+  mRen(nullptr),
+  running(false) {
 
     initSDL();
 
@@ -35,6 +36,15 @@ void Game::run() {
 
     // TODO: implement.
     printf("running...\n");
+
+    running = true;
+    while (running) {
+
+        handleEvents();
+        update();
+        render();
+
+    }
 
     // Destroy window and renderer.
     SDL_DestroyRenderer(mRen);
@@ -116,7 +126,13 @@ void Game::createRen() {
 
 void Game::handleEvents() {
 
-    // TODO: implement.
+    SDL_Event event;
+
+    while (running && SDL_PollEvent(&event)) {
+
+        running = event.type != SDL_QUIT;
+
+    }
 
 }
 

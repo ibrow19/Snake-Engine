@@ -41,4 +41,7 @@ private:
     SDL_Window* mWin;
     SDL_Renderer* mRen; 
 
+    // Whether the game is currently running.
+    bool running;
+
 };
