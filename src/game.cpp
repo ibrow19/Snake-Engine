@@ -162,6 +162,38 @@ void Game::render() {
 }
 
 
+void Game::setTitle(const std::string& title) {
+
+    mTitle = title;
+
+}
+
+
+void Game::setWinSize(int x, int y) {
+
+    mWidth = x;
+    mHeight = y;
+
+}
+
+
+void Game::setFullScreen(bool full) {
+
+    if (full) {
+
+        mWinFlags |= SDL_WINDOW_FULLSCREEN;
+        assert(mWinFlags & SDL_WINDOW_FULLSCREEN);
+
+    } else {
+
+        mWinFlags &= ~SDL_WINDOW_FULLSCREEN;
+        assert(!(mWinFlags & SDL_WINDOW_FULLSCREEN));
+
+    }
+
+}
+
+
 void Game::setVSync(bool vsync) {
 
     if (vsync) {
@@ -175,12 +207,5 @@ void Game::setVSync(bool vsync) {
         assert(!(mRenFlags & SDL_RENDERER_PRESENTVSYNC));
 
     }
-
-}
-
-
-void Game::setTitle(const std::string& title) {
-
-    mTitle = title;
 
 }

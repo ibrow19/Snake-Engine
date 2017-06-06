@@ -15,11 +15,20 @@ public:
     // Options configuration.
 
     /// Set the title used by the game window.
-    /// \param title the new title to use.
+    /// \param title The new title to use.
     void setTitle(const std::string& title);
 
+    /// Set the game window size.
+    /// \param x Height of the window in pixels.
+    /// \param y Width of the window in pixels.
+    void setWinSize(int x, int y);
+
+    /// Set whether the window is in full screen mode.
+    /// \param full Whether the window should be full screen.
+    void setFullScreen(bool full);
+
     /// Set whether vsync is used (Renderer uses vsync by default).
-    /// \param vsync whether vsync should be used.
+    /// \param vsync Whether vsync should be used.
     void setVSync(bool vsync);
 
 private:
@@ -40,7 +49,7 @@ private:
     void handleEvents();
 
     /// Update the game world based on how much time has passed.
-    /// \patam deltaTime the time to update the game world with.
+    /// \patam deltaTime The time to update the game world with.
     void update(float deltaTime);
 
     /// Draw the current state of the game world.
