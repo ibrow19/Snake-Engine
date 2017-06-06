@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <SDL2/SDL_image.h>
 #include "exception.hpp"
+#include "timer.hpp"
 #include "game.hpp"
 
 
@@ -34,15 +35,25 @@ void Game::run() {
     // Create window and render.
     createWin();
     createRen();
+    Timer timer;
+    timer.start();
 
-    // TODO: implement.
     printf("running...\n");
 
     mRunning = true;
     while (mRunning) {
 
+        // Handle queued events.
         handleEvents();
-        update();
+
+        // Get time past since last update and restart timer.
+        float deltaTime = timer.getTime();
+        timer.start();
+
+        // Update game world with time passed since last update.
+        update(deltaTime);
+
+        // Draw the game world.
         render();
 
     }
@@ -128,7 +139,6 @@ void Game::createRen() {
 void Game::handleEvents() {
 
     SDL_Event event;
-
     while (mRunning && SDL_PollEvent(&event)) {
 
         mRunning = event.type != SDL_QUIT;
@@ -138,7 +148,7 @@ void Game::handleEvents() {
 }
 
 
-void Game::update() {
+void Game::update(float /*deltaTime*/) {
 
     // TODO: implement.
 

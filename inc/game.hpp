@@ -35,7 +35,7 @@ private:
     void createRen();
 
     void handleEvents();
-    void update();
+    void update(float deltaTime);
     void render();
 
 private:
