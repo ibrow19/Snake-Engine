@@ -22,12 +22,12 @@ public:
     void unpause();
 
     /// Get the current time recorded by the timer.
-    /// \return the time currently recorded by the timer.
-    Uint32 getTime() const;
+    /// \return the time currently recorded by the timer in seconds.
+    float getTime() const;
 
 private:
 
-    /// The time that the timer was started (measured from when the SDL was initialised).
+    /// The time in milliseconds since the timer was started (measured from when the SDL was initialised).
     Uint32 mStartTime;
 
     /// The time at which the timer was paused.

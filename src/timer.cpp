@@ -56,21 +56,21 @@ void Timer::unpause() {
 }
 
 
-Uint32 Timer::getTime() const {
+float Timer::getTime() const {
 
-    if (!mStarted) {
+    Uint32 result = 0;
+    if (mPaused) {
 
-        return 0;
+        result = mPauseTime - mStartTime;
 
-    } else if (mPaused) {
-
-        return mPauseTime - mStartTime;
-
-    } else {
+    } else if (mStarted) {
 
         Uint32 currentTime = SDL_GetTicks();
-        return currentTime - mStartTime;
+        result = currentTime - mStartTime;
 
     }
+
+    // return result in seconds.
+    return result / 1000.f;
 
 }
