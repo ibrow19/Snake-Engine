@@ -7,6 +7,7 @@ int main() {
     try {
 
         Game game;
+        game.setTitle("Game");
         game.run();
 
     } catch (std::exception& e) {

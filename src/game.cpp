@@ -7,7 +7,7 @@
 
 
 Game::Game() 
-: //mTitle(nullptr) 
+: mTitle(""),
   mWidth(1240),
   mHeight(720),
   mWinFlags(SDL_WINDOW_SHOWN),  // Default window options.
@@ -101,7 +101,7 @@ void Game::createWin() {
     }
 
     // TODO: add title customisation.
-    mWin = SDL_CreateWindow("Game",
+    mWin = SDL_CreateWindow(mTitle.c_str(),
                             SDL_WINDOWPOS_UNDEFINED,
                             SDL_WINDOWPOS_UNDEFINED,
                             mWidth,
@@ -162,9 +162,9 @@ void Game::render() {
 }
 
 
-void Game::setVSync(bool active) {
+void Game::setVSync(bool vsync) {
 
-    if (active) {
+    if (vsync) {
 
         mRenFlags |= SDL_RENDERER_PRESENTVSYNC;
         assert(mRenFlags & SDL_RENDERER_PRESENTVSYNC);
@@ -175,5 +175,12 @@ void Game::setVSync(bool active) {
         assert(!(mRenFlags & SDL_RENDERER_PRESENTVSYNC));
 
     }
+
+}
+
+
+void Game::setTitle(const std::string& title) {
+
+    mTitle = title;
 
 }
