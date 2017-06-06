@@ -13,7 +13,7 @@ Game::Game()
   mRenFlags(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),  // Default renderer options.
   mWin(nullptr),
   mRen(nullptr),
-  running(false) {
+  mRunning(false) {
 
     initSDL();
 
@@ -38,8 +38,8 @@ void Game::run() {
     // TODO: implement.
     printf("running...\n");
 
-    running = true;
-    while (running) {
+    mRunning = true;
+    while (mRunning) {
 
         handleEvents();
         update();
@@ -54,7 +54,7 @@ void Game::run() {
 }
 
 
-void Game::initSDL() {
+void Game::initSDL() const {
 
     printf("initialising...\n");
 
@@ -68,7 +68,7 @@ void Game::initSDL() {
 }
 
 
-void Game::exitSDL() {
+void Game::exitSDL() const {
 
     printf("exiting...\n");
 
@@ -129,9 +129,9 @@ void Game::handleEvents() {
 
     SDL_Event event;
 
-    while (running && SDL_PollEvent(&event)) {
+    while (mRunning && SDL_PollEvent(&event)) {
 
-        running = event.type != SDL_QUIT;
+        mRunning = event.type != SDL_QUIT;
 
     }
 

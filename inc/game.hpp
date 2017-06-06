@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 
 
+// Class to run and manage a game.
 class Game {
 public:
 
@@ -22,12 +23,15 @@ public:
 private:
 
     /// Initialises SDL subsystems necessary for the game.
-    void initSDL();
+    void initSDL() const;
 
     /// Closes SDL subsystems used by the game.
-    void exitSDL();
+    void exitSDL() const;
 
+    /// Create window with current settings.
     void createWin();
+
+    /// Create renderer for game's window using current settings.
     void createRen();
 
     void handleEvents();
@@ -48,6 +52,6 @@ private:
     SDL_Renderer* mRen; 
 
     // Whether the game is currently running.
-    bool running;
+    bool mRunning;
 
 };
