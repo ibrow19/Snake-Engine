@@ -47,11 +47,11 @@ void Game::run() {
         handleEvents();
 
         // Get time past since last update and restart timer.
-        float deltaTime = timer.getTime();
+        float delta = timer.getTime();
         timer.start();
 
         // Update game world with time passed since last update.
-        update(deltaTime);
+        update(delta);
 
         // Draw the game world.
         render();
@@ -127,12 +127,18 @@ void Game::createRen() {
     }
 
     mRen = SDL_CreateRenderer(mWin, -1, mRenFlags);
-
     if (mRen == nullptr) {
 
         throw SDLException();
 
     }
+    
+    if (SDL_SetRenderDrawColor(mRen, 0xFF, 0xFF, 0xFF, 0xFF) < 0) {
+
+        throw SDLException();
+
+    }
+
 }
 
 
@@ -148,7 +154,7 @@ void Game::handleEvents() {
 }
 
 
-void Game::update(float /*deltaTime*/) {
+void Game::update(float /*delta*/) {
 
     // TODO: implement.
 
@@ -157,7 +163,16 @@ void Game::update(float /*deltaTime*/) {
 
 void Game::render() {
 
-    // TODO: implement.
+    if (SDL_RenderClear(mRen) < 0) {
+
+        throw SDLException();
+
+    }
+
+    // Draw current scene/world state.
+
+    // Display game.
+    SDL_RenderPresent(mRen);
 
 }
 

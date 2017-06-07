@@ -49,8 +49,8 @@ private:
     void handleEvents();
 
     /// Update the game world based on how much time has passed.
-    /// \patam deltaTime The time to update the game world with.
-    void update(float deltaTime);
+    /// \param delta The time to update the game world with.
+    void update(float delta);
 
     /// Draw the current state of the game world.
     void render();
