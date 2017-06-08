@@ -1,5 +1,5 @@
 #include <stdexcept>
-#include "game.hpp"
+#include <game.hpp>
 
 
 int main() {
