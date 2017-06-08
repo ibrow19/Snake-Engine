@@ -14,7 +14,7 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 
 # Find Boost modules.
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 
 # Compiler flags.
 add_definitions(-Wall -Wextra -std=c++11)
@@ -36,27 +36,27 @@ target_link_libraries(${LIB_NAME} ${SDL2_LIBRARY}
 
 # Test executable for experimenting with engine.
 set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
-set(TEST_EXE_SOURCES ${TEST_DIR}/testmain.cpp)
+set(TEST_EXE_SOURCES ${TEST_DIR}/main.cpp)
 set(TEST_EXE_NAME "game")
 
 add_executable(${TEST_EXE_NAME} ${TEST_EXE_SOURCES})
 target_link_libraries(${TEST_EXE_NAME} ${LIB_NAME})
 
 
-# Unit tests.
+# Unit tests executables.
 enable_testing()
+add_definitions(-DBOOST_TEST_DYN_LINK) 
+add_definitions(-DBOOST_TEST_MAIN) 
 
-
-# Test files.
-#file(GLOB_RECURSE TESTS ${PROJECT_SOURCE_DIR}/test/*.cpp)
-#
-#
-#include_directories(${SDL2_INCLUDE_DIR}
-#                    ${SDL2_IMAGE_INCLUDE_DIR}
-#                    ${SDL2_TTF_INCLUDE_DIR})
-#target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARY}
-#                                         ${SDL2_IMAGE_LIBRARIES}
-#                                         ${SDL2_TTF_LIBRARIES})
-               
-# Install target
-#install(TARGETS ${EXECUTABLE_NAME} DESTINATION ${CMAKE_BINARY_DIR})
+file(GLOB_RECURSE TEST_SOURCES RELATIVE ${TEST_DIR} ${TEST_DIR}/*test*.cpp)
+foreach(TEST_SOURCE_FILE ${TEST_SOURCES})
+    # Remove .cpp from executable name.
+    string(REPLACE ".cpp" "" TEST_STEM ${TEST_SOURCE_FILE})
+    string(REPLACE "/" "" TEST_NAME ${TEST_STEM})
+    add_executable(${TEST_NAME} ${TEST_DIR}/${TEST_SOURCE_FILE})
+    target_link_libraries(${TEST_NAME} ${LIB_NAME}
+                                       ${Boost_FILESYSTEM_LIBRARY}
+                                       ${Boost_SYSTEM_LIBRARY}
+                                       ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+    add_test(${TEST_NAME} ${TEST_NAME})
+endforeach(TEST_SOURCE_FILE ${TEST_SOURCES})
