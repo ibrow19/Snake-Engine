@@ -1,3 +1,7 @@
+#ifndef TIMER_HEADER
+#define TIMER_HEADER
+
+
 #include <SDL2/SDL.h>
 
 
@@ -40,3 +44,6 @@ private:
     bool mPaused;
     
 };
+
+
+#endif

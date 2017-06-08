@@ -1,3 +1,7 @@
+#ifndef GAME_HEADER
+#define GAME_HEADER
+
+
 #include <string>
 #include <SDL2/SDL.h>
 
@@ -82,3 +86,6 @@ private:
     bool mRunning;
 
 };
+
+
+#endif
