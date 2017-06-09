@@ -38,7 +38,8 @@ public:
 private:
 
     /// Initialises SDL subsystems necessary for the game.
-    void initSDL() const;
+    /// \return Whether initialisation was sucessful.
+    bool initSDL() const;
 
     /// Closes SDL subsystems used by the game.
     void exitSDL() const;

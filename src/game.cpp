@@ -16,7 +16,12 @@ Game::Game()
   mRen(nullptr),
   mRunning(false) {
 
-    initSDL();
+    if (!initSDL()) {
+
+        exitSDL();
+        throw SDLException();
+
+    }
 
 }
 
@@ -65,16 +70,11 @@ void Game::run() {
 }
 
 
-void Game::initSDL() const {
+bool Game::initSDL() const {
 
     printf("initialising...\n");
-
-    if ((SDL_Init(SDL_INIT_VIDEO) < 0) ||
-        (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))) {
-
-        throw SDLException();
-
-    }
+    return (SDL_Init(SDL_INIT_VIDEO) == 0) &&
+           (IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG);
 
 }
 
@@ -100,7 +100,6 @@ void Game::createWin() {
 
     }
 
-    // TODO: add title customisation.
     mWin = SDL_CreateWindow(mTitle.c_str(),
                             SDL_WINDOWPOS_UNDEFINED,
                             SDL_WINDOWPOS_UNDEFINED,
