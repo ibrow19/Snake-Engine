@@ -52,7 +52,7 @@ file(GLOB_RECURSE TEST_SOURCES RELATIVE ${TEST_DIR} ${TEST_DIR}/*test*.cpp)
 foreach(TEST_SOURCE_FILE ${TEST_SOURCES})
     # Remove .cpp from executable name.
     string(REPLACE ".cpp" "" TEST_STEM ${TEST_SOURCE_FILE})
-    string(REPLACE "/" "" TEST_NAME ${TEST_STEM})
+    string(REPLACE "/" "_" TEST_NAME ${TEST_STEM})
     add_executable(${TEST_NAME} ${TEST_DIR}/${TEST_SOURCE_FILE})
     target_link_libraries(${TEST_NAME} ${LIB_NAME}
                                        ${Boost_FILESYSTEM_LIBRARY}

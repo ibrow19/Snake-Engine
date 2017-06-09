@@ -49,22 +49,16 @@ template<typename T>
 Vector2d<T> operator/(const Vector2d<T>& lhs, T rhs);
 
 template<typename T>
-Vector2d<T>& operator+=(const Vector2d<T>& lhs, const Vector2d<T>& rhs);
+Vector2d<T>& operator+=(Vector2d<T>& lhs, const Vector2d<T>& rhs);
 
 template<typename T>
-Vector2d<T>& operator-=(const Vector2d<T>& lhs, const Vector2d<T>& rhs);
+Vector2d<T>& operator-=(Vector2d<T>& lhs, const Vector2d<T>& rhs);
 
 template<typename T>
-Vector2d<T>& operator*=(const Vector2d<T>& lhs, const Vector2d<T>& rhs);
+Vector2d<T>& operator*=(Vector2d<T>& lhs, T rhs);
 
 template<typename T>
-Vector2d<T>& operator/=(const Vector2d<T>& lhs, const Vector2d<T>& rhs);
-
-template<typename T>
-Vector2d<T>& operator*=(const Vector2d<T>& lhs, T rhs);
-
-template<typename T>
-Vector2d<T>& operator/=(const Vector2d<T>& lhs, T rhs);
+Vector2d<T>& operator/=(Vector2d<T>& lhs, T rhs);
 
 template<typename T>
 bool operator==(const Vector2d<T>& lhs, const Vector2d<T>& rhs);
