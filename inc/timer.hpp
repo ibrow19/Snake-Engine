@@ -1,9 +1,9 @@
-#ifndef TIMER_HEADER
-#define TIMER_HEADER
-
+#ifndef SNAKE_TIMER_HEADER
+#define SNAKE_TIMER_HEADER
 
 #include <SDL2/SDL.h>
 
+namespace snk {
 
 // Timer to record time passed using SDL.
 class Timer {
@@ -45,5 +45,6 @@ private:
     
 };
 
+} // namespace snk
 
 #endif

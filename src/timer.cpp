@@ -1,5 +1,6 @@
 #include "timer.hpp"
 
+namespace snk {
 
 Timer::Timer()
 : mStartTime(0),
@@ -74,3 +75,5 @@ float Timer::getTime() const {
     return result / 1000.f;
 
 }
+
+} // namespace snk

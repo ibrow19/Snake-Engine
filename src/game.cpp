@@ -5,6 +5,7 @@
 #include "timer.hpp"
 #include "game.hpp"
 
+namespace snk {
 
 Game::Game() 
 : mTitle(""),
@@ -223,3 +224,5 @@ void Game::setVSync(bool vsync) {
     }
 
 }
+
+} // namespace snk

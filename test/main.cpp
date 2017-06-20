@@ -6,7 +6,7 @@ int main() {
 
     try {
 
-        Game game;
+        snk::Game game;
         game.setTitle("Game");
         game.run();
 

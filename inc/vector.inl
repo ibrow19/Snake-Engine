@@ -1,20 +1,17 @@
-#include <cmath>
-
-
 template<typename T>
-Vector2d<T>::Vector2d()
+Vector2<T>::Vector2()
 : x(T(0)),
   y(T(0)) {}
 
 
 template<typename T>
-Vector2d<T>::Vector2d(T x, T y)
+Vector2<T>::Vector2(T x, T y)
 : x(x),
   y(y) {}
 
 
 template<typename T>
-T dot(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
+T dot(const Vector2<T>& lhs, const Vector2<T>& rhs) {
 
     return (lhs.x * rhs.x + lhs.y * rhs.y);
 
@@ -22,7 +19,7 @@ T dot(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
 
 
 template<typename T>
-T magnitude(const Vector2d<T>& v) {
+T magnitude(const Vector2<T>& v) {
 
     return sqrt(pow(v.x, 2) + pow(v.y, 2));
 
@@ -30,55 +27,55 @@ T magnitude(const Vector2d<T>& v) {
 
 
 template<typename T>
-Vector2d<T> operator-(const Vector2d<T>& rhs) {
+Vector2<T> operator-(const Vector2<T>& rhs) {
 
-    return Vector2d<T>(-rhs.x, -rhs.y);
-
-}
-
-
-template<typename T>
-Vector2d<T> operator+(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
-
-    return Vector2d<T>(lhs.x + rhs.x, lhs.y + rhs.y);
+    return Vector2<T>(-rhs.x, -rhs.y);
 
 }
 
 
 template<typename T>
-Vector2d<T> operator-(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
+Vector2<T> operator+(const Vector2<T>& lhs, const Vector2<T>& rhs) {
 
-    return Vector2d<T>(lhs.x - rhs.x, lhs.y - rhs.y);
-
-}
-
-
-template<typename T>
-Vector2d<T> operator*(const Vector2d<T>& lhs, T rhs) {
-
-    return Vector2d<T>(lhs.x * rhs, lhs.y * rhs);
+    return Vector2<T>(lhs.x + rhs.x, lhs.y + rhs.y);
 
 }
 
 
 template<typename T>
-Vector2d<T> operator*(T lhs, const Vector2d<T>& rhs) {
+Vector2<T> operator-(const Vector2<T>& lhs, const Vector2<T>& rhs) {
 
-    return Vector2d<T>(rhs.x * lhs, rhs.y * lhs);
-
-}
-
-
-template<typename T>
-Vector2d<T> operator/(const Vector2d<T>& lhs, T rhs) {
-
-    return Vector2d<T>(lhs.x / rhs, lhs.y / rhs);
+    return Vector2<T>(lhs.x - rhs.x, lhs.y - rhs.y);
 
 }
 
 
 template<typename T>
-Vector2d<T>& operator+=(Vector2d<T>& lhs, const Vector2d<T>& rhs) {
+Vector2<T> operator*(const Vector2<T>& lhs, T rhs) {
+
+    return Vector2<T>(lhs.x * rhs, lhs.y * rhs);
+
+}
+
+
+template<typename T>
+Vector2<T> operator*(T lhs, const Vector2<T>& rhs) {
+
+    return Vector2<T>(rhs.x * lhs, rhs.y * lhs);
+
+}
+
+
+template<typename T>
+Vector2<T> operator/(const Vector2<T>& lhs, T rhs) {
+
+    return Vector2<T>(lhs.x / rhs, lhs.y / rhs);
+
+}
+
+
+template<typename T>
+Vector2<T>& operator+=(Vector2<T>& lhs, const Vector2<T>& rhs) {
 
     lhs.x += rhs.x;
     lhs.y += rhs.y;
@@ -88,7 +85,7 @@ Vector2d<T>& operator+=(Vector2d<T>& lhs, const Vector2d<T>& rhs) {
 
 
 template<typename T>
-Vector2d<T>& operator-=(Vector2d<T>& lhs, const Vector2d<T>& rhs) {
+Vector2<T>& operator-=(Vector2<T>& lhs, const Vector2<T>& rhs) {
 
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
@@ -98,7 +95,7 @@ Vector2d<T>& operator-=(Vector2d<T>& lhs, const Vector2d<T>& rhs) {
 
 
 template<typename T>
-Vector2d<T>& operator*=(Vector2d<T>& lhs, T rhs) {
+Vector2<T>& operator*=(Vector2<T>& lhs, T rhs) {
 
     lhs.x *= rhs;
     lhs.y *= rhs;
@@ -108,7 +105,7 @@ Vector2d<T>& operator*=(Vector2d<T>& lhs, T rhs) {
 
 
 template<typename T>
-Vector2d<T>& operator/=(Vector2d<T>& lhs, T rhs) {
+Vector2<T>& operator/=(Vector2<T>& lhs, T rhs) {
 
     lhs.x /= rhs;
     lhs.y /= rhs;
@@ -118,7 +115,7 @@ Vector2d<T>& operator/=(Vector2d<T>& lhs, T rhs) {
 
 
 template<typename T>
-bool operator==(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
+bool operator==(const Vector2<T>& lhs, const Vector2<T>& rhs) {
 
     return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 
@@ -126,7 +123,7 @@ bool operator==(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
 
 
 template<typename T>
-bool operator!=(const Vector2d<T>& lhs, const Vector2d<T>& rhs) {
+bool operator!=(const Vector2<T>& lhs, const Vector2<T>& rhs) {
 
     return !(lhs == rhs);
 

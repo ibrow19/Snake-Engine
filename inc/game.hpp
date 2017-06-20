@@ -1,10 +1,10 @@
-#ifndef GAME_HEADER
-#define GAME_HEADER
+#ifndef SNAKE_GAME_HEADER
+#define SNAKE_GAME_HEADER
 
+namespace snk {
 
 #include <string>
 #include <SDL2/SDL.h>
-
 
 // Class to run and manage a game.
 class Game {
@@ -88,5 +88,6 @@ private:
 
 };
 
+} // namespace snk
 
 #endif

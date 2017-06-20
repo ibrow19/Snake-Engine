@@ -1,10 +1,10 @@
-#ifndef EXCEPTION_HEADER
-#define EXCEPTION_HEADER
-
+#ifndef SNAKE_EXCEPTION_HEADER
+#define SNAKE_EXCEPTION_HEADER
 
 #include <stdexcept>
 #include <SDL2/SDL.h>
 
+namespace snk {
 
 class SDLException : public std::runtime_error {
 public:
@@ -13,5 +13,6 @@ public:
 
 };
 
+} // namespace snk
 
 #endif

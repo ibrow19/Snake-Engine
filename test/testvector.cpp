@@ -12,11 +12,11 @@ struct Vectors {
       v4(1000, 5092),
       v5(-19, -93) {}
 
-    Vector2di v1;
-    Vector2di v2;
-    Vector2di v3;
-    Vector2di v4;
-    Vector2di v5;
+    snk::Vector2i v1;
+    snk::Vector2i v2;
+    snk::Vector2i v3;
+    snk::Vector2i v4;
+    snk::Vector2i v5;
 
 };
 
@@ -27,8 +27,8 @@ BOOST_FIXTURE_TEST_SUITE(VectorTests, Vectors)
 // - tests.
 BOOST_AUTO_TEST_CASE(unaryMinus1) {
 
-    Vector2di expected(8, -2);
-    Vector2di negated3(-v3);
+    snk::Vector2i expected(8, -2);
+    snk::Vector2i negated3(-v3);
     
     BOOST_CHECK_EQUAL(expected.x, negated3.x);
     BOOST_CHECK_EQUAL(expected.y, negated3.y);
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(unaryMinus1) {
 
 BOOST_AUTO_TEST_CASE(unaryMinus2) {
 
-    Vector2di negated1(-v1);
+    snk::Vector2i negated1(-v1);
 
     BOOST_CHECK_EQUAL(v1.x, negated1.x);
     BOOST_CHECK_EQUAL(v1.y, negated1.y);
@@ -49,8 +49,8 @@ BOOST_AUTO_TEST_CASE(unaryMinus2) {
 // + tests.
 BOOST_AUTO_TEST_CASE(binaryAdd1) {
 
-    Vector2di expected(-7, 3);
-    Vector2di added(v2 + v3);
+    snk::Vector2i expected(-7, 3);
+    snk::Vector2i added(v2 + v3);
     
     BOOST_CHECK_EQUAL(expected.x, added.x);
     BOOST_CHECK_EQUAL(expected.y, added.y);
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(binaryAdd1) {
 
 BOOST_AUTO_TEST_CASE(binaryAdd2) {
 
-    Vector2di expected(981, 4999);
-    Vector2di added(v4 + v5);
+    snk::Vector2i expected(981, 4999);
+    snk::Vector2i added(v4 + v5);
     
     BOOST_CHECK_EQUAL(expected.x, added.x);
     BOOST_CHECK_EQUAL(expected.y, added.y);
@@ -69,8 +69,8 @@ BOOST_AUTO_TEST_CASE(binaryAdd2) {
 
 BOOST_AUTO_TEST_CASE(binaryAdd3) {
 
-    Vector2di expected(0, 0);
-    Vector2di added(v1 + v1);
+    snk::Vector2i expected(0, 0);
+    snk::Vector2i added(v1 + v1);
     
     BOOST_CHECK_EQUAL(expected.x, added.x);
     BOOST_CHECK_EQUAL(expected.y, added.y);
@@ -80,8 +80,8 @@ BOOST_AUTO_TEST_CASE(binaryAdd3) {
 // - tests.
 BOOST_AUTO_TEST_CASE(binarySubtract1) {
 
-    Vector2di expected(-9, 1);
-    Vector2di subtracted(v3 - v2);
+    snk::Vector2i expected(-9, 1);
+    snk::Vector2i subtracted(v3 - v2);
     
     BOOST_CHECK_EQUAL(expected.x, subtracted.x);
     BOOST_CHECK_EQUAL(expected.y, subtracted.y);
@@ -90,8 +90,8 @@ BOOST_AUTO_TEST_CASE(binarySubtract1) {
 
 BOOST_AUTO_TEST_CASE(binarySubtract2) {
 
-    Vector2di expected(0, 0);
-    Vector2di subtracted(v4 - v4);
+    snk::Vector2i expected(0, 0);
+    snk::Vector2i subtracted(v4 - v4);
     
     BOOST_CHECK_EQUAL(expected.x, subtracted.x);
     BOOST_CHECK_EQUAL(expected.y, subtracted.y);
@@ -100,8 +100,8 @@ BOOST_AUTO_TEST_CASE(binarySubtract2) {
 
 BOOST_AUTO_TEST_CASE(binarySubtract3) {
 
-    Vector2di expected(-19, -93);
-    Vector2di subtracted(v5 - v1);
+    snk::Vector2i expected(-19, -93);
+    snk::Vector2i subtracted(v5 - v1);
     
     BOOST_CHECK_EQUAL(expected.x, subtracted.x);
     BOOST_CHECK_EQUAL(expected.y, subtracted.y);
@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE(binarySubtract3) {
 // * tests.
 BOOST_AUTO_TEST_CASE(binaryMultiply1) {
 
-    Vector2di expected(-48, 12);
+    snk::Vector2i expected(-48, 12);
     int multiplier = 6;
-    Vector2di multipliedr(v3 * multiplier);
-    Vector2di multipliedl(multiplier * v3);
+    snk::Vector2i multipliedr(v3 * multiplier);
+    snk::Vector2i multipliedl(multiplier * v3);
     
     BOOST_CHECK_EQUAL(expected.x, multipliedr.x);
     BOOST_CHECK_EQUAL(expected.y, multipliedr.y);
@@ -125,10 +125,10 @@ BOOST_AUTO_TEST_CASE(binaryMultiply1) {
 
 BOOST_AUTO_TEST_CASE(binaryMultiply2) {
 
-    Vector2di expected(3000, 15276);
+    snk::Vector2i expected(3000, 15276);
     int multiplier = 3;
-    Vector2di multipliedr(v4 * multiplier);
-    Vector2di multipliedl(multiplier * v4);
+    snk::Vector2i multipliedr(v4 * multiplier);
+    snk::Vector2i multipliedl(multiplier * v4);
     
     BOOST_CHECK_EQUAL(expected.x, multipliedr.x);
     BOOST_CHECK_EQUAL(expected.y, multipliedr.y);
@@ -139,10 +139,10 @@ BOOST_AUTO_TEST_CASE(binaryMultiply2) {
 
 BOOST_AUTO_TEST_CASE(binaryMultiply3) {
 
-    Vector2di expected(0, 0);
+    snk::Vector2i expected(0, 0);
     int multiplier = 0;
-    Vector2di multipliedr(v5 * multiplier);
-    Vector2di multipliedl(multiplier * v5);
+    snk::Vector2i multipliedr(v5 * multiplier);
+    snk::Vector2i multipliedl(multiplier * v5);
     
     BOOST_CHECK_EQUAL(expected.x, multipliedr.x);
     BOOST_CHECK_EQUAL(expected.y, multipliedr.y);
@@ -154,8 +154,8 @@ BOOST_AUTO_TEST_CASE(binaryMultiply3) {
 // / tests.
 BOOST_AUTO_TEST_CASE(binaryDivide1) {
 
-    Vector2di expected(-4, 1);
-    Vector2di divided(v3 / 2);
+    snk::Vector2i expected(-4, 1);
+    snk::Vector2i divided(v3 / 2);
     
     BOOST_CHECK_EQUAL(expected.x, divided.x);
     BOOST_CHECK_EQUAL(expected.y, divided.y);
@@ -164,8 +164,8 @@ BOOST_AUTO_TEST_CASE(binaryDivide1) {
 
 BOOST_AUTO_TEST_CASE(binaryDivide2) {
 
-    Vector2di expected(125, 636);
-    Vector2di divided(v4 / 8);
+    snk::Vector2i expected(125, 636);
+    snk::Vector2i divided(v4 / 8);
     
     BOOST_CHECK_EQUAL(expected.x, divided.x);
     BOOST_CHECK_EQUAL(expected.y, divided.y);
@@ -174,8 +174,8 @@ BOOST_AUTO_TEST_CASE(binaryDivide2) {
 
 BOOST_AUTO_TEST_CASE(binaryDivide3) {
 
-    Vector2di expected(-19, -93);
-    Vector2di divided(v5 / 1);
+    snk::Vector2i expected(-19, -93);
+    snk::Vector2i divided(v5 / 1);
     
     BOOST_CHECK_EQUAL(expected.x, divided.x);
     BOOST_CHECK_EQUAL(expected.y, divided.y);
@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE(binaryDivide3) {
 // += tests.
 BOOST_AUTO_TEST_CASE(compoundAdd1) {
 
-    Vector2di expected(1001, 5093);
+    snk::Vector2i expected(1001, 5093);
     v2 += v4;
     
     BOOST_CHECK_EQUAL(expected.x, v2.x);
@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE(compoundAdd1) {
 
 BOOST_AUTO_TEST_CASE(compoundAdd2) {
 
-    Vector2di expected(2, 2);
+    snk::Vector2i expected(2, 2);
     v2 += v2;
     
     BOOST_CHECK_EQUAL(expected.x, v2.x);
@@ -206,7 +206,7 @@ BOOST_AUTO_TEST_CASE(compoundAdd2) {
 
 BOOST_AUTO_TEST_CASE(compoundAdd3) {
 
-    Vector2di expected(0, 0);
+    snk::Vector2i expected(0, 0);
     v1 += v1;
     
     BOOST_CHECK_EQUAL(expected.x, v1.x);
@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE(compoundAdd3) {
 // -= tests.
 BOOST_AUTO_TEST_CASE(compoundSubtract1) {
 
-    Vector2di expected(1008, 5090);
+    snk::Vector2i expected(1008, 5090);
     v4 -= v3;
     
     BOOST_CHECK_EQUAL(expected.x, v4.x);
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE(compoundSubtract1) {
 
 BOOST_AUTO_TEST_CASE(compoundSubtract2) {
 
-    Vector2di expected(0, 0);
+    snk::Vector2i expected(0, 0);
     v5 -= v5;
     
     BOOST_CHECK_EQUAL(expected.x, v5.x);
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE(compoundSubtract2) {
 
 BOOST_AUTO_TEST_CASE(compoundSubtract3) {
 
-    Vector2di expected(0, 0);
+    snk::Vector2i expected(0, 0);
     v1 -= v1;
     
     BOOST_CHECK_EQUAL(expected.x, v1.x);
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE(compoundSubtract3) {
 // *= tests.
 BOOST_AUTO_TEST_CASE(compoundMultiply1) {
 
-    Vector2di expected(-24, 6);
+    snk::Vector2i expected(-24, 6);
     v3 *= 3;
     
     BOOST_CHECK_EQUAL(expected.x, v3.x);
@@ -258,7 +258,7 @@ BOOST_AUTO_TEST_CASE(compoundMultiply1) {
 
 BOOST_AUTO_TEST_CASE(compoundMultiply2) {
 
-    Vector2di expected(10000, 50920);
+    snk::Vector2i expected(10000, 50920);
     v4 *= 10;
     
     BOOST_CHECK_EQUAL(expected.x, v4.x);
@@ -268,7 +268,7 @@ BOOST_AUTO_TEST_CASE(compoundMultiply2) {
 
 BOOST_AUTO_TEST_CASE(compoundMultiply3) {
 
-    Vector2di expected(0, 0);
+    snk::Vector2i expected(0, 0);
     v1 *= 982347;
     
     BOOST_CHECK_EQUAL(expected.x, v1.x);
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(compoundMultiply3) {
 // /= tests.
 BOOST_AUTO_TEST_CASE(compoundDivide1) {
 
-    Vector2di expected(-4, 1);
+    snk::Vector2i expected(-4, 1);
     v3 /= 2;
     
     BOOST_CHECK_EQUAL(expected.x, v3.x);
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE(compoundDivide1) {
 
 BOOST_AUTO_TEST_CASE(compoundDivide2) {
 
-    Vector2di expected(125, 636);
+    snk::Vector2i expected(125, 636);
     v4 /= 8;
     
     BOOST_CHECK_EQUAL(expected.x, v4.x);
@@ -299,7 +299,7 @@ BOOST_AUTO_TEST_CASE(compoundDivide2) {
 
 BOOST_AUTO_TEST_CASE(compoundDivide3) {
 
-    Vector2di expected(-19, -93);
+    snk::Vector2i expected(-19, -93);
     v5 /= 1;
     
     BOOST_CHECK_EQUAL(expected.x, v5.x);
@@ -319,7 +319,7 @@ BOOST_AUTO_TEST_CASE(equal1) {
 
 BOOST_AUTO_TEST_CASE(equal2) {
 
-    Vector2di v(-19, -93);
+    snk::Vector2i v(-19, -93);
 
     BOOST_CHECK(v5 == v);
 
