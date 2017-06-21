@@ -7,8 +7,10 @@ project(${PROJECT_NAME} C CXX)
 # Cmake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+# Find OpenGL modules.
+find_package(OpenGL REQUIRED)
+
 # Find SDL modules.
-find_package(OpenGL)
 find_package(SDL2 REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
