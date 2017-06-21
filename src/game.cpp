@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstdio>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_opengl.h>
 #include "exception.hpp"
 #include "timer.hpp"
 #include "game.hpp"
@@ -11,26 +12,19 @@ Game::Game()
 : mTitle(""),
   mWidth(1240),
   mHeight(720),
-  mWinFlags(SDL_WINDOW_SHOWN),  // Default window options.
-  mRenFlags(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),  // Default renderer options.
+  mWinFlags(SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN),  // Default window options.
   mWin(nullptr),
-  mRen(nullptr),
-  mRunning(false) {
+  mRunning(false),
+  mVsync(true) {
 
-    if (!initSDL()) {
-
-        exitSDL();
-        throw SDLException();
-
-    }
+    initSDL();
 
 }
 
 
 Game::~Game() {
 
-    SDL_DestroyRenderer(mRen);
-    SDL_DestroyWindow(mWin);
+    destroyWin();
     exitSDL();
 
 }
@@ -38,9 +32,8 @@ Game::~Game() {
 
 void Game::run() {
 
-    // Create window and render.
+    // Create window.
     createWin();
-    createRen();
     Timer timer;
     timer.start();
 
@@ -64,18 +57,40 @@ void Game::run() {
 
     }
 
-    // Destroy window and renderer.
-    SDL_DestroyRenderer(mRen);
-    SDL_DestroyWindow(mWin);
+    // Destroy window.
+    destroyWin();
 
 }
 
 
-bool Game::initSDL() const {
+void Game::initSDL() const {
 
-    printf("initialising...\n");
-    return (SDL_Init(SDL_INIT_VIDEO) == 0) &&
-           (IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG);
+    printf("initialising SDL...\n");
+
+    bool success = true;
+
+    // Initialise subsystems.
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+
+        success = false;     
+
+    } else {
+
+        // Set OpenGl version as 3.1 core.
+        // TODO: possibly typedef version numbers somewhere.
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+    }
+
+    // Upon failure destroy potentially half initialised subsystems.
+    if (!success) {
+
+        exitSDL();
+        throw SDLException();
+
+    }
 
 }
 
@@ -84,7 +99,6 @@ void Game::exitSDL() const {
 
     printf("exiting...\n");
 
-    IMG_Quit();
     SDL_Quit();
 
     printf("finished\n");
@@ -92,12 +106,13 @@ void Game::exitSDL() const {
 }
 
 
-// TODO: add window settings customisation.
 void Game::createWin() {
+
+    bool success = true;
 
     if (mWin != nullptr) {
 
-        SDL_DestroyWindow(mWin);
+        destroyWin();
 
     }
 
@@ -110,34 +125,44 @@ void Game::createWin() {
 
     if (mWin == nullptr) {
 
+        success = false;
+
+    } else {
+
+        mContext = SDL_GL_CreateContext(mWin);
+        if (mContext == nullptr) {
+
+            success = false;
+            
+        } else if (mVsync &&
+                   SDL_GL_SetSwapInterval(1) != 0) {
+
+            success = false;
+
+        }
+
+    }
+
+    // Upon failure throw exception.
+    if (!success) {
+
+        destroyWin();
         throw SDLException();
+
+    // Upon success initialise the window clear color.
+    } else {
+
+        glClearColor(1.f, 1.f, 1.f, 1.f);
 
     }
 
 }
 
 
-// TODO: add renderer settings customisation.
-void Game::createRen() {
+void Game::destroyWin() {
 
-    if (mRen != nullptr) {
-
-        SDL_DestroyRenderer(mRen);
-
-    }
-
-    mRen = SDL_CreateRenderer(mWin, -1, mRenFlags);
-    if (mRen == nullptr) {
-
-        throw SDLException();
-
-    }
-    
-    if (SDL_SetRenderDrawColor(mRen, 0xFF, 0xFF, 0xFF, 0xFF) < 0) {
-
-        throw SDLException();
-
-    }
+    SDL_GL_DeleteContext(mContext);
+    SDL_DestroyWindow(mWin);
 
 }
 
@@ -163,16 +188,10 @@ void Game::update(float /*delta*/) {
 
 void Game::render() {
 
-    if (SDL_RenderClear(mRen) < 0) {
+    glClear(GL_COLOR_BUFFER_BIT);
 
-        throw SDLException();
 
-    }
-
-    // Draw current scene/world state.
-
-    // Display game.
-    SDL_RenderPresent(mRen);
+    SDL_GL_SwapWindow(mWin);
 
 }
 
@@ -211,17 +230,7 @@ void Game::setFullScreen(bool full) {
 
 void Game::setVSync(bool vsync) {
 
-    if (vsync) {
-
-        mRenFlags |= SDL_RENDERER_PRESENTVSYNC;
-        assert(mRenFlags & SDL_RENDERER_PRESENTVSYNC);
-
-    } else {
-
-        mRenFlags &= ~SDL_RENDERER_PRESENTVSYNC;
-        assert(!(mRenFlags & SDL_RENDERER_PRESENTVSYNC));
-
-    }
+    mVsync = vsync;
 
 }
 

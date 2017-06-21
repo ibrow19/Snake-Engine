@@ -38,17 +38,16 @@ public:
 private:
 
     /// Initialises SDL subsystems necessary for the game.
-    /// \return Whether initialisation was sucessful.
-    bool initSDL() const;
+    void initSDL() const;
 
     /// Closes SDL subsystems used by the game.
     void exitSDL() const;
 
-    /// Create window with current settings.
+    /// Create and initialise window with current settings.
     void createWin();
 
-    /// Create renderer for game's window using current settings.
-    void createRen();
+    /// Destroy window.
+    void destroyWin();
 
     /// Handle queued window events in the game world.
     void handleEvents();
@@ -74,17 +73,17 @@ private:
     /// Flags to use for window creation.
     Uint32 mWinFlags;
 
-    /// Flags to use for renderer creation.
-    Uint32 mRenFlags;
+    /// OpenGL context.
+    SDL_GLContext mContext;
 
     /// Pointer to window displaying game.
     SDL_Window* mWin;
 
-    /// Pointer to renderer for drawing game.
-    SDL_Renderer* mRen; 
-
     /// Whether the game is currently running.
     bool mRunning;
+
+    /// Whether vsync should be used when rendering.
+    bool mVsync;
 
 };
 

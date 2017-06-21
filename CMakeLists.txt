@@ -8,6 +8,7 @@ project(${PROJECT_NAME} C CXX)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Find SDL modules.
+find_package(OpenGL)
 find_package(SDL2 REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -29,7 +30,8 @@ file(GLOB_RECURSE LIB_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 # Create library.
 set(LIB_NAME "Engine")
 add_library(${LIB_NAME} ${LIB_SOURCES})
-target_link_libraries(${LIB_NAME} ${SDL2_LIBRARY}
+target_link_libraries(${LIB_NAME} ${OPENGL_gl_LIBRARY}
+                                  ${SDL2_LIBRARY}
                                   ${SDL2_IMAGE_LIBRARIES}
                                   ${SDL2_TTF_LIBRARIES})
 
