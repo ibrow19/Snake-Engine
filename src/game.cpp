@@ -1,8 +1,9 @@
 #include <cassert>
 #include <cstdio>
+#include <iostream>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_opengl.h>
-#include "exception.hpp"
+#include "error/sdlexception.hpp"
 #include "timer.hpp"
 #include "game.hpp"
 
@@ -14,6 +15,7 @@ Game::Game()
   mHeight(720),
   mWinFlags(SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN),  // Default window options.
   mWin(nullptr),
+  mContext(nullptr),
   mRunning(false),
   mVsync(true) {
 

@@ -1,4 +1,4 @@
-#include "vector.hpp"
+#include "maths/vector.hpp"
 #include <boost/test/included/unit_test.hpp>
 
 #define BOOST_TEST_MODULE MyTest

@@ -70,7 +70,7 @@ template<typename T>
 bool operator!=(const Vector2<T>& lhs, const Vector2<T>& rhs);
 
 // Define vector operations.
-#include "vector.inl"
+#include "maths/vector.inl"
 
 // Common vector types.
 typedef Vector2<int> Vector2i;

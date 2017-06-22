@@ -1,10 +1,10 @@
 #ifndef SNAKE_GAME_HEADER
 #define SNAKE_GAME_HEADER
 
-namespace snk {
-
 #include <string>
 #include <SDL2/SDL.h>
+
+namespace snk {
 
 // Class to run and manage a game.
 class Game {
@@ -73,11 +73,11 @@ private:
     /// Flags to use for window creation.
     Uint32 mWinFlags;
 
-    /// OpenGL context.
-    SDL_GLContext mContext;
-
     /// Pointer to window displaying game.
     SDL_Window* mWin;
+
+    /// OpenGL context.
+    SDL_GLContext mContext;
 
     /// Whether the game is currently running.
     bool mRunning;

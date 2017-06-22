@@ -1,4 +1,4 @@
-#include "exception.hpp"
+#include "error/sdlexception.hpp"
 
 namespace snk {
 
