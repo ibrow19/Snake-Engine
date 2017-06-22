@@ -3,12 +3,12 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <stdexcept>
+#include "error/snkexception.hpp"
 
 namespace snk {
 
 /// Exception to report openGL errors.
-class GLException : public std::runtime_error {
+class GLException : public SnakeException {
 public:
 
     /// Initialise with OpenGL error code.

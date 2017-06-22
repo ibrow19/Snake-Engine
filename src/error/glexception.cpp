@@ -3,8 +3,8 @@
 namespace snk {
 
 GLException::GLException(GLenum error) 
-: std::runtime_error(std::string("OpenGL error: ") + 
-                     reinterpret_cast<const char*>(gluErrorString(error))) {}
+: SnakeException(std::string("OpenGL error: ") + 
+                 reinterpret_cast<const char*>(gluErrorString(error))) {}
 
 void checkGLError() {
 

@@ -4,6 +4,6 @@
 namespace snk {
 
 SDLException::SDLException() 
-: std::runtime_error(std::string("SDL error: ") + SDL_GetError()) {}
+: SnakeException(std::string("SDL error: ") + SDL_GetError()) {}
 
 } // namespace snk

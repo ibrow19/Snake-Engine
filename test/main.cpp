@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <game.hpp>
+#include <error/snkexception.hpp>
 
 
 int main() {
@@ -10,7 +11,7 @@ int main() {
         game.setTitle("Game");
         game.run();
 
-    } catch (std::exception& e) {
+    } catch (snk::SnakeException& e) {
 
         fprintf(stderr, "%s\n", e.what());
 
