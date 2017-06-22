@@ -34,7 +34,7 @@ file(GLOB_RECURSE LIB_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 set(LIB_NAME "Engine")
 add_library(${LIB_NAME} ${LIB_SOURCES})
 target_link_libraries(${LIB_NAME} ${GLEW_LIBRARIES}
-                                  ${OPENGL_gl_LIBRARY}
+                                  ${OPENGL_LIBRARIES}
                                   ${SDL2_LIBRARY}
                                   ${SDL2_IMAGE_LIBRARIES}
                                   ${SDL2_TTF_LIBRARIES})

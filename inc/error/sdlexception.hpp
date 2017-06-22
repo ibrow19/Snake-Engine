@@ -1,8 +1,7 @@
-#ifndef SNAKE_EXCEPTION_HEADER
-#define SNAKE_EXCEPTION_HEADER
+#ifndef SNAKE_SDL_EXCEPTION_HEADER
+#define SNAKE_SDL_EXCEPTION_HEADER
 
 #include <stdexcept>
-#include <SDL2/SDL.h>
 
 namespace snk {
 
