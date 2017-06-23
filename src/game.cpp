@@ -1,11 +1,15 @@
 #include <cassert>
 #include <cstdio>
 #include <iostream>
+#include "error/glewexception.hpp"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_opengl.h>
 #include "error/sdlexception.hpp"
+#include "shader.hpp"
 #include "timer.hpp"
 #include "game.hpp"
+
+#include "texture.hpp"
 
 namespace snk {
 
@@ -71,8 +75,11 @@ void Game::initSDL() const {
 
     bool success = true;
 
+    int imageFlags = IMG_INIT_JPG | IMG_INIT_PNG; 
+
     // Initialise subsystems.
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if ((SDL_Init(SDL_INIT_VIDEO) != 0) ||
+        !(IMG_Init(imageFlags) & imageFlags)) {
 
         success = false;     
 
@@ -101,6 +108,7 @@ void Game::exitSDL() const {
 
     printf("exiting...\n");
 
+    IMG_Quit();
     SDL_Quit();
 
     printf("finished\n");
@@ -108,6 +116,8 @@ void Game::exitSDL() const {
 }
 
 
+// TODO: split into smaller functions: One for window creation, one for context and gl
+// initialisation.
 void Game::createWin() {
 
     bool success = true;
@@ -140,6 +150,17 @@ void Game::createWin() {
                    SDL_GL_SetSwapInterval(1) != 0) {
 
             success = false;
+
+        } else {
+
+            glewExperimental = GL_TRUE;
+            GLenum error = glewInit();
+            if (error != GLEW_OK) {
+
+                destroyWin();
+                throw GLEWException(error);
+
+            }
 
         }
 
