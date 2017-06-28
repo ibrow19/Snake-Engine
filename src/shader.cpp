@@ -96,7 +96,7 @@ GLuint loadShader(const std::string& path, GLenum type) {
     glCompileShader(shaderID);
 
     GLint success = 0;
-    glGetProgramiv(shaderID, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
     if (success == GL_FALSE) {
 
         std::string log = getShaderLog(shaderID);
