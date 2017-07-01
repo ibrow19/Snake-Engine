@@ -1,7 +1,7 @@
+#define BOOST_TEST_MODULE vector
+
 #include "maths/vector.hpp"
 #include <boost/test/included/unit_test.hpp>
-
-#define BOOST_TEST_MODULE MyTest
 
 struct Vectors {
 
@@ -21,7 +21,6 @@ struct Vectors {
 };
 
 BOOST_FIXTURE_TEST_SUITE(VectorTests, Vectors)
-
 
 // Unary operations.
 // - tests.

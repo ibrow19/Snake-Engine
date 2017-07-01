@@ -57,9 +57,8 @@ Transform& Transform::translate(const Vector2f& v) {
 
 Transform& Transform::translate(float x, float y) {
 
-    mMatrix[3][0] += x;
-    mMatrix[3][1] += y;
-    return *this;
+    Transform translation(x, y);
+    return combine(translation);
 
 }
 
