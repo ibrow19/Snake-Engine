@@ -4,7 +4,6 @@
 
 namespace snk {
 
-/// Initialise transform with identity matrix.
 Transform::Transform() 
 : mMatrix{{1.f, 0.f, 0.f, 0.f}, 
           {0.f, 1.f, 0.f, 0.f},
@@ -65,7 +64,6 @@ Transform& Transform::translate(float x, float y) {
 }
 
 
-//// Combine transformations by multiplying them.
 Transform& Transform::combine(const Transform& t) {
 
     const float (*a)[4] = mMatrix;
@@ -83,11 +81,18 @@ Transform& Transform::combine(const Transform& t) {
 }
 
 
-/// Transform a vector using current transformation matrix.
-Vector2f Transform::transform(const Vector2f& v) const {
+Point2f Transform::transformPoint(const Point2f& p) const {
 
-    return Vector2f(v.x * mMatrix[0][0] + v.y * mMatrix[1][0] + mMatrix[3][0],
-                    v.x * mMatrix[0][1] + v.y * mMatrix[1][1] + mMatrix[3][1]);
+    return Vector2f(p.x * mMatrix[0][0] + p.y * mMatrix[1][0] + mMatrix[3][0],
+                    p.x * mMatrix[0][1] + p.y * mMatrix[1][1] + mMatrix[3][1]);
+
+}
+
+
+Vector2f Transform::transformVector(const Vector2f& v) const {
+
+    return Vector2f(v.x * mMatrix[0][0] + v.y * mMatrix[1][0],
+                    v.x * mMatrix[0][1] + v.y * mMatrix[1][1]);
 
 }
 
@@ -116,7 +121,6 @@ Transform::Transform(float u0, float u1,
           {tx,  ty,  0.f, 1.f}} {}
 
 
-/// Print 3x3 matrix.
 void Transform::printMatrix3() const {
 
     std::cout << mMatrix[0][0] << " | " << mMatrix[1][0] << " | " << mMatrix[3][0] << std::endl;
@@ -125,7 +129,7 @@ void Transform::printMatrix3() const {
 
 }
 
-/// Print 4x4 matrix.
+
 void Transform::printMatrix4() const {
 
     std::cout << mMatrix[0][0] << " | " << mMatrix[1][0] << " | " << mMatrix[2][0] << " | " << mMatrix[3][0] << std::endl;
@@ -149,11 +153,10 @@ Transform& operator*=(Transform& lhs, const Transform& rhs) {
 }
 
 
-Vector2f operator*(const Transform& lhs, const Vector2f& rhs) {
+Point2f operator*(const Transform& lhs, const Point2f& rhs) {
 
-    return lhs.transform(rhs);
+    return lhs.transformPoint(rhs);
 
 }
 
-    
 } // namespace snk

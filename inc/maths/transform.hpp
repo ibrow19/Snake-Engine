@@ -34,11 +34,14 @@ public:
     /// Translate using an offset on the x and y axis.
     Transform& translate(float x, float y);
 
-    //// Combine transformations by multiplying them.
+    /// Combine transformations by multiplying them.
     Transform& combine(const Transform& t);
 
+    /// Transform a point using current transformation matrix.
+    Point2f transformPoint(const Point2f& p) const;
+
     /// Transform a vector using current transformation matrix.
-    Vector2f transform(const Vector2f& v) const;
+    Vector2f transformVector(const Vector2f& v) const;
 
     // Matrix printing functions for debugging.
     /// Print 3x3 matrix.
@@ -66,6 +69,8 @@ private:
               float u2, float u3,
               float tx, float ty);
 
+private:
+
     /// Matrix in form usable by opengl.
     /// [column][row]
     float mMatrix[4][4];
@@ -75,7 +80,9 @@ private:
 Transform operator*(const Transform& lhs, const Transform& rhs);
 Transform& operator*=(Transform& lhs, const Transform& rhs);
 
-Vector2f operator*(const Transform& lhs, const Vector2f& rhs);
+/// Use multiplication to transform a point as 
+/// this is much more common than vector transformation.
+Point2f operator*(const Transform& lhs, const Point2f& rhs);
 
 } // namespace snk
 
