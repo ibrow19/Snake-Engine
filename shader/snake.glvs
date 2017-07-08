@@ -1,0 +1,22 @@
+// Use GLSL version for OpenGL 3.2
+#version 150
+
+// Matrices for position in scene.
+uniform mat4 uProjection;
+uniform mat4 uView;
+uniform mat4 uModel;
+
+in vec2 vertexPos;  // Two dimensional vertex position.
+in vec2 iTextureCoord;  // Texture position to be used by fragment shader.
+
+out vec2 textureCoord;
+
+void main() {
+
+    // Pass texture position on to be used by fragment shader.
+    textureCoord = iTextureCoord;
+
+    // Multiply vertex by matrices to get final position.
+    gl_Position = uProjection * uView * uModel * vec4(vertexPos.x, vertexPos.y, 0.f, 1.f);
+
+}

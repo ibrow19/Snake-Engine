@@ -11,10 +11,15 @@ class Shader {
 public:
 
     Shader(const std::string& vertexPath, const std::string& fragmentPath);
-    ~Shader();
+    virtual ~Shader();
 
-    void bind();
-    void unbind();
+protected:
+
+    void bind() const;
+    void unbind() const;
+
+    GLint getAttribute(const std::string& attribute) const;
+    GLint getUniform(const std::string& uniform) const;
 
 private:
 

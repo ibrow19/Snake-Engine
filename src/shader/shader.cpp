@@ -2,7 +2,7 @@
 #include "GL/glew.h"
 #include "error/snkexception.hpp"
 #include "error/glexception.hpp"
-#include "shader.hpp"
+#include "shader/shader.hpp"
 
 namespace snk {
 
@@ -14,7 +14,14 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 }
 
 
-void Shader::bind() {
+Shader::~Shader() {
+
+    destroyProgram();
+
+}
+
+
+void Shader::bind() const {
 
     glUseProgram(mProgramID);
     checkGLError();
@@ -22,16 +29,35 @@ void Shader::bind() {
 }
 
 
-void Shader::unbind() {
+void Shader::unbind() const {
 
     glUseProgram(0);
 
 }
 
 
-Shader::~Shader() {
+GLint Shader::getAttribute(const std::string& attribute) const {
 
-    destroyProgram();
+    GLint attributeID = glGetAttribLocation(mProgramID, attribute.c_str());
+    if (attributeID == -1) {
+
+        throw SnakeException("Could not locate shader attribure: " + attribute);
+
+    }
+    return attributeID;
+
+}
+
+
+GLint Shader::getUniform(const std::string& uniform) const {
+
+    GLint uniformID = glGetUniformLocation(mProgramID, uniform.c_str());
+    if (uniformID == -1) {
+
+        throw SnakeException("Could not locate shader uniform: " + uniform);
+
+    }
+    return uniformID;
 
 }
 
@@ -188,5 +214,6 @@ std::string getShaderLog(GLuint shaderID) {
     return logString;
 
 }
+
 
 } // namespace snk

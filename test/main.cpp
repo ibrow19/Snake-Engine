@@ -2,7 +2,6 @@
 #include <game.hpp>
 #include <error/snkexception.hpp>
 
-
 int main() {
 
     try {

@@ -5,7 +5,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_opengl.h>
 #include "error/sdlexception.hpp"
-#include "shader.hpp"
+#include "error/glexception.hpp"
+#include "shader/basic.hpp"
 #include "timer.hpp"
 #include "game.hpp"
 
@@ -43,6 +44,10 @@ void Game::run() {
     Timer timer;
     timer.start();
 
+    // Shader and texture for rendering test.
+    BasicShader s(mWidth, mHeight);
+    Texture t(s, "texture.png");
+
     printf("running...\n");
 
     mRunning = true;
@@ -59,10 +64,15 @@ void Game::run() {
         update(delta);
 
         // Draw the game world.
-        render();
+        //render();
+
+        // Test rendering.
+        glClear(GL_COLOR_BUFFER_BIT);
+        t.render();
+        SDL_GL_SwapWindow(mWin);
 
     }
-
+    
     // Destroy window.
     destroyWin();
 
@@ -85,10 +95,12 @@ void Game::initSDL() const {
 
     } else {
 
-        // Set OpenGl version as 3.1 core.
-        // TODO: possibly typedef version numbers somewhere.
+        // Set OpenGl version as 3.2 core.
+        // TODO: possibly define version numbers somewhere.
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+        // set core context.
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     }
@@ -155,6 +167,10 @@ void Game::createWin() {
 
             glewExperimental = GL_TRUE;
             GLenum error = glewInit();
+
+            // Reset gl error flag caused by some glew versions.
+            glGetError();
+
             if (error != GLEW_OK) {
 
                 destroyWin();

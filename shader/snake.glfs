@@ -1,0 +1,15 @@
+// Use GLSL version for OpenGL 3.2
+#version 150
+
+uniform sampler2D uSampler;
+
+in vec2 textureCoord;
+
+out vec4 fragColor;
+
+void main() {
+
+    // Set fragment color using texture.
+    fragColor = texture2D(uSampler, textureCoord);
+
+}
