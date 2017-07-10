@@ -6,7 +6,7 @@
 namespace snk {
 
 BasicShader::BasicShader(float width, float height)
-: Shader("shader/snake.glvs", "shader/snake.glfs"),
+: Shader("res/shader/snake.glvs", "res/shader/snake.glfs"),
   mViewID(0),
   mModelID(0),
   mVertexPosID(0),

@@ -3,7 +3,6 @@ set(PROJECT_NAME Engine)
 set(CMAKE_BUILD_TYPE Debug)
 project(${PROJECT_NAME} C CXX)
 
-
 # Cmake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -39,7 +38,6 @@ target_link_libraries(${LIB_NAME} ${GLEW_LIBRARIES}
                                   ${SDL2_IMAGE_LIBRARIES}
                                   ${SDL2_TTF_LIBRARIES})
 
-
 # Test executable for experimenting with engine.
 set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 set(TEST_EXE_SOURCES ${TEST_DIR}/main.cpp)
@@ -48,6 +46,9 @@ set(TEST_EXE_NAME "game")
 add_executable(${TEST_EXE_NAME} ${TEST_EXE_SOURCES})
 target_link_libraries(${TEST_EXE_NAME} ${LIB_NAME})
 
+# Copy resources to binary directory.
+set(RES_DIR ${PROJECT_SOURCE_DIR}/res)
+file(COPY ${RES_DIR} DESTINATION ${PROJECT_BINARY_DIR})
 
 # Unit tests executables.
 enable_testing()
