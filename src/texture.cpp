@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <GL/glew.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_opengl.h>
@@ -18,18 +16,16 @@ Texture::Texture(BasicShader& shader, const std::string& path)
   mWidth(0),
   mHeight(0) {
 
-    // TODO: can probably do without all the exception throwing here.
-    try {
+    loadFromFile(path);
+    initVBO();
+    initIBO();
+    mVAOID = mShader.initVAO(mVBOID[0], mVBOID[1], mIBOID);
 
-        loadFromFile(path);
-        initVBO();
-        initIBO();
-        mVAOID = mShader.initVAO(mVBOID[0], mVBOID[1], mIBOID);
-
-    } catch (SDLException& e) {
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
 
         destroyTexture();
-        throw;
+        throw GLException("Error initialisng texture: " + path, error);
 
     }
       
@@ -82,19 +78,18 @@ void Texture::loadFromFile(const std::string& path) {
                  loaded->pixels);
 
     // Texture parameters.
+    // Use linear sampling.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    // Repeat textures when wrapping.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 
     // Unbind.
     glBindTexture(GL_TEXTURE_2D, 0);
     
     SDL_FreeSurface(loaded);
-
-    checkGLError();
 
 }
 
@@ -138,7 +133,6 @@ void Texture::initVBO() {
     //Unbind buffer.
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    checkGLError("Initialising VBO");
 }
 
 
@@ -152,8 +146,6 @@ void Texture::initIBO() {
     
     //Unbind buffer.
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    checkGLError("Initialising IBO");
 
 }
 

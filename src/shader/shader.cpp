@@ -24,7 +24,6 @@ Shader::~Shader() {
 void Shader::bind() const {
 
     glUseProgram(mProgramID);
-    checkGLError();
 
 }
 

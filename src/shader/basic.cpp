@@ -20,6 +20,13 @@ BasicShader::BasicShader(float width, float height)
     setModel(t);
     setView(t);
 
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+
+        throw GLException("Error initialisng basic shader", error);
+
+    }
+
 }
 
 
@@ -44,8 +51,6 @@ GLuint BasicShader::initVAO(GLuint vertexBuffer, GLuint coordBuffer, GLuint inde
 
     glBindVertexArray(0);
 
-    checkGLError("Initialising VAO");
-
     return newVAO;
 
 }
@@ -63,12 +68,6 @@ void BasicShader::render(GLuint VAOID, GLuint textureID) const {
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
     unbind();
-
-    // Check errors.
-    // TODO: Could be beneficial to make error checking more efficient here
-    // due to many render calls: remove function call and string creation
-    // for every call.
-    checkGLError("Rendering");
 
 }
 

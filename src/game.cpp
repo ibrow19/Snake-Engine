@@ -41,6 +41,7 @@ void Game::run() {
 
     // Create window.
     createWin();
+
     Timer timer;
     timer.start();
 
@@ -70,6 +71,14 @@ void Game::run() {
         glClear(GL_COLOR_BUFFER_BIT);
         t.render();
         SDL_GL_SwapWindow(mWin);
+
+        // Check errors once per loop.
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR) {
+
+            throw GLException("Error detected in main loop", error);
+
+        }
 
     }
     
@@ -128,7 +137,6 @@ void Game::exitSDL() const {
 }
 
 
-// TODO: split into smaller functions: One for window creation, one for context and gl
 // initialisation.
 void Game::createWin() {
 
