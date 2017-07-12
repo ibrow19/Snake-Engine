@@ -2,14 +2,13 @@
 #include <cstdio>
 #include <iostream>
 #include "error/glewexception.hpp"
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_image.h>
+#include <SDL_opengl.h>
 #include "error/sdlexception.hpp"
 #include "error/glexception.hpp"
 #include "shader/basic.hpp"
 #include "timer.hpp"
 #include "game.hpp"
-
 #include "texture.hpp"
 
 namespace snk {
@@ -47,7 +46,7 @@ void Game::run() {
 
     // Shader and texture for rendering test.
     BasicShader s(mWidth, mHeight);
-    Texture t(s, "texture.png");
+    Texture t(s, "res/texture/texture.png");
 
     printf("running...\n");
 

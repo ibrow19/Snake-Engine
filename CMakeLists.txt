@@ -12,19 +12,24 @@ find_package(OpenGL REQUIRED)
 
 # Find SDL2 modules.
 find_package(SDL2 REQUIRED)
-find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 
 # Find Boost modules.
 find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 
+# Find rapidxml.
+find_package(RapidXML REQUIRED)
+
 # Compiler flags.
 add_definitions(-Wall -Wextra -std=c++11)
 
-# Include directory for library.
-set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/inc)
-include_directories(${INCLUDE_DIR})
+# Include directories for library.
+set(INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/inc 
+                 ${SDL2_INCLUDE_DIR}
+                 ${SDL2_IMAGE_INCLUDE_DIRS}
+                 ${RAPIDXML_INCLUDE_DIR})
+include_directories(${INCLUDE_DIRS})
 
 # Source files for library.
 file(GLOB_RECURSE LIB_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)

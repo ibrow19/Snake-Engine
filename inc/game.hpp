@@ -2,7 +2,7 @@
 #define SNAKE_GAME_HEADER
 
 #include <string>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace snk {
 

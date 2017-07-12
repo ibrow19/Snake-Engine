@@ -1,7 +1,7 @@
 #ifndef SNAKE_TIMER_HEADER
 #define SNAKE_TIMER_HEADER
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace snk {
 
