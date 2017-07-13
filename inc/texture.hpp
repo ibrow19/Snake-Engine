@@ -2,6 +2,7 @@
 #define SNAKE_TEXTURE_HEADER
 
 #include <string>
+#include <vector>
 #include <GL/gl.h>
 #include "shader/basic.hpp"
 
@@ -24,6 +25,14 @@ struct TextureCoord {
 
 };
 
+struct clip {
+
+    GLfloat left;
+    GLfloat top;
+    GLfloat width;
+    GLfloat height;
+
+};
 
 class Texture {
 public:
@@ -32,11 +41,14 @@ public:
     Texture(BasicShader& shader, const std::string& path);
     ~Texture();
 
+    void addClip(const clip& newClip);
     void render();
+    void render(unsigned int clip);
 
 private:
 
     void loadFromFile(const std::string& path);
+    void setClip(unsigned int clip);
     void initVBO();
     void initIBO();
     void destroyTexture();
@@ -45,7 +57,7 @@ private:
 
     BasicShader& mShader;
 
-    /// Vertex array object ID..
+    /// Vertex array object ID.
     GLuint mVAOID;
 
     // TODO: these could be split into separate variables for clarity.
@@ -61,6 +73,9 @@ private:
 
     GLuint mWidth;
     GLuint mHeight;
+
+    unsigned int currentClip;
+    std::vector<clip> clips;
 
 };
 

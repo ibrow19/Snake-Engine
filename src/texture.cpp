@@ -15,7 +15,8 @@ Texture::Texture(BasicShader& shader, const std::string& path)
   mIBOID(0),
   mTextureID(0),
   mWidth(0),
-  mHeight(0) {
+  mHeight(0),
+  currentClip(0) {
 
     loadFromFile(path);
     initVBO();
@@ -29,6 +30,9 @@ Texture::Texture(BasicShader& shader, const std::string& path)
         throw GLException("Error initialisng texture: " + path, error);
 
     }
+
+    // Add default clip for entire texture. 
+    addClip({0.f, 0.f, (GLfloat)mWidth, (GLfloat)mHeight});
       
 }
 
@@ -40,8 +44,81 @@ Texture::~Texture() {
 }
 
 
+void Texture::addClip(const clip& newClip) {
+
+    clips.push_back(newClip);
+
+}
+
+
+void Texture::setClip(unsigned int clipIndex) {
+
+    if (clipIndex >= clips.size()) {
+
+        throw SnakeException("Attempting to use out of bounds texture clip index");
+
+    }
+
+    clip& target = clips.at(clipIndex);
+    GLfloat left = target.left / mWidth;;
+    GLfloat right = (target.left + target.width) / mWidth;
+    GLfloat top = target.top / mHeight;
+    GLfloat bottom = (target.top + target.height) / mHeight;
+    GLfloat width = target.width;
+    GLfloat height = target.height;
+
+    VertexPos vertices[4];
+    TextureCoord coords[4];
+
+    vertices[0].x = 0.f;
+    vertices[0].y = 0.f;
+    coords[0].s = left;
+    coords[0].t = top;
+
+    vertices[1].x = width;
+    vertices[1].y = 0.f;
+    coords[1].s = right;
+    coords[1].t = top;
+
+    vertices[2].x = width;
+    vertices[2].y = height;
+    coords[2].s = right;
+    coords[2].t = bottom;
+
+    vertices[3].x = 0.f;
+    vertices[3].y = height;
+    coords[3].s = left;
+    coords[3].t = bottom;
+
+    // Fill first buffer with vertex positions.
+    glBindBuffer(GL_ARRAY_BUFFER, mVBOID[0]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(VertexPos), vertices);
+
+    // Fill second buffer with texture coordinates.
+    glBindBuffer(GL_ARRAY_BUFFER, mVBOID[1]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(TextureCoord), coords);
+    
+    //Unbind buffer.
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+}
+
+
 void Texture::render() {
 
+    render(0);
+
+}
+
+
+void Texture::render(unsigned int clip) {
+
+    if (currentClip != clip) {
+
+        setClip(clip);
+        currentClip = clip;
+
+    }
     mShader.render(mVAOID, mTextureID);
 
 }
@@ -125,11 +202,11 @@ void Texture::initVBO() {
 
     // Fill first buffer with vertex positions.
     glBindBuffer(GL_ARRAY_BUFFER, mVBOID[0]);
-    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(VertexPos), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(VertexPos), vertices, GL_DYNAMIC_DRAW);
 
     // Fill second buffer with texture coordinates.
     glBindBuffer(GL_ARRAY_BUFFER, mVBOID[1]);
-    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(TextureCoord), coords, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(TextureCoord), coords, GL_DYNAMIC_DRAW);
     
     //Unbind buffer.
     glBindBuffer(GL_ARRAY_BUFFER, 0);
