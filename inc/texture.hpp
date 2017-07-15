@@ -8,33 +8,19 @@
 
 namespace snk {
 
-// TODO: define number of vertices for definng size of vertex, textureCoord, index arrays etc.
-// potentially in header fo structs.
-// TODO: move structs to separate header.
-struct VertexPos {
-
-    GLfloat x;
-    GLfloat y;
-
-};
-
-struct TextureCoord {
-
-    GLfloat s;
-    GLfloat t;
-
-};
-
-struct clip {
-
-    GLfloat left;
-    GLfloat top;
-    GLfloat width;
-    GLfloat height;
-
-};
-
 class Texture {
+public:
+
+    // TODO: use smaller data type for clips and vertex attributes.
+    struct clip {
+    
+        GLfloat left;
+        GLfloat top;
+        GLfloat width;
+        GLfloat height;
+    
+    };
+
 public:
 
     // TODO: Add conversion of  NPOT textures to use POT space.
@@ -44,6 +30,22 @@ public:
     void addClip(const clip& newClip);
     void render();
     void render(unsigned int clip);
+
+private:
+
+    struct VertexPos {
+    
+        GLfloat x;
+        GLfloat y;
+    
+    };
+    
+    struct TextureCoord {
+    
+        GLfloat s;
+        GLfloat t;
+    
+    };
 
 private:
 
