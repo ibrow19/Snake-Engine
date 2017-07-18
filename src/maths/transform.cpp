@@ -11,6 +11,33 @@ Transform::Transform()
           {0.f, 0.f, 0.f, 1.f}} {}
 
 
+Transform::Transform(const TData& initData) 
+: mMatrix{{1.f, 0.f, 0.f, 0.f}, 
+          {0.f, 1.f, 0.f, 0.f},
+          {0.f, 0.f, 1.f, 0.f},
+          {0.f, 0.f, 0.f, 1.f}} {
+
+    // Create matrix from translate origin -> scale -> rotation -> translation.
+    float radian = initData.angle * M_PI / 180.f;
+    float cos = std::cos(radian);
+    float sin = std::sin(radian);
+    float u0 = initData.scale.x * cos;
+    float u1 = initData.scale.x * sin;
+    float u2 = -initData.scale.y * sin;
+    float u3 = initData.scale.y * cos;
+    float tx = u0 * -initData.origin.x + u1 * -initData.origin.y + initData.translation.x;
+    float ty = u2 * -initData.origin.x + u3 * -initData.origin.y + initData.translation.y;
+
+    mMatrix[0][0] = u0;
+    mMatrix[1][0] = u1;
+    mMatrix[0][1] = u2;
+    mMatrix[1][1] = u3;
+    mMatrix[3][0] = tx;
+    mMatrix[3][1] = ty;
+
+}
+
+
 const float* Transform::getMatrix() const {
 
     return mMatrix[0];
@@ -21,6 +48,13 @@ const float* Transform::getMatrix() const {
 Transform& Transform::scale(float factor) {
 
     return scale(factor, factor);
+
+}
+
+
+Transform& Transform::scale(const Vector2f& factor) {
+
+    return scale(factor.x, factor.y);
 
 }
 

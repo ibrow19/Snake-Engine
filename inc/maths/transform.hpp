@@ -13,8 +13,22 @@ namespace snk {
 class Transform {
 public:
 
+    struct TData {
+
+        Point2f origin;
+        float angle;
+        Vector2f scale;
+        Vector2f translation;
+
+    };
+
+public:
+
     /// Initialise transform with identity matrix.
     Transform();
+
+    /// Initialise with prepared transformation.
+    Transform(const TData& initData);
 
     /// Get pointer to 4x4 matrix that can be used for openGL.
     const float* getMatrix() const;
@@ -22,7 +36,10 @@ public:
     /// Uniform scale.
     Transform& scale(float factor);
 
-    /// Scale.
+    /// Scale using scale vector.
+    Transform& scale(const Vector2f& factor);
+
+    // Scale using x and y scale.
     Transform& scale(float x, float y);
 
     /// Rotate.
