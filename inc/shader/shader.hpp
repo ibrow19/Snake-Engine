@@ -28,14 +28,14 @@ private:
 
 private:
 
-    GLuint mProgramID;
+    GLuint mProgramId;
 
 };
 
 GLuint loadShader(const std::string& path, GLenum shaderType);
 std::string getContents(const std::string& path);
-std::string getProgramLog(GLuint programID);
-std::string getShaderLog(GLuint shaderID);
+std::string getProgramLog(GLuint programId);
+std::string getShaderLog(GLuint shaderId);
 
 } // namespace snk
 

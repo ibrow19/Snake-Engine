@@ -2,20 +2,20 @@
 #include <cstring>
 #include <fstream>
 #include <rapidxml_utils.hpp>
-#include "texturemanager.hpp"
-#include "error/snkexception.hpp"
+#include <texturemanager.hpp>
+#include <error/snkexception.hpp>
 
 namespace snk {
 
-TextureManager::TextureManager(BasicShader& shader)
-: mShader(shader) {}
+TextureManager::TextureManager(BasicShader& shader, const std::string& resDir)
+: mShader(shader),
+  mResDir(resDir + '/') {}
 
 
 void TextureManager::loadTexture(const std::string& path) {
 
-    // TODO: add default path prefix to use (e.g "res/texture")
-
-    rapidxml::file<> xmlFile(path.c_str());
+    std::string totalPath = mResDir + path;
+    rapidxml::file<> xmlFile(totalPath.c_str());
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
 
@@ -23,22 +23,22 @@ void TextureManager::loadTexture(const std::string& path) {
 
     if (node == nullptr) {
 
-        throw SnakeException("Could not find texture node when loading texture with: " + path);
+        throw SnakeException("Could not find texture node when loading texture with: " + totalPath);
 
     }
 
     rapidxml::xml_attribute<>* attr =  node->first_attribute("path");
     if (attr == nullptr) {
         
-        throw SnakeException("Could not find path attribute when loading texture with: " + path);
+        throw SnakeException("Could not find path attribute when loading texture with: " + totalPath);
 
     }
-    std::unique_ptr<Texture> newTexture(new Texture(mShader, attr->value()));
+    std::unique_ptr<Texture> newTexture(new Texture(mShader, mResDir + attr->value()));
 
-    attr = node->first_attribute("ID");
+    attr = node->first_attribute("id");
     if (attr == nullptr) {
         
-        throw SnakeException("Could not find ID attribute when loading texture with: " + path);
+        throw SnakeException("Could not find id attribute when loading texture with: " + totalPath);
 
     }
     std::string identifier(attr->value());
@@ -59,7 +59,7 @@ void TextureManager::loadTexture(const std::string& path) {
     }
     if (!valid) {
 
-        throw SnakeException("Invalid clip node found when loading texture with: " + path);
+        throw SnakeException("Invalid clip node found when loading texture with: " + totalPath);
 
     }
 

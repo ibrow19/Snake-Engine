@@ -1,13 +1,13 @@
 #include <fstream>
-#include "GL/glew.h"
-#include "error/snkexception.hpp"
-#include "error/glexception.hpp"
-#include "shader/shader.hpp"
+#include <GL/glew.h>
+#include <error/snkexception.hpp>
+#include <error/glexception.hpp>
+#include <shader/shader.hpp>
 
 namespace snk {
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
-: mProgramID(0) {
+: mProgramId(0) {
 
     initProgram(vertexPath, fragmentPath);
 
@@ -23,7 +23,7 @@ Shader::~Shader() {
 
 void Shader::bind() const {
 
-    glUseProgram(mProgramID);
+    glUseProgram(mProgramId);
 
 }
 
@@ -37,64 +37,64 @@ void Shader::unbind() const {
 
 GLint Shader::getAttribute(const std::string& attribute) const {
 
-    GLint attributeID = glGetAttribLocation(mProgramID, attribute.c_str());
-    if (attributeID == -1) {
+    GLint attributeId = glGetAttribLocation(mProgramId, attribute.c_str());
+    if (attributeId == -1) {
 
         throw SnakeException("Could not locate shader attribure: " + attribute);
 
     }
-    return attributeID;
+    return attributeId;
 
 }
 
 
 GLint Shader::getUniform(const std::string& uniform) const {
 
-    GLint uniformID = glGetUniformLocation(mProgramID, uniform.c_str());
-    if (uniformID == -1) {
+    GLint uniformId = glGetUniformLocation(mProgramId, uniform.c_str());
+    if (uniformId == -1) {
 
         throw SnakeException("Could not locate shader uniform: " + uniform);
 
     }
-    return uniformID;
+    return uniformId;
 
 }
 
 
 void Shader::initProgram(const std::string& vertexPath, const std::string& fragmentPath) {
 
-    mProgramID = glCreateProgram();
+    mProgramId = glCreateProgram();
 
-    GLuint vertexID = loadShader(vertexPath, GL_VERTEX_SHADER);
-    glAttachShader(mProgramID, vertexID);
+    GLuint vertexId = loadShader(vertexPath, GL_VERTEX_SHADER);
+    glAttachShader(mProgramId, vertexId);
 
-    GLuint fragmentID = 0;
+    GLuint fragmentId = 0;
     try {
 
-        fragmentID = loadShader(fragmentPath, GL_FRAGMENT_SHADER);
+        fragmentId = loadShader(fragmentPath, GL_FRAGMENT_SHADER);
 
     // If loading fragment shade fails. Delete vertex shader then throw
     // exception again.
     } catch (std::exception& e) {
 
-        glDeleteShader(vertexID);
+        glDeleteShader(vertexId);
         throw;
 
     }
-    glAttachShader(mProgramID, fragmentID);
+    glAttachShader(mProgramId, fragmentId);
 
-    glLinkProgram(mProgramID);
+    glLinkProgram(mProgramId);
 
-    glDeleteShader(vertexID);
-    glDeleteShader(fragmentID);
+    glDeleteShader(vertexId);
+    glDeleteShader(fragmentId);
 
     // Check successful link.
     GLint success = 0;
-    glGetProgramiv(mProgramID, GL_LINK_STATUS, &success);
+    glGetProgramiv(mProgramId, GL_LINK_STATUS, &success);
     if (success == GL_FALSE) {
 
-        std::string log = getProgramLog(mProgramID);
-        glDeleteProgram(mProgramID);
+        std::string log = getProgramLog(mProgramId);
+        glDeleteProgram(mProgramId);
         throw SnakeException("Error linking shader program. Info log:\n" + log);
 
     }
@@ -104,33 +104,33 @@ void Shader::initProgram(const std::string& vertexPath, const std::string& fragm
 
 void Shader::destroyProgram() {
 
-    glDeleteProgram(mProgramID);
+    glDeleteProgram(mProgramId);
 
 }
 
 
 GLuint loadShader(const std::string& path, GLenum type) {
 
-    GLuint shaderID;
+    GLuint shaderId;
     std::string shaderString = getContents(path);
 
-    shaderID = glCreateShader(type);
+    shaderId = glCreateShader(type);
 
     const GLchar* shaderSrc = shaderString.c_str();
-    glShaderSource(shaderID, 1, &shaderSrc, nullptr);
-    glCompileShader(shaderID);
+    glShaderSource(shaderId, 1, &shaderSrc, nullptr);
+    glCompileShader(shaderId);
 
     GLint success = 0;
-    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
     if (success == GL_FALSE) {
 
-        std::string log = getShaderLog(shaderID);
-        glDeleteShader(shaderID);
+        std::string log = getShaderLog(shaderId);
+        glDeleteShader(shaderId);
         throw SnakeException("Error compiling shader from " + path + ". Info log:\n" + log);
 
     }
 
-    return shaderID;
+    return shaderId;
 
 }
 
@@ -161,20 +161,20 @@ std::string getContents(const std::string& path) {
 }
 
 
-std::string getProgramLog(GLuint programID) {
+std::string getProgramLog(GLuint programId) {
 
     if (!glIsProgram) {
 
-        throw SnakeException("Querying program log with invalid ID");
+        throw SnakeException("Querying program log with invalid Id");
 
     }
 
     int logLen = 0;
     int actualLen = 0;
 
-    glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &logLen);
+    glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &logLen);
     char* log = new char[logLen];
-    glGetProgramInfoLog(programID, logLen, &actualLen, log);
+    glGetProgramInfoLog(programId, logLen, &actualLen, log);
     std::string logString;
     if (actualLen > 0) {
 
@@ -188,20 +188,20 @@ std::string getProgramLog(GLuint programID) {
 }
 
 
-std::string getShaderLog(GLuint shaderID) {
+std::string getShaderLog(GLuint shaderId) {
 
     if (!glIsShader) {
 
-        throw SnakeException("Querying shader log with invalid ID");
+        throw SnakeException("Querying shader log with invalid Id");
 
     }
 
     int logLen = 0;
     int actualLen = 0;
 
-    glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLen);
+    glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLen);
     char* log = new char[logLen];
-    glGetShaderInfoLog(shaderID, logLen, &actualLen, log);
+    glGetShaderInfoLog(shaderId, logLen, &actualLen, log);
     std::string logString;
     if (actualLen > 0) {
 

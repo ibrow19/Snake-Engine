@@ -1,8 +1,8 @@
 #ifndef SNAKE_BASIC_SHADER_HEADER
 #define SNAKE_BASIC_SHADER_HEADER
 
-#include "maths/transform.hpp"
-#include "shader/shader.hpp"
+#include <maths/transform.hpp>
+#include <shader/shader.hpp>
 
 namespace snk {
 
@@ -19,10 +19,10 @@ public:
     /// \param vertexBuffer buffer to use for vertex position attributes.
     /// \param coordBuffer buffer to use for texture coordintae attributes.
     /// \param indexBuffer buffer to use for element indices.
-    GLuint initVAO(GLuint vertexBuffer, GLuint coordBuffer, GLuint indexBuffer) const;
+    GLuint initVao(GLuint vertexBuffer, GLuint coordBuffer, GLuint indexBuffer) const;
 
     /// Render a texture using a vertex array object initialised for this shader.
-    void render(GLuint VAOID, GLuint textureID) const;
+    void render(GLuint vaoId, GLuint textureId) const;
 
     /// Set the model matrix.
     /// \param t transform to set matrix to.
@@ -40,7 +40,6 @@ private:
     /// Initialise texture sampler.
     void initSampler() const;
 
-    // TODO: altering projectionn matrix on window resize.
     /// Initialise the projection matrix with an orthographic matrix based
     /// on the window size.
     /// \param left offset of left of window.
@@ -52,12 +51,12 @@ private:
 private:
 
     // Model and biew matrix shader uniforms.
-    GLint mViewID;
-    GLint mModelID;
+    GLint mViewId;
+    GLint mModelId;
 
     // Vertex and coordinate shader attributes.
-    GLint mVertexPosID;
-    GLint mTextureCoordID;
+    GLint mVertexPosId;
+    GLint mTextureCoordId;
 
 };
 

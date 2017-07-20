@@ -3,11 +3,16 @@
 
 #include <vector>
 #include <memory>
-#include "texture.hpp"
-#include "maths/transform.hpp"
+#include <texture.hpp>
+#include <maths/transform.hpp>
 
 namespace snk {
 
+// Note: using dirty flag with local transform data makes some operations impossible
+//       e.g rotating around a point that is not the origin (translate to point, rotate,
+//       translate back ~ would just appear like a rotation around the origin).
+//       However, it does ensure transformations are always applied in the same order:
+//       Translate to origin -> scale -> rotate -> translate.
 class Node {
 public:
 
@@ -15,12 +20,7 @@ public:
 
     void addChild(Node& child);
 
-    //void handleCommand(const Command& command);
     void render();
-
-    // Note: using dirty flag with local transform data makes some operations impossible
-    //       e.g rotating around a point that is not the origin (translate to point, rotate,
-    //       translate back ~ would just appear like a rotation around the origin).
 
     // Operations corresponding to the various possible transformations.
 
@@ -50,7 +50,6 @@ public:
     void translate(const Vector2f& v);
     void translate(float x, float y);
 
-
 private:
 
     void render(Transform& world, bool dirty);
@@ -58,7 +57,6 @@ private:
 private:
 
     Node* mParent;
-    //ComponentManager& mCManager;
 
     bool mDirty;
     Transform mLocal;

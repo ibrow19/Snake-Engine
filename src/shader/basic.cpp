@@ -1,16 +1,16 @@
 #include <GL/glew.h>
 #include <iostream>
-#include "error/glexception.hpp"
-#include "shader/basic.hpp"
+#include <error/glexception.hpp>
+#include <shader/basic.hpp>
 
 namespace snk {
 
 BasicShader::BasicShader(float width, float height)
 : Shader("res/shader/snake.glvs", "res/shader/snake.glfs"),
-  mViewID(0),
-  mModelID(0),
-  mVertexPosID(0),
-  mTextureCoordID(0) {
+  mViewId(0),
+  mModelId(0),
+  mVertexPosId(0),
+  mTextureCoordId(0) {
 
     initVars();
     initSampler();
@@ -30,44 +30,45 @@ BasicShader::BasicShader(float width, float height)
 }
 
 
-GLuint BasicShader::initVAO(GLuint vertexBuffer, GLuint coordBuffer, GLuint indexBuffer) const {
+GLuint BasicShader::initVao(GLuint vertexBuffer, GLuint coordBuffer, GLuint indexBuffer) const {
 
-    GLuint newVAO;
-    glGenVertexArrays(1, &newVAO);
-    glBindVertexArray(newVAO);
+    GLuint vaoId;
+    glGenVertexArrays(1, &vaoId);
+    glBindVertexArray(vaoId);
 
     // Vertex positions.
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glEnableVertexAttribArray(mVertexPosID);
-    glVertexAttribPointer(mVertexPosID, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(mVertexPosId);
+    glVertexAttribPointer(mVertexPosId, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     // Texture Coords.
     glBindBuffer(GL_ARRAY_BUFFER, coordBuffer);
-    glEnableVertexAttribArray(mTextureCoordID);
-    glVertexAttribPointer(mTextureCoordID, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(mTextureCoordId);
+    glVertexAttribPointer(mTextureCoordId, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     // Indices.
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
     glBindVertexArray(0);
 
-    return newVAO;
+    return vaoId;
 
 }
 
 
-void BasicShader::render(GLuint VAOID, GLuint textureID) const {
+void BasicShader::render(GLuint vaoId, GLuint textureId) const {
 
     // Bind and render target texture.
     bind();
-    glBindVertexArray(VAOID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
+    glBindVertexArray(vaoId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
     glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, 0);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
-    unbind();
+    // TODO: avoiding unbinding here to try and optimise draws.
+    //       This is assuming OpenGL will not rebind something
+    //       if it is already bound. This is true for most
+    //       implementations but it would probaby be better to
+    //       track what is bound and handle optimisation client side.
 
 }
 
@@ -75,7 +76,7 @@ void BasicShader::render(GLuint VAOID, GLuint textureID) const {
 void BasicShader::setModel(const Transform& t) const {
 
     bind();
-    glUniformMatrix4fv(mModelID, 1, GL_FALSE, t.getMatrix());
+    glUniformMatrix4fv(mModelId, 1, GL_FALSE, t.getMatrix());
     unbind();
 
 }
@@ -84,26 +85,26 @@ void BasicShader::setModel(const Transform& t) const {
 void BasicShader::setView(const Transform& t) const {
 
     bind();
-    glUniformMatrix4fv(mViewID, 1, GL_FALSE, t.getMatrix());
+    glUniformMatrix4fv(mViewId, 1, GL_FALSE, t.getMatrix());
     unbind();
 }
 
 
 void BasicShader::initVars() {
 
-    mViewID = getUniform("uView");
-    mModelID = getUniform("uModel");
-    mVertexPosID = getAttribute("vertexPos");
-    mTextureCoordID = getAttribute("iTextureCoord");
+    mViewId = getUniform("uView");
+    mModelId = getUniform("uModel");
+    mVertexPosId = getAttribute("vertexPos");
+    mTextureCoordId = getAttribute("iTextureCoord");
 
 }
 
 
 void BasicShader::initSampler() const {
 
-    GLint samplerID = getUniform("uSampler");
+    GLint samplerId = getUniform("uSampler");
     bind();
-    glUniform1i(samplerID, 0);
+    glUniform1i(samplerId, 0);
     unbind();
 
 }
@@ -124,9 +125,9 @@ void BasicShader::initProjection(float left, float right, float top, float botto
                        c30, c31, 0.f, 1.f};
 
 
-    GLint projectionID = getUniform("uProjection");
+    GLint projectionId = getUniform("uProjection");
     bind();
-    glUniformMatrix4fv(projectionID, 1, GL_FALSE, ortho);
+    glUniformMatrix4fv(projectionId, 1, GL_FALSE, ortho);
     unbind();
 
 }

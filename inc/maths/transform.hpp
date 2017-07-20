@@ -1,7 +1,7 @@
 #ifndef SNAKE_TRANSFORM_HEADER
 #define SNAKE_TRANSFORM_HEADER
 
-#include "vector.hpp"
+#include <maths/vector.hpp>
 
 namespace snk {
 

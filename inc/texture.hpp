@@ -4,14 +4,13 @@
 #include <string>
 #include <vector>
 #include <GL/gl.h>
-#include "shader/basic.hpp"
+#include <shader/basic.hpp>
 
 namespace snk {
 
 class Texture {
 public:
 
-    // TODO: use smaller data type for clips and vertex attributes.
     struct clip {
     
         GLfloat left;
@@ -28,8 +27,7 @@ public:
     ~Texture();
 
     void addClip(const clip& newClip);
-    void render();
-    void render(unsigned int clip);
+    void render(const Transform& model, unsigned int clip = 0);
 
 private:
 
@@ -51,8 +49,8 @@ private:
 
     void loadFromFile(const std::string& path);
     void setClip(unsigned int clip);
-    void initVBO();
-    void initIBO();
+    void initVbo();
+    void initIbo();
     void destroyTexture();
 
 private:
@@ -60,18 +58,18 @@ private:
     BasicShader& mShader;
 
     /// Vertex array object ID.
-    GLuint mVAOID;
+    GLuint mVaoId;
 
     // TODO: these could be split into separate variables for clarity.
     /// Vertex buffer object ID.
     /// Stores attributes: vertex positions and texture coordinates.
-    GLuint mVBOID[2];
+    GLuint mVboId[2];
 
     /// Index buffer object ID.
-    GLuint mIBOID;
+    GLuint mIboId;
 
     /// Texture buffer object ID.
-    GLuint mTextureID;
+    GLuint mTextureId;
 
     GLuint mWidth;
     GLuint mHeight;

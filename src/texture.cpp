@@ -1,27 +1,26 @@
 #include <GL/glew.h>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
-#include <rapidxml.hpp>
-#include "error/sdlexception.hpp"
-#include "error/glexception.hpp"
-#include "texture.hpp"
+#include <error/sdlexception.hpp>
+#include <error/glexception.hpp>
+#include <texture.hpp>
 
 namespace snk {
 
 Texture::Texture(BasicShader& shader, const std::string& path) 
 : mShader(shader),
-  mVAOID(0),
-  mVBOID{0},
-  mIBOID(0),
-  mTextureID(0),
+  mVaoId(0),
+  mVboId{0},
+  mIboId(0),
+  mTextureId(0),
   mWidth(0),
   mHeight(0),
   currentClip(0) {
 
     loadFromFile(path);
-    initVBO();
-    initIBO();
-    mVAOID = mShader.initVAO(mVBOID[0], mVBOID[1], mIBOID);
+    initVbo();
+    initIbo();
+    mVaoId = mShader.initVao(mVboId[0], mVboId[1], mIboId);
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
@@ -91,11 +90,11 @@ void Texture::setClip(unsigned int clipIndex) {
     coords[3].t = bottom;
 
     // Fill first buffer with vertex positions.
-    glBindBuffer(GL_ARRAY_BUFFER, mVBOID[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, mVboId[0]);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(VertexPos), vertices);
 
     // Fill second buffer with texture coordinates.
-    glBindBuffer(GL_ARRAY_BUFFER, mVBOID[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, mVboId[1]);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(TextureCoord), coords);
     
     //Unbind buffer.
@@ -104,22 +103,16 @@ void Texture::setClip(unsigned int clipIndex) {
 }
 
 
-void Texture::render() {
+void Texture::render(const Transform& model, unsigned int clip) {
 
-    render(0);
-
-}
-
-
-void Texture::render(unsigned int clip) {
-
+    mShader.setModel(model);
     if (currentClip != clip) {
 
         setClip(clip);
         currentClip = clip;
 
     }
-    mShader.render(mVAOID, mTextureID);
+    mShader.render(mVaoId, mTextureId);
 
 }
 
@@ -136,8 +129,8 @@ void Texture::loadFromFile(const std::string& path) {
     mWidth = loaded->w;
     mHeight = loaded->h;
 
-    glGenTextures(1, &mTextureID);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
+    glGenTextures(1, &mTextureId);
+    glBindTexture(GL_TEXTURE_2D, mTextureId);
 
     // set mode to match texture format.
     int mode = GL_RGB;
@@ -172,7 +165,7 @@ void Texture::loadFromFile(const std::string& path) {
 }
 
 
-void Texture::initVBO() {
+void Texture::initVbo() {
 
     VertexPos vertices[4];
     TextureCoord coords[4];
@@ -198,14 +191,14 @@ void Texture::initVBO() {
     coords[3].t = 1.f;
 
     // Allocate two vertex buffers. One for vertex positions and one for texture coordinates.
-    glGenBuffers(2, mVBOID);
+    glGenBuffers(2, mVboId);
 
     // Fill first buffer with vertex positions.
-    glBindBuffer(GL_ARRAY_BUFFER, mVBOID[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, mVboId[0]);
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(VertexPos), vertices, GL_DYNAMIC_DRAW);
 
     // Fill second buffer with texture coordinates.
-    glBindBuffer(GL_ARRAY_BUFFER, mVBOID[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, mVboId[1]);
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(TextureCoord), coords, GL_DYNAMIC_DRAW);
     
     //Unbind buffer.
@@ -214,12 +207,12 @@ void Texture::initVBO() {
 }
 
 
-void Texture::initIBO() {
+void Texture::initIbo() {
 
     GLuint indices[4] = {0, 1, 2, 3};
 
-    glGenBuffers(1, &mIBOID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBOID);
+    glGenBuffers(1, &mIboId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIboId);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indices, GL_STATIC_DRAW);
     
     //Unbind buffer.
@@ -230,10 +223,10 @@ void Texture::initIBO() {
 
 void Texture::destroyTexture() {
 
-    glDeleteVertexArrays(1, &mVAOID); 
-    glDeleteBuffers(2, mVBOID); 
-    glDeleteBuffers(1, &mIBOID);
-    glDeleteBuffers(1, &mTextureID);
+    glDeleteVertexArrays(1, &mVaoId); 
+    glDeleteBuffers(2, mVboId); 
+    glDeleteBuffers(1, &mIboId);
+    glDeleteBuffers(1, &mTextureId);
 
 }
 

@@ -6,15 +6,15 @@
 #include <string>
 #include <GL/gl.h>
 #include <rapidxml.hpp>
-#include "shader/basic.hpp"
-#include "texture.hpp"
+#include <shader/basic.hpp>
+#include <texture.hpp>
 
 namespace snk {
 
 class TextureManager {
 public:
 
-    TextureManager(BasicShader& shader);
+    TextureManager(BasicShader& shader, const std::string& resDir = ".");
 
     void loadTexture(const std::string& path);
     Texture& getTexture(const std::string& identifier);
@@ -26,6 +26,7 @@ private:
 private:
 
     BasicShader& mShader;
+    std::string mResDir;
     std::map<std::string, std::unique_ptr<Texture>> mTextures;
 
 };

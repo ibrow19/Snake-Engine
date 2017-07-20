@@ -1,5 +1,5 @@
 #include <cassert>
-#include "scene/node.hpp"
+#include <scene/node.hpp>
 
 namespace snk {
 
@@ -20,7 +20,6 @@ void Node::addChild(Node& child) {
 }
 
 
-//void handleCommand(const Command& command);
 void Node::render() {
 
     Transform t;
