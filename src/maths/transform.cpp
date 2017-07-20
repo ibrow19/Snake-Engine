@@ -181,7 +181,7 @@ void Transform::printMatrix4() const {
 
 Transform operator*(const Transform& lhs, const Transform& rhs) {
 
-    return Transform(lhs).combine(rhs);;
+    return Transform(lhs).combine(rhs);
 
 }
 

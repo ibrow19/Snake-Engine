@@ -175,8 +175,7 @@ void Node::render(const Transform& world, bool dirty) {
     mDirty = false;
     if (dirty) {
 
-        // TODO: this might need to be the other way around.
-        mWorld = mLocal * world; 
+        mWorld = world * mLocal;
 
     }
     if (mTexture != nullptr) {
