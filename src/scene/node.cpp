@@ -8,7 +8,7 @@ Node::Node(Texture* texture)
   mDirty(true),  // Must be true initially to initialise world transform
   mLocal(),
   mWorld(),
-  mLocalData({{0.f, 0.f}, 0.f, {0.f, 0.f}, {0.f, 0.f}}),
+  mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
   mTexture(texture) {}
 
 
@@ -164,7 +164,7 @@ void Node::translate(float x, float y) {
 }
 
 
-void Node::render(Transform& world, bool dirty) {
+void Node::render(const Transform& world, bool dirty) {
 
     if (mDirty) {
 

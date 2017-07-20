@@ -200,6 +200,28 @@ BOOST_AUTO_TEST_CASE(compound1) {
 
 }
 
-// TODO: test vector transformations?
+// Transform data initialisation.
+BOOST_AUTO_TEST_CASE(dataInit1) {
+
+    snk::Transform::TData initData;
+    initData.origin = {15.f, -0.9f};
+    initData.angle = 189.f;
+    initData.scale= {-6.4f, -2.f};
+    initData.translation = {1.f, 101.f};
+
+    t.translate(initData.translation);
+    t.rotate(initData.angle);
+    t.scale(initData.scale);
+    t.translate(-initData.origin);
+    snk::Transform t2(initData);
+
+    snk::Point2f transformed1 = t * p3;
+    snk::Point2f transformed2 = t2 * p3;
+
+    BOOST_CHECK_CLOSE(transformed1.x, transformed2.x, TOLERANCE);
+    BOOST_CHECK_CLOSE(transformed1.y, transformed2.y, TOLERANCE);
+
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

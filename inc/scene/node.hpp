@@ -52,7 +52,7 @@ public:
 
 private:
 
-    void render(Transform& world, bool dirty);
+    void render(const Transform& world, bool dirty);
 
 private:
 

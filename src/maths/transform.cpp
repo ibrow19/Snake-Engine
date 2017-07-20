@@ -25,16 +25,22 @@ Transform::Transform(const TData& initData)
     float u1 = initData.scale.x * sin;
     float u2 = -initData.scale.y * sin;
     float u3 = initData.scale.y * cos;
-    float tx = u0 * -initData.origin.x + u1 * -initData.origin.y + initData.translation.x;
-    float ty = u2 * -initData.origin.x + u3 * -initData.origin.y + initData.translation.y;
+    float tx = u0 * -initData.origin.x + u2 * -initData.origin.y + initData.translation.x;
+    float ty = u1 * -initData.origin.x + u3 * -initData.origin.y + initData.translation.y;
 
     mMatrix[0][0] = u0;
-    mMatrix[1][0] = u1;
-    mMatrix[0][1] = u2;
+    mMatrix[0][1] = u1;
+    mMatrix[1][0] = u2;
     mMatrix[1][1] = u3;
     mMatrix[3][0] = tx;
     mMatrix[3][1] = ty;
 
+    // the above is equivalent to:
+    // translate(translation).rotate(angle).scale(scale).translate(-origin);
+    // The initial transformation is manually calculated rather than using
+    // the transformation functions as it is more efficient than going through
+    // the several combinations and different Transform objects that the 
+    // funcion calls would cause.
 }
 
 
@@ -169,6 +175,7 @@ void Transform::printMatrix4() const {
     std::cout << mMatrix[0][1] << " | " << mMatrix[1][1] << " | " << mMatrix[2][1] << " | " << mMatrix[3][1] << std::endl;
     std::cout << mMatrix[0][2] << " | " << mMatrix[1][2] << " | " << mMatrix[2][2] << " | " << mMatrix[3][2] << std::endl;
     std::cout << mMatrix[0][3] << " | " << mMatrix[1][3] << " | " << mMatrix[2][3] << " | " << mMatrix[3][3] << std::endl;
+
 }
 
 
