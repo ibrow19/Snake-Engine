@@ -5,6 +5,7 @@ namespace snk {
 
 Node::Node(Texture* texture)
 : mParent(nullptr),
+  mDestroyed(false),
   mDirty(true),  // Must be true initially to initialise world transform
   mLocal(),
   mWorld(),
@@ -24,6 +25,25 @@ void Node::render() {
 
     Transform t;
     render(t, false);
+
+}
+
+
+void Node::destroy() {
+
+    mDestroyed = true;
+    for (Node* child : mChildren) {
+
+        child->destroy();
+
+    }
+
+}
+
+
+bool Node::isDestroyed() const {
+
+    return mDestroyed;
 
 }
 

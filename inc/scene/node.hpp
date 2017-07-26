@@ -22,6 +22,13 @@ public:
 
     void render();
 
+    // Mark the node and its children for removal so that once iteration for
+    // updating is finished, the node can be destroyed by node manager.
+    void destroy();
+    
+    // Check if node is marked for removal.
+    bool isDestroyed() const;
+
     // Operations corresponding to the various possible transformations.
 
     // Origin
@@ -57,6 +64,8 @@ private:
 private:
 
     Node* mParent;
+
+    bool mDestroyed;
 
     bool mDirty;
     Transform mLocal;
