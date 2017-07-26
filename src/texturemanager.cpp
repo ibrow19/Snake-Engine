@@ -31,7 +31,7 @@ void TextureManager::registerTexture(Id textureId, const std::string& path) {
 
     }
 
-    if (!mTextures.at(textureId).path.empty()) {
+    if (mTextures.at(textureId).init) {
 
         throw SnakeException("Attempting to assign already assigned texture Id");
 
@@ -43,6 +43,7 @@ void TextureManager::registerTexture(Id textureId, const std::string& path) {
 
     }
 
+    mTextures.at(textureId).init = true;
     mTextures.at(textureId).path = path;
 
 }

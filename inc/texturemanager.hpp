@@ -33,7 +33,8 @@ private:
 
     struct TextureData {
 
-        // An empty path represents that this entry has not been initialised.
+        // init represents whether this entry has been initialised or not.
+        bool init = false;
         std::string path;
 
         // TODO: store textures contiguously somewhere rather than using unique pointers.
