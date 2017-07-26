@@ -113,6 +113,17 @@ float Node::getRotation() const {
 
 void Node::setRotation(float angle) {
 
+    // Calculate angle modulo 360.
+    while (angle >= 360.f) {
+
+        angle -= 360.f;
+
+    }
+    while (angle < 0.f) {
+
+        angle += 360.f;
+
+    }
     mLocalData.angle = angle;
     mDirty = true;
 
