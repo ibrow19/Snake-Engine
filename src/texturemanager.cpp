@@ -7,12 +7,74 @@
 
 namespace snk {
 
-TextureManager::TextureManager(BasicShader& shader, const std::string& resDir)
+TextureManager::TextureManager(unsigned int textureCount,
+                               BasicShader& shader, 
+                               const std::string& resDir)
 : mShader(shader),
-  mResDir(resDir + '/') {}
+  mResDir(resDir + '/'),
+  mTextures(textureCount) {
+      
+    if (textureCount == 0) {
+
+        throw SnakeException("Texture manager must be able to hold at least one texture");
+
+    }
+
+}
 
 
-void TextureManager::loadTexture(const std::string& path) {
+void TextureManager::registerTexture(Id textureId, const std::string& path) {
+
+    if (textureId >= mTextures.size()) {
+
+        throw SnakeException("Attempting to assign texture Id which is greater than maximum texture Id");
+
+    }
+
+    if (!mTextures.at(textureId).path.empty()) {
+
+        throw SnakeException("Attempting to assign already assigned texture Id");
+
+    }
+
+    if (path.empty()) {
+
+        throw SnakeException("Attempting to assign empty path for texture");
+
+    }
+
+    mTextures.at(textureId).path = path;
+
+}
+
+
+Texture& TextureManager::getTexture(Id textureId) {
+
+    if (textureId >= mTextures.size()) {
+
+        throw SnakeException("Attempting to get texture Id which is greater than maximum texture Id");
+
+    }
+    Texture* texture = mTextures.at(textureId).texture.get();
+    if (texture == nullptr) {
+
+        loadTexture(textureId);
+        texture = mTextures.at(textureId).texture.get();
+
+    }
+    return *texture;
+
+}
+
+
+void TextureManager::loadTexture(Id textureId) {
+
+    std::string& path = mTextures.at(textureId).path;
+    if (path.empty()) {
+
+        throw SnakeException("Attempting to load texture with Id which has not been initialised");
+
+    }
 
     std::string totalPath = mResDir + path;
     rapidxml::file<> xmlFile(totalPath.c_str());
@@ -35,14 +97,6 @@ void TextureManager::loadTexture(const std::string& path) {
     }
     std::unique_ptr<Texture> newTexture(new Texture(mShader, mResDir + attr->value()));
 
-    attr = node->first_attribute("id");
-    if (attr == nullptr) {
-        
-        throw SnakeException("Could not find id attribute when loading texture with: " + totalPath);
-
-    }
-    std::string identifier(attr->value());
-
     bool valid = true;
     Texture::clip newClip = {0.f, 0.f, 0.f, 0.f};
     for (node = node->first_node();
@@ -63,27 +117,7 @@ void TextureManager::loadTexture(const std::string& path) {
 
     }
 
-    auto inserted = mTextures.insert(std::make_pair(identifier, std::move(newTexture))); 
-    if (!inserted.second) {
-
-        throw SnakeException("Atempting to load texture with already used ifentifier: " + identifier);
-
-    }
-
-}
-
-
-Texture& TextureManager::getTexture(const std::string& identifier) {
-
-    // throw exception on failure.
-    auto it = mTextures.find(identifier);
-    if (it == mTextures.end()) {
-
-        throw SnakeException("Falied to find texture: " + identifier);
-
-    }
-
-    return *(it->second.get());
+    mTextures.at(textureId).texture = std::move(newTexture);
 
 }
 
