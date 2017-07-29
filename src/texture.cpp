@@ -58,7 +58,7 @@ void Texture::setClip(unsigned int clipIndex) {
 
     }
 
-    clip& target = clips.at(clipIndex);
+    clip& target = clips[clipIndex];
     GLfloat left = target.left / mWidth;;
     GLfloat right = (target.left + target.width) / mWidth;
     GLfloat top = target.top / mHeight;

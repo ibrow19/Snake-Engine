@@ -29,7 +29,7 @@ void NodeManager::registerNode(Id nodeId, const NodeData& nodeData) {
 
     }
 
-    if (mNodeTypes.at(nodeId).init) {
+    if (mNodeTypes[nodeId].init) {
 
         throw SnakeException("Attempting to assign already assigned node type Id");
 
@@ -40,8 +40,8 @@ void NodeManager::registerNode(Id nodeId, const NodeData& nodeData) {
 
     // TODO: component validation.
    
-    mNodeTypes.at(nodeId).init = true;
-    mNodeTypes.at(nodeId).data = nodeData;
+    mNodeTypes[nodeId].init = true;
+    mNodeTypes[nodeId].data = nodeData;
 
 }
 
@@ -54,7 +54,7 @@ Node& NodeManager::createNode(Id nodeId) {
 
     }
 
-    NodeType& nodeType = mNodeTypes.at(nodeId);
+    NodeType& nodeType = mNodeTypes[nodeId];
     if (!nodeType.init) {
 
         throw SnakeException("Attempting to create node with unitialised type");

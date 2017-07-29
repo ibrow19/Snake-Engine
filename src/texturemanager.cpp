@@ -31,7 +31,7 @@ void TextureManager::registerTexture(Id textureId, const std::string& path) {
 
     }
 
-    if (mTextures.at(textureId).init) {
+    if (mTextures[textureId].init) {
 
         throw SnakeException("Attempting to assign already assigned texture Id");
 
@@ -43,8 +43,8 @@ void TextureManager::registerTexture(Id textureId, const std::string& path) {
 
     }
 
-    mTextures.at(textureId).init = true;
-    mTextures.at(textureId).path = path;
+    mTextures[textureId].init = true;
+    mTextures[textureId].path = path;
 
 }
 
@@ -56,11 +56,11 @@ Texture& TextureManager::getTexture(Id textureId) {
         throw SnakeException("Attempting to get texture Id which is greater than maximum texture Id");
 
     }
-    Texture* texture = mTextures.at(textureId).texture.get();
+    Texture* texture = mTextures[textureId].texture.get();
     if (texture == nullptr) {
 
         loadTexture(textureId);
-        texture = mTextures.at(textureId).texture.get();
+        texture = mTextures[textureId].texture.get();
 
     }
     return *texture;
@@ -70,7 +70,7 @@ Texture& TextureManager::getTexture(Id textureId) {
 
 void TextureManager::loadTexture(Id textureId) {
 
-    std::string& path = mTextures.at(textureId).path;
+    std::string& path = mTextures[textureId].path;
     if (path.empty()) {
 
         throw SnakeException("Attempting to load texture with Id which has not been initialised");
@@ -118,7 +118,7 @@ void TextureManager::loadTexture(Id textureId) {
 
     }
 
-    mTextures.at(textureId).texture = std::move(newTexture);
+    mTextures[textureId].texture = std::move(newTexture);
 
 }
 
