@@ -1,11 +1,12 @@
 #ifndef SNAKE_RESOURCE_MANAGER_HEADER
 #define SNAKE_RESOURCE_MANAGER_HEADER
 
+#include <iterator>
 #include <handle.hpp>
 
 namespace snk {
 
-template<typename Resource>
+template<typename Resource, typename Pointer, typename Reference>
 class ResourceIter;
 
 // TODO: custom iterator over resources.
@@ -14,23 +15,26 @@ template<typename Resource>
 class ResourceManager {
 public:
 
-    // Make iterator friend so that it can access resources.
-    friend class ResourceIter<Resource>;
-
-public:
-
     // Standard container typedefs.
-    typedef ResourceIter<Resource> iterator;
     typedef ptrdiff_t difference_type;
     typedef size_t size_type;
     typedef Resource value_type;
     typedef Resource* pointer;
     typedef Resource& reference;
+    typedef const Resource* const_pointer;
+    typedef const Resource& const_reference;
+    typedef ResourceIter<Resource, reference, pointer> iterator;
+    typedef ResourceIter<Resource, const_reference, const_pointer> const_iterator;
+
+public:
+
+    // Make iterator friend so that it can access resources.
+    friend iterator;
+    friend const_iterator;
 
 public:
 
     ResourceManager();
-    // virtual ~ResourceManager();
 
     Handle create();
     void destroy(const Handle& handle);
@@ -38,8 +42,10 @@ public:
     Resource& dereference(const Handle& handle);
     const Resource& dereference(const Handle& handle) const;
 
-    ResourceIter<Resource> begin();
-    ResourceIter<Resource> end();
+    iterator begin();
+    iterator end();
+    const_iterator cbegin();
+    const_iterator cend();
     
 private:
 
@@ -63,19 +69,32 @@ private:
 };
 
 /// Iterator for ResourceManager.
-template<typename Resource>
-class ResourceIter {
+template<typename Resource, typename Pointer, typename Reference>
+class ResourceIter : public std::iterator<std::forward_iterator_tag,
+                                          typename ResourceManager<Resource>::value_type,
+                                          typename ResourceManager<Resource>::difference_type,
+                                          Pointer,
+                                          Reference> {
+private:
+
+    typedef std::iterator<std::forward_iterator_tag,
+                          typename ResourceManager<Resource>::value_type,
+                          typename ResourceManager<Resource>::difference_type,
+                          Pointer,
+                          Reference> base;
+    typedef typename base::pointer pointer;
+    typedef typename base::reference reference;
+
 public:
 
     ResourceIter(ResourceManager<Resource>& manager, bool begin);
     
     bool operator==(const ResourceIter& rhs);
     bool operator!=(const ResourceIter& rhs);
-    Resource& operator*();
-    ResourceIter<Resource>& operator++();
-    ResourceIter<Resource> operator++(int);
-
-    // TODO: ->, const iterator, reverse iterator, traits.
+    reference operator*();
+    pointer operator->();
+    ResourceIter<Resource, Pointer, Reference>& operator++();
+    ResourceIter<Resource, Pointer, Reference> operator++(int);
 
 private:
 
@@ -92,4 +111,14 @@ private:
 
 } // namespace snk
 
+
+#include <resource.hpp>
+
+// Test struct
+struct AStruct : public snk::Resource {
+
+    void reset() {}
+    
+};
+snk::ResourceManager<AStruct> a;
 #endif

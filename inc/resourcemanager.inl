@@ -7,12 +7,6 @@ ResourceManager<Resource>::ResourceManager()
   mCounter(0) {}
 
 
-/*
-template<typename Resource>
-ResourceManager<Resource>::~ResourceManager() {}
-*/
-
-
 template<typename Resource>
 Handle ResourceManager<Resource>::create() {
 
@@ -100,24 +94,40 @@ const Resource& ResourceManager<Resource>::dereference(const Handle& handle) con
 
 
 template<typename Resource>
-ResourceIter<Resource> ResourceManager<Resource>::begin() {
+typename ResourceManager<Resource>::iterator ResourceManager<Resource>::begin() {
 
-    return ResourceIter<Resource>(*this, true);
+    return iterator(*this, true);
 
 }
 
 
 template<typename Resource>
-ResourceIter<Resource> ResourceManager<Resource>::end() {
+typename ResourceManager<Resource>::iterator ResourceManager<Resource>::end() {
 
-    return ResourceIter<Resource>(*this, false);
+    return iterator(*this, false);
+
+}
+
+
+template<typename Resource>
+typename ResourceManager<Resource>::const_iterator ResourceManager<Resource>::cbegin() {
+
+    return const_iterator(*this, true);
+
+}
+
+
+template<typename Resource>
+typename ResourceManager<Resource>::const_iterator ResourceManager<Resource>::cend() {
+
+    return const_iterator(*this, false);
 
 }
 
 
 /* Iterator implementation */
-template<typename Resource>
-ResourceIter<Resource>::ResourceIter(ResourceManager<Resource>& manager, bool begin) 
+template<typename Resource, typename Pointer, typename Reference>
+ResourceIter<Resource, Pointer, Reference>::ResourceIter(ResourceManager<Resource>& manager, bool begin) 
 : mResources(manager.mResources),
   mIt(begin ? mResources.begin() : mResources.end()) {
 
@@ -134,32 +144,41 @@ ResourceIter<Resource>::ResourceIter(ResourceManager<Resource>& manager, bool be
 }
 
 
-template<typename Resource>
-bool ResourceIter<Resource>::operator==(const ResourceIter& rhs) {
+template<typename Resource, typename Pointer, typename Reference>
+bool ResourceIter<Resource, Pointer, Reference>::operator==(const ResourceIter& rhs) {
 
     return mIt == rhs.mIt;
 
 }
 
 
-template<typename Resource>
-bool ResourceIter<Resource>::operator!=(const ResourceIter& rhs) {
+template<typename Resource, typename Pointer, typename Reference>
+bool ResourceIter<Resource, Pointer, Reference>::operator!=(const ResourceIter& rhs) {
 
     return !(*this == rhs);
 
 }
 
 
-template<typename Resource>
-Resource& ResourceIter<Resource>::operator*() {
+template<typename Resource, typename Pointer, typename Reference>
+typename ResourceIter<Resource, Pointer, Reference>::reference ResourceIter<Resource, Pointer, Reference>::operator*() {
 
     return mIt->resource;
 
 }
 
 
-template<typename Resource>
-ResourceIter<Resource>& ResourceIter<Resource>::operator++() {
+template<typename Resource, typename Pointer, typename Reference>
+typename ResourceIter<Resource, Pointer, Reference>::pointer ResourceIter<Resource, Pointer,
+Reference>::operator->() {
+
+    return &(mIt->resource);
+
+}
+
+
+template<typename Resource, typename Pointer, typename Reference>
+ResourceIter<Resource, Pointer, Reference>& ResourceIter<Resource, Pointer, Reference>::operator++() {
 
     ++mIt;
     while ((mIt->counter == 0) && (mIt != mResources.end())) {
@@ -171,10 +190,10 @@ ResourceIter<Resource>& ResourceIter<Resource>::operator++() {
 }
 
 
-template<typename Resource>
-ResourceIter<Resource> ResourceIter<Resource>::operator++(int) {
+template<typename Resource, typename Pointer, typename Reference>
+ResourceIter<Resource, Pointer, Reference> ResourceIter<Resource, Pointer, Reference>::operator++(int) {
 
-    ResourceIter<Resource> copy(*this);
+    ResourceIter<Resource, Pointer, Reference> copy(*this);
     ++(*this);
     return copy;
 
