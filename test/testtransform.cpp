@@ -1,9 +1,9 @@
 #define BOOST_TEST_MODULE transform
 #define TOLERANCE 0.0001  // Allow tolerance % difference for floating point comparisons.
 
-#include "maths/vector.hpp"
-#include "maths/transform.hpp"
 #include <boost/test/included/unit_test.hpp>
+#include <maths/vector.hpp>
+#include <maths/transform.hpp>
 
 struct Transforms {
 

@@ -2,6 +2,7 @@
 #define SNAKE_RESOURCE_MANAGER_HEADER
 
 #include <iterator>
+#include <error/snkexception.hpp>
 #include <handle.hpp>
 
 namespace snk {
@@ -9,7 +10,6 @@ namespace snk {
 template<typename Resource, typename Pointer, typename Reference>
 class ResourceIter;
 
-// TODO: custom iterator over resources.
 // Note: resources used with manager must have default constructor.
 template<typename Resource>
 class ResourceManager {
@@ -51,7 +51,7 @@ private:
 
     struct StoredResource {
 
-        unsigned int counter;
+        unsigned int counter = 0;
         Resource resource;
         
     };
@@ -111,14 +111,4 @@ private:
 
 } // namespace snk
 
-
-#include <resource.hpp>
-
-// Test struct
-struct AStruct : public snk::Resource {
-
-    void reset() {}
-    
-};
-snk::ResourceManager<AStruct> a;
 #endif

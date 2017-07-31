@@ -1,5 +1,3 @@
-#include <error/snkexception.hpp>
-
 template<typename Resource>
 ResourceManager<Resource>::ResourceManager() 
 : mMaxIndex(MAX_INDEX),
@@ -11,7 +9,7 @@ template<typename Resource>
 Handle ResourceManager<Resource>::create() {
 
     unsigned int index;
-    if (mCounter = mMaxCounter) {
+    if (mCounter == mMaxCounter) {
 
         mCounter = 0;
 
@@ -24,7 +22,7 @@ Handle ResourceManager<Resource>::create() {
     } else {
 
         index = mResources.size();
-        mResources.push_back(Resource());
+        mResources.push_back(StoredResource());
 
         // Subtract one and test equality rather than using greater than test,
         // in case that max index is also max value for type causing overflow.
@@ -73,7 +71,7 @@ Resource& ResourceManager<Resource>::dereference(const Handle& handle) {
 
     }
 
-    StoredResource& res = mResources[index];
+    StoredResource& res = mResources[handle.getIndex()];
     if (res.counter != handle.getCounter()) {
 
         throw SnakeException("Handle counter does not match");
