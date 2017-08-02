@@ -23,8 +23,8 @@ public:
     typedef Resource& reference;
     typedef const Resource* const_pointer;
     typedef const Resource& const_reference;
-    typedef ResourceIter<Resource, reference, pointer> iterator;
-    typedef ResourceIter<Resource, const_reference, const_pointer> const_iterator;
+    typedef ResourceIter<Resource, pointer, reference> iterator;
+    typedef ResourceIter<Resource, const_pointer, const_reference> const_iterator;
 
 public:
 
@@ -89,8 +89,8 @@ public:
 
     ResourceIter(ResourceManager<Resource>& manager, bool begin);
     
-    bool operator==(const ResourceIter& rhs);
-    bool operator!=(const ResourceIter& rhs);
+    bool operator==(const ResourceIter& rhs) const;
+    bool operator!=(const ResourceIter& rhs) const;
     reference operator*();
     pointer operator->();
     ResourceIter<Resource, Pointer, Reference>& operator++();

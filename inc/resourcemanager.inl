@@ -131,7 +131,7 @@ ResourceIter<Resource, Pointer, Reference>::ResourceIter(ResourceManager<Resourc
 
     if (begin) {
 
-        while ((mIt->counter == 0) && (mIt != mResources.end())) {
+        while ((mIt != mResources.end()) && (mIt->counter == 0) ) {
             
             ++mIt;
 
@@ -143,7 +143,7 @@ ResourceIter<Resource, Pointer, Reference>::ResourceIter(ResourceManager<Resourc
 
 
 template<typename Resource, typename Pointer, typename Reference>
-bool ResourceIter<Resource, Pointer, Reference>::operator==(const ResourceIter& rhs) {
+bool ResourceIter<Resource, Pointer, Reference>::operator==(const ResourceIter& rhs) const {
 
     return mIt == rhs.mIt;
 
@@ -151,7 +151,7 @@ bool ResourceIter<Resource, Pointer, Reference>::operator==(const ResourceIter& 
 
 
 template<typename Resource, typename Pointer, typename Reference>
-bool ResourceIter<Resource, Pointer, Reference>::operator!=(const ResourceIter& rhs) {
+bool ResourceIter<Resource, Pointer, Reference>::operator!=(const ResourceIter& rhs) const {
 
     return !(*this == rhs);
 
@@ -179,11 +179,12 @@ template<typename Resource, typename Pointer, typename Reference>
 ResourceIter<Resource, Pointer, Reference>& ResourceIter<Resource, Pointer, Reference>::operator++() {
 
     ++mIt;
-    while ((mIt->counter == 0) && (mIt != mResources.end())) {
+    while ((mIt != mResources.end()) && (mIt->counter == 0)) {
         
         ++mIt;
 
     }
+    return *this;
 
 }
 
