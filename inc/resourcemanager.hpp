@@ -7,11 +7,10 @@
 
 namespace snk {
 
-template<typename Resource, typename Pointer, typename Reference>
+template<typename Resource, typename Tag, typename Pointer, typename Reference>
 class ResourceIter;
 
-// Note: resources used with manager must have default constructor.
-template<typename Resource>
+template<typename Resource, typename Tag>
 class ResourceManager {
 public:
 
@@ -23,8 +22,10 @@ public:
     typedef Resource& reference;
     typedef const Resource* const_pointer;
     typedef const Resource& const_reference;
-    typedef ResourceIter<Resource, pointer, reference> iterator;
-    typedef ResourceIter<Resource, const_pointer, const_reference> const_iterator;
+    typedef ResourceIter<Resource, Tag, pointer, reference> iterator;
+    typedef ResourceIter<Resource, Tag, const_pointer, const_reference> const_iterator;
+    
+    typedef Handle<Tag> ResHandle;
 
 public:
 
@@ -36,11 +37,11 @@ public:
 
     ResourceManager();
 
-    Handle create();
-    void destroy(const Handle& handle);
+    ResHandle create();
+    void destroy(const ResHandle& handle);
 
-    Resource& dereference(const Handle& handle);
-    const Resource& dereference(const Handle& handle) const;
+    Resource& dereference(const ResHandle& handle);
+    const Resource& dereference(const ResHandle& handle) const;
 
     iterator begin();
     iterator end();
@@ -69,17 +70,17 @@ private:
 };
 
 /// Iterator for ResourceManager.
-template<typename Resource, typename Pointer, typename Reference>
+template<typename Resource, typename Tag, typename Pointer, typename Reference>
 class ResourceIter : public std::iterator<std::forward_iterator_tag,
-                                          typename ResourceManager<Resource>::value_type,
-                                          typename ResourceManager<Resource>::difference_type,
+                                          typename ResourceManager<Resource, Tag>::value_type,
+                                          typename ResourceManager<Resource, Tag>::difference_type,
                                           Pointer,
                                           Reference> {
 private:
 
     typedef std::iterator<std::forward_iterator_tag,
-                          typename ResourceManager<Resource>::value_type,
-                          typename ResourceManager<Resource>::difference_type,
+                          typename ResourceManager<Resource, Tag>::value_type,
+                          typename ResourceManager<Resource, Tag>::difference_type,
                           Pointer,
                           Reference> base;
     typedef typename base::pointer pointer;
@@ -87,18 +88,18 @@ private:
 
 public:
 
-    ResourceIter(ResourceManager<Resource>& manager, bool begin);
+    ResourceIter(ResourceManager<Resource, Tag>& manager, bool begin);
     
     bool operator==(const ResourceIter& rhs) const;
     bool operator!=(const ResourceIter& rhs) const;
     reference operator*();
     pointer operator->();
-    ResourceIter<Resource, Pointer, Reference>& operator++();
-    ResourceIter<Resource, Pointer, Reference> operator++(int);
+    ResourceIter<Resource, Tag, Pointer, Reference>& operator++();
+    ResourceIter<Resource, Tag, Pointer, Reference> operator++(int);
 
 private:
 
-    typedef typename ResourceManager<Resource>::StoredResource Stored;
+    typedef typename ResourceManager<Resource, Tag>::StoredResource Stored;
 
 private:
 

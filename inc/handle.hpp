@@ -8,7 +8,10 @@
 
 namespace snk {
 
-// TODO: template to have different handle types for different resources.
+/// Handle for resources.
+/// Template Tag to allow different handle types for different resources for 
+/// compile time safety.
+template<typename Tag>
 class Handle {
 public:
 
@@ -23,6 +26,8 @@ private:
     unsigned int mCounter : COUNTER_BITS;
 
 };
+
+#include <handle.inl>
 
 } // namespace snk
 

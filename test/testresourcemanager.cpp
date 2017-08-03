@@ -4,6 +4,11 @@
 #include <resourcemanager.hpp>
 #include <resource.hpp>
 
+// Handle tag.
+struct TestTag {};
+
+typedef snk::Handle<TestTag> TestHandle;
+
 struct Manager {
 
     // Test Resource.
@@ -18,7 +23,7 @@ struct Manager {
         
     };
 
-    snk::ResourceManager<TestRes> manager;
+    snk::ResourceManager<TestRes, TestTag> manager;
 
     Manager() {}
 
@@ -29,7 +34,7 @@ BOOST_FIXTURE_TEST_SUITE(ResourceManagerTests, Manager)
 BOOST_AUTO_TEST_CASE(create1) {
 
     int testVal = 6;
-    snk::Handle h = manager.create(); 
+    TestHandle h = manager.create(); 
     manager.dereference(h).val = testVal; 
     TestRes& r = manager.dereference(h);
     BOOST_CHECK_EQUAL(testVal, r.val);
@@ -43,14 +48,14 @@ BOOST_AUTO_TEST_CASE(create2) {
     int testVal3 = 43;
 
     manager.create();
-    snk::Handle h1 = manager.create(); 
+    TestHandle h1 = manager.create(); 
     manager.create();
     manager.create();
-    snk::Handle h2 = manager.create(); 
+    TestHandle h2 = manager.create(); 
     manager.create();
     manager.create();
     manager.create();
-    snk::Handle h3 = manager.create(); 
+    TestHandle h3 = manager.create(); 
     manager.create();
     manager.create();
 
@@ -70,7 +75,7 @@ BOOST_AUTO_TEST_CASE(create2) {
 
 BOOST_AUTO_TEST_CASE(destroy1) {
 
-    snk::Handle h = manager.create(); 
+    TestHandle h = manager.create(); 
     manager.destroy(h);
     BOOST_CHECK_THROW(manager.dereference(h), snk::SnakeException);
 
@@ -78,7 +83,7 @@ BOOST_AUTO_TEST_CASE(destroy1) {
 
 BOOST_AUTO_TEST_CASE(destroy2) {
 
-    snk::Handle h = manager.create(); 
+    TestHandle h = manager.create(); 
     manager.destroy(h);
     BOOST_CHECK_THROW(manager.dereference(h), snk::SnakeException);
 
@@ -87,7 +92,7 @@ BOOST_AUTO_TEST_CASE(destroy2) {
 BOOST_AUTO_TEST_CASE(destroy3) {
 
     int testVal = 8475;
-    snk::Handle h = manager.create(); 
+    TestHandle h = manager.create(); 
     manager.dereference(h).val = testVal;
     manager.destroy(h);
     h = manager.create(); 
@@ -103,16 +108,16 @@ BOOST_AUTO_TEST_CASE(destroy4) {
     int testVal2 = -907;
     int testVal3 = 1;
 
-    snk::Handle d1 = manager.create(); 
-    snk::Handle h1 = manager.create(); 
-    snk::Handle d2 = manager.create(); 
+    TestHandle d1 = manager.create(); 
+    TestHandle h1 = manager.create(); 
+    TestHandle d2 = manager.create(); 
     manager.destroy(d1);
-    snk::Handle h2 = manager.create(); 
-    snk::Handle d3 = manager.create();
-    snk::Handle d4 = manager.create();
+    TestHandle h2 = manager.create(); 
+    TestHandle d3 = manager.create();
+    TestHandle d4 = manager.create();
     manager.destroy(d4);
-    snk::Handle d5 = manager.create();
-    snk::Handle h3 = manager.create(); 
+    TestHandle d5 = manager.create();
+    TestHandle h3 = manager.create(); 
     manager.destroy(d3);
     manager.destroy(d5);
     manager.create();
@@ -168,7 +173,7 @@ BOOST_AUTO_TEST_CASE(itMovement2) {
 
 BOOST_AUTO_TEST_CASE(itDestruction) {
 
-    snk::Handle h = manager.create();
+    TestHandle h = manager.create();
     BOOST_CHECK(manager.begin() != manager.end());
     manager.destroy(h);
     BOOST_CHECK(manager.begin() == manager.end());
@@ -181,10 +186,10 @@ BOOST_AUTO_TEST_CASE(itNormal1) {
     int testVal2 = 2965;
     int testVal3 = 9;
     int testVal4 = 123;
-    snk::Handle h1 = manager.create();
-    snk::Handle h2 = manager.create();
-    snk::Handle h3 = manager.create();
-    snk::Handle h4 = manager.create();
+    TestHandle h1 = manager.create();
+    TestHandle h2 = manager.create();
+    TestHandle h3 = manager.create();
+    TestHandle h4 = manager.create();
 
     manager.dereference(h1).val = testVal1; 
     manager.dereference(h2).val = testVal2; 
@@ -215,14 +220,14 @@ BOOST_AUTO_TEST_CASE(itNormal1) {
 BOOST_AUTO_TEST_CASE(itNormal2) {
 
     int testVal = 97;
-    snk::Handle d1 = manager.create();
-    snk::Handle d2 = manager.create();
-    snk::Handle h1 = manager.create();
-    snk::Handle h2 = manager.create();
-    snk::Handle d3 = manager.create();
-    snk::Handle h3 = manager.create();
-    snk::Handle d4 = manager.create();
-    snk::Handle d5 = manager.create();
+    TestHandle d1 = manager.create();
+    TestHandle d2 = manager.create();
+    TestHandle h1 = manager.create();
+    TestHandle h2 = manager.create();
+    TestHandle d3 = manager.create();
+    TestHandle h3 = manager.create();
+    TestHandle d4 = manager.create();
+    TestHandle d5 = manager.create();
 
     manager.dereference(h1).val = testVal; 
     manager.dereference(h2).val = testVal; 
