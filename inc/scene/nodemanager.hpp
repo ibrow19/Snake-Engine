@@ -7,6 +7,9 @@
 
 namespace snk {
 
+struct NodeTag {};
+typedef Handle<NodeTag> NodeHandle; 
+
 /// Stores all nodes in one place in addition to factories for game objects.
 //template<typename ... types>
 class NodeManager {
@@ -35,7 +38,10 @@ public:
     void registerNode(Id nodeId, const NodeData& nodeData);
 
     /// Create a node of the specified type.
-    Node& createNode(Id nodeId);  
+    NodeHandle createNode(Id nodeId);  
+
+    Node& dereference(const NodeHandle& handle);
+    const Node& dereference(const NodeHandle& handle) const;
 
     /// Destroy marked nodes.
     void destroyMarked();
@@ -56,11 +62,7 @@ private:
 
     std::vector<NodeType> mNodeTypes;
 
-    // TODO: All managers need a way of storing references to resources in a contiguous
-    // fashion that can cope with relocation from vector resizes. Unique_ptrs to the
-    // resources can cope with relocation in the vector but resources are not
-    // stored contiguously.
-    std::vector<std::unique_ptr<Node>> mNodes;
+    ResourceManager<Node, NodeTag> mNodes;
 
 };
 

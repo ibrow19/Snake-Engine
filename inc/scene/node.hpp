@@ -5,6 +5,7 @@
 #include <memory>
 #include <texture.hpp>
 #include <maths/transform.hpp>
+#include <resource.hpp>
 
 namespace snk {
 
@@ -13,13 +14,15 @@ namespace snk {
 //       translate back ~ would just appear like a rotation around the origin).
 //       However, it does ensure transformations are always applied in the same order:
 //       Translate to origin -> scale -> rotate -> translate.
-class Node {
+class Node : public Resource {
 public:
 
-    Node(Texture* texture);
+    Node();
 
+    void reset();
+
+    void setTexture(Texture* texture);
     void addChild(Node& child);
-
     void render();
 
     // Mark the node and its children for removal so that once iteration for

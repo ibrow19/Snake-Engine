@@ -46,7 +46,7 @@ void NodeManager::registerNode(Id nodeId, const NodeData& nodeData) {
 }
 
 
-Node& NodeManager::createNode(Id nodeId) {
+NodeHandle NodeManager::createNode(Id nodeId) {
 
     if (nodeId >= mNodeTypes.size()) {
 
@@ -68,22 +68,40 @@ Node& NodeManager::createNode(Id nodeId) {
 
     }
 
-    std::unique_ptr<Node> newNode(new Node(texture));
-    Node& newRef = *(newNode.get());
-    mNodes.push_back(std::move(newNode));
-    return newRef;
+    NodeHandle newHandle = mNodes.create();
+    Node& newNode = mNodes.dereference(newHandle);
+    newNode.setTexture(texture);
+    return newHandle;
+
+}
+
+
+Node& NodeManager::dereference(const NodeHandle& handle) {
+
+    return mNodes.dereference(handle);
+
+}
+
+
+const Node& NodeManager::dereference(const NodeHandle& handle) const {
+
+    return mNodes.dereference(handle);
 
 }
 
 
 void NodeManager::destroyMarked() {
 
+    // TODO: reconsider how node destruction is carried out. 
+    //       Possibly add destruction method to iterator so handle not strictly required for
+    //       destruction.
+
     // Note: component cleanup is handled by component manager. 
 
-    auto removeBegin = std::remove_if(mNodes.begin(), mNodes.end(),
-                                      std::mem_fn(&Node::isDestroyed));
+    //auto removeBegin = std::remove_if(mNodes.begin(), mNodes.end(),
+    //                                  std::mem_fn(&Node::isDestroyed));
 
-    mNodes.erase(removeBegin, mNodes.end());
+    //mNodes.erase(removeBegin, mNodes.end());
 
 }
 

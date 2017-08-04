@@ -3,14 +3,37 @@
 
 namespace snk {
 
-Node::Node(Texture* texture)
+Node::Node()
 : mParent(nullptr),
   mDestroyed(false),
   mDirty(true),  // Must be true initially to initialise world transform
   mLocal(),
   mWorld(),
   mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
-  mTexture(texture) {}
+  mTexture(nullptr) {}
+
+
+void Node::reset() {
+
+    mParent = nullptr;
+    mDestroyed = false;
+    mDirty = true;
+    mLocal = Transform();
+    mWorld = Transform();
+    mLocalData = Transform::TData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}});
+    mTexture = nullptr;
+    mChildren.clear();
+
+    // TODO: remove components.
+
+}
+
+
+void Node::setTexture(Texture* texture) {
+
+    mTexture = texture;
+
+}
 
 
 void Node::addChild(Node& child) {

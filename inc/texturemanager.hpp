@@ -8,6 +8,7 @@
 #include <rapidxml.hpp>
 #include <shader/basic.hpp>
 #include <texture.hpp>
+#include <resourcemanager.hpp>
 
 namespace snk {
 
