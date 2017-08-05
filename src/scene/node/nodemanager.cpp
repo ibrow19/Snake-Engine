@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <functional>
 #include <error/snkexception.hpp>
-#include <scene/nodemanager.hpp>
+#include <scene/node/nodemanager.hpp>
 
 namespace snk {
 

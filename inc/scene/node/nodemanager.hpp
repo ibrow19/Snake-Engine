@@ -2,8 +2,8 @@
 #define SNAKE_NODE_MANAGER_HEADER
 
 #include <texturemanager.hpp>
-#include <scene/node.hpp>
-#include <scene/componentmanager.hpp>
+#include <scene/node/node.hpp>
+#include <scene/component/componentmanager.hpp>
 
 namespace snk {
 

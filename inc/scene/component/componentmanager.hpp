@@ -1,7 +1,7 @@
 #ifndef SNAKE_COMPONENT_MANAGER_HEADER
 #define SNAKE_COMPONENT_MANAGER_HEADER
 
-#include <scene/component.hpp>
+#include <scene/component/component.hpp>
 
 namespace snk {
 

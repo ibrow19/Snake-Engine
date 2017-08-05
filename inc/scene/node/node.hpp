@@ -26,12 +26,16 @@ public:
     void addChild(Node& child);
     void render();
 
+    //void addComponent(ComponentManager::Id componentId);
+    //Component* getComponent(ComponentManager::Id componentId); 
+
     // Mark the node and its children for removal so that once iteration for
     // updating is finished, the node can be destroyed by node manager.
     void destroy();
     
     // Check if node is marked for removal.
     bool isDestroyed() const;
+
 
     // Operations corresponding to the various possible transformations.
 

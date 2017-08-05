@@ -1,5 +1,5 @@
 #include <cassert>
-#include <scene/node.hpp>
+#include <scene/node/node.hpp>
 
 namespace snk {
 
