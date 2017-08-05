@@ -12,7 +12,7 @@ TextureManager::TextureManager(unsigned int textureCount,
                                const std::string& resDir)
 : mShader(shader),
   mResDir(resDir + '/'),
-  mTextures(textureCount) {
+  mTextureData(textureCount) {
       
     if (textureCount == 0) {
 
@@ -25,13 +25,13 @@ TextureManager::TextureManager(unsigned int textureCount,
 
 void TextureManager::registerTexture(Id textureId, const std::string& path) {
 
-    if (textureId >= mTextures.size()) {
+    if (textureId >= mTextureData.size()) {
 
         throw SnakeException("Attempting to assign texture Id which is greater than maximum texture Id");
 
     }
 
-    if (mTextures[textureId].init) {
+    if (mTextureData[textureId].init) {
 
         throw SnakeException("Attempting to assign already assigned texture Id");
 
@@ -43,41 +43,43 @@ void TextureManager::registerTexture(Id textureId, const std::string& path) {
 
     }
 
-    mTextures[textureId].init = true;
-    mTextures[textureId].path = path;
+    mTextureData[textureId].init = true;
+    mTextureData[textureId].path = path;
 
 }
 
 
 Texture& TextureManager::getTexture(Id textureId) {
 
-    if (textureId >= mTextures.size()) {
+    if (textureId >= mTextureData.size()) {
 
         throw SnakeException("Attempting to get texture Id which is greater than maximum texture Id");
 
     }
-    Texture* texture = mTextures[textureId].texture.get();
-    if (texture == nullptr) {
+    TextureData& data = mTextureData[textureId];
+    if (data.init != true) {
 
-        loadTexture(textureId);
-        texture = mTextures[textureId].texture.get();
+        throw SnakeException("Attempting to get texture Id which has uninitialied entry in manager");
 
     }
-    return *texture;
+
+    try {
+
+        return mTextures.dereference(mTextureData[textureId].handle);
+
+    } catch (SnakeException& e) {
+
+        loadTexture(textureId);
+        return mTextures.dereference(mTextureData[textureId].handle);
+        
+    }
 
 }
 
 
-void TextureManager::loadTexture(Id textureId) {
+void TextureManager::loadTexture(Id textureId) { 
 
-    std::string& path = mTextures[textureId].path;
-    if (path.empty()) {
-
-        throw SnakeException("Attempting to load texture with Id which has not been initialised");
-
-    }
-
-    std::string totalPath = mResDir + path;
+    std::string totalPath = mResDir + mTextureData[textureId].path;
     rapidxml::file<> xmlFile(totalPath.c_str());
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
@@ -96,7 +98,11 @@ void TextureManager::loadTexture(Id textureId) {
         throw SnakeException("Could not find path attribute when loading texture with: " + totalPath);
 
     }
-    std::unique_ptr<Texture> newTexture(new Texture(mShader, mResDir + attr->value()));
+
+    TextureHandle newHandle;
+    Texture& newTexture = mTextures.create(newHandle);
+    mTextureData[textureId].handle = newHandle;
+    newTexture.init(mShader, mResDir + attr->value());
 
     bool valid = true;
     Texture::clip newClip = {0.f, 0.f, 0.f, 0.f};
@@ -107,7 +113,7 @@ void TextureManager::loadTexture(Id textureId) {
         valid = parseClip(node, newClip);
         if (valid) {
 
-            newTexture->addClip(newClip);
+            newTexture.addClip(newClip);
 
         }
 
@@ -117,8 +123,6 @@ void TextureManager::loadTexture(Id textureId) {
         throw SnakeException("Invalid clip node found when loading texture with: " + totalPath);
 
     }
-
-    mTextures[textureId].texture = std::move(newTexture);
 
 }
 

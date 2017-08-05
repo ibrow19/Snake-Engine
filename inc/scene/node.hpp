@@ -6,6 +6,7 @@
 #include <texture.hpp>
 #include <maths/transform.hpp>
 #include <resource.hpp>
+#include <texturemanager.hpp>
 
 namespace snk {
 
@@ -21,7 +22,7 @@ public:
 
     void reset();
 
-    void setTexture(Texture* texture);
+    void init(TextureManager& tManager, bool hasTexture, TextureManager::Id textureId);
     void addChild(Node& child);
     void render();
 
@@ -76,7 +77,9 @@ private:
 
     Transform::TData mLocalData;
 
-    Texture* mTexture;
+    TextureManager* mTManager;
+    bool mHasTexture;
+    TextureManager::Id mTextureId;
 
     std::vector<Node*> mChildren;
 

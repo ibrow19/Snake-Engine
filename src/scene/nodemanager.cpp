@@ -61,18 +61,10 @@ NodeHandle NodeManager::createNode(Id nodeId) {
     
     }
 
-    Texture* texture = nullptr;
-    if (nodeType.data.hasTexture) {
-
-        texture = &(mTManager.getTexture(nodeType.data.textureId));
-
-    }
-
-    NodeHandle newHandle = mNodes.create();
-    Node& newNode = mNodes.dereference(newHandle);
-    newNode.setTexture(texture);
+    NodeHandle newHandle;
+    Node& newNode = mNodes.create(newHandle);
+    newNode.init(mTManager, nodeType.data.hasTexture, nodeType.data.textureId);
     return newHandle;
-
 }
 
 

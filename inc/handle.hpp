@@ -15,6 +15,9 @@ template<typename Tag>
 class Handle {
 public:
 
+    /// Default initialision.
+    Handle();
+
     Handle(unsigned int index, unsigned int counter);
     
     unsigned int getIndex() const;

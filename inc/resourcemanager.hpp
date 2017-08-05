@@ -37,7 +37,13 @@ public:
 
     ResourceManager();
 
-    ResHandle create();
+    /// Create a new resource, setting handle. Note, any other calls to resourcemanager
+    /// functions (primarily creation and destruction) may invalidate the reference.
+    /// \param handle resource handle to be initilised.
+    /// \return the created resource to carry out additional initialisation.
+    Resource& create(ResHandle& handle);
+
+    // TODO: should this throw an exception if the handle is invalid or not?
     void destroy(const ResHandle& handle);
 
     Resource& dereference(const ResHandle& handle);

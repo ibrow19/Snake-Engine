@@ -1,3 +1,4 @@
+#include <cassert>
 #include <GL/glew.h>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
@@ -7,33 +8,15 @@
 
 namespace snk {
 
-Texture::Texture(BasicShader& shader, const std::string& path) 
-: mShader(shader),
+Texture::Texture() 
+: mShader(nullptr),
   mVaoId(0),
   mVboId{0},
   mIboId(0),
   mTextureId(0),
   mWidth(0),
   mHeight(0),
-  currentClip(0) {
-
-    loadFromFile(path);
-    initVbo();
-    initIbo();
-    mVaoId = mShader.initVao(mVboId[0], mVboId[1], mIboId);
-
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-
-        destroyTexture();
-        throw GLException("Error initialisng texture: " + path, error);
-
-    }
-
-    // Add default clip for entire texture. 
-    addClip({0.f, 0.f, (GLfloat)mWidth, (GLfloat)mHeight});
-      
-}
+  mCurrentClip(0) {}
 
 
 Texture::~Texture() {
@@ -43,22 +26,59 @@ Texture::~Texture() {
 }
 
 
+void Texture::reset() {
+
+    destroyTexture();
+    mShader = nullptr;
+    mVaoId = 0;
+    mVboId[0] = 0;
+    mVboId[1] = 0;
+    mIboId = 0;
+    mTextureId = 0;
+    mWidth = 0;
+    mHeight = 0;
+    mCurrentClip = 0;
+    mClips.clear();
+
+}
+
+
+void Texture::init(BasicShader& shader, const std::string& path) {
+
+    assert(mShader == nullptr);
+    mShader = &shader;
+
+    loadFromFile(path);
+    initVbo();
+    initIbo();
+    mVaoId = mShader->initVao(mVboId[0], mVboId[1], mIboId);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+
+        throw GLException("Error initialisng texture: " + path, error);
+
+    }
+
+    // Add default clip for entire texture. 
+    addClip({0.f, 0.f, (GLfloat)mWidth, (GLfloat)mHeight});
+
+}
+
+
 void Texture::addClip(const clip& newClip) {
 
-    clips.push_back(newClip);
+    assert(mShader != nullptr);
+    mClips.push_back(newClip);
 
 }
 
 
 void Texture::setClip(unsigned int clipIndex) {
 
-    if (clipIndex >= clips.size()) {
+    assert(clipIndex < mClips.size());
 
-        throw SnakeException("Attempting to use out of bounds texture clip index");
-
-    }
-
-    clip& target = clips[clipIndex];
+    clip& target = mClips[clipIndex];
     GLfloat left = target.left / mWidth;;
     GLfloat right = (target.left + target.width) / mWidth;
     GLfloat top = target.top / mHeight;
@@ -105,14 +125,15 @@ void Texture::setClip(unsigned int clipIndex) {
 
 void Texture::render(const Transform& model, unsigned int clip) {
 
-    mShader.setModel(model);
-    if (currentClip != clip) {
+    assert(mShader != nullptr);
+    mShader->setModel(model);
+    if (mCurrentClip != clip) {
 
         setClip(clip);
-        currentClip = clip;
+        mCurrentClip = clip;
 
     }
-    mShader.render(mVaoId, mTextureId);
+    mShader->render(mVaoId, mTextureId);
 
 }
 

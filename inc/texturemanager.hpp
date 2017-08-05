@@ -32,15 +32,17 @@ public:
 
 private:
 
+    struct TextureTag {};
+    typedef Handle<TextureTag> TextureHandle;
+
+private:
+
     struct TextureData {
 
         // init represents whether this entry has been initialised or not.
         bool init = false;
         std::string path;
-
-        // TODO: store textures contiguously somewhere rather than using unique pointers.
-        // Should be null if the texture is not loaded.
-        std::unique_ptr<Texture> texture;
+        TextureHandle handle;
 
     };
 
@@ -53,7 +55,9 @@ private:
 
     BasicShader& mShader;
     std::string mResDir;
-    std::vector<TextureData> mTextures;
+    std::vector<TextureData> mTextureData;
+
+    ResourceManager<Texture, TextureTag> mTextures;
 
 };
 

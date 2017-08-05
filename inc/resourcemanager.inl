@@ -6,7 +6,7 @@ ResourceManager<Resource, Tag>::ResourceManager()
 
 
 template<typename Resource, typename Tag>
-typename ResourceManager<Resource, Tag>::ResHandle ResourceManager<Resource, Tag>::create() {
+Resource& ResourceManager<Resource, Tag>::create(ResHandle& handle) {
 
     unsigned int index;
     if (mCounter == mMaxCounter) {
@@ -33,9 +33,9 @@ typename ResourceManager<Resource, Tag>::ResHandle ResourceManager<Resource, Tag
         }
 
     }
-    ResHandle newHandle(index, ++mCounter);
+    handle = ResHandle(index, ++mCounter);
     mResources[index].counter = mCounter;
-    return newHandle;
+    return mResources[index].resource;
 
 }
 
@@ -62,6 +62,9 @@ void ResourceManager<Resource, Tag>::destroy(const ResHandle& handle) {
 }
 
 
+// TODO: compare exception approach for invalid handles to returning nullptr on failure.
+//       current implementation assumes zero cost exceptions are faster than potetntial
+//       branch misprediction from checking nullptr.
 template<typename Resource, typename Tag>
 Resource& ResourceManager<Resource, Tag>::dereference(const ResHandle& handle) {
 
