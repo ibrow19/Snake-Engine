@@ -10,28 +10,21 @@ NodeManager::NodeManager(unsigned int nodeCount,
                          ComponentManager& cManager) 
 : mTManager(tManager),
   mCManager(cManager),
-  mNodeTypes(nodeCount) {
-
-    if (nodeCount == 0) {
-
-        throw SnakeException("Node manager must manage at least one type of node");
-
-    }
-
-}
+  mNodeTypes(nodeCount) {}
+  // TODO: could ensure there is at least one node type for manager here.
 
 
 void NodeManager::registerNode(Id nodeId, const NodeData& nodeData) {
 
     if (nodeId >= mNodeTypes.size()) {
 
-        throw SnakeException("Attempting to assign node type Id which is greater than maximum node Id");
+        throw SnakeException("Attempting to initialise node type Id which is greater than maximum node Id");
 
     }
 
     if (mNodeTypes[nodeId].init) {
 
-        throw SnakeException("Attempting to assign already assigned node type Id");
+        throw SnakeException("Attempting to initialise already initialised node type Id");
 
     }
 
