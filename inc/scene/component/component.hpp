@@ -6,14 +6,19 @@
 
 namespace snk {
 
+class Node;
+class NodeManager;
+
 class Component : public Resource {
 public:
 
     // TODO: initialise owner.
     Component();
+    virtual ~Component();
 
     // TODO: this function shouldn't be exposed.
-    void setOwner(const NodeHandle& handle);
+    /// Initialise newly created component with owner and manager.
+    void init(NodeManager& manager, const NodeHandle& owner);
 
     // init is called when node using this component is initialised.
     virtual void init();
@@ -21,7 +26,11 @@ public:
 
 protected:
 
-    //NodeManager mNManager;
+    Node& getOwner();
+
+protected:
+
+    NodeManager* mNManager;
     NodeHandle mOwnerHandle;
 
 };

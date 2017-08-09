@@ -8,7 +8,9 @@ ComponentManager::ComponentManager(unsigned int componentCount)
   mComponents(componentCount) {}
 
 
-ComponentHandle ComponentManager::createComponent(ComponentId componentId) {
+ComponentHandle ComponentManager::createComponent(ComponentId componentId,
+                                                  const NodeHandle& owner,
+                                                  NodeManager& nManager) {
 
     if (componentId >= mComponents.size()) {
 
@@ -25,6 +27,7 @@ ComponentHandle ComponentManager::createComponent(ComponentId componentId) {
     ComponentHandle newHandle;
     ComponentPointer& newComponent = mComponents[componentId].create(newHandle);
     newComponent.setComponent(mComponentTypes[componentId].factory);
+    newComponent.getComponent().init(nManager, owner);
     return newHandle;
 
 }

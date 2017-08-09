@@ -15,10 +15,6 @@
 
 namespace snk {
 
-//class TextureManager;
-//class NodeManager;
-//class ComponentManager;
-
 class Node : public Resource {
 public:
 
@@ -28,7 +24,8 @@ public:
 
     // TODO: less generic ResourceManager could avoid needing to constantly reinitialise
     //       managers.
-    void init(TextureManager& tManager, 
+    void init(const NodeHandle& handle,
+              TextureManager& tManager, 
               ComponentManager& cManager,
               NodeManager& nManager,  
               bool hasTexture, 
@@ -85,7 +82,7 @@ private:
 
     /// Add component to this node.
     /// \param componentId Id of component to add.
-    void addComponent(ComponentId componentId);
+    void addComponent(ComponentId componentId, const NodeHandle& owner);
     void render(const Transform& world, bool dirty);
 
 private:

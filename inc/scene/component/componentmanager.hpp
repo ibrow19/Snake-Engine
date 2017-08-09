@@ -17,7 +17,9 @@ public:
     template<typename T>
     void registerComponent(ComponentId componentId);
 
-    ComponentHandle createComponent(ComponentId componentId);
+    ComponentHandle createComponent(ComponentId componentId,
+                                    const NodeHandle& owner,
+                                    NodeManager& nManager);
 
     Component& dereference(ComponentId componentId, const ComponentHandle& handle);
     const Component& dereference(ComponentId componentId, const ComponentHandle& handle) const;

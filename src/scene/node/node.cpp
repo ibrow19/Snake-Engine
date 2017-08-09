@@ -41,8 +41,8 @@ void Node::reset() {
 }
 
 
-// TODO: initialise components here.
-void Node::init(TextureManager& tManager, 
+void Node::init(const NodeHandle& handle,
+                TextureManager& tManager, 
                 ComponentManager& cManager,
                 NodeManager& nManager,  
                 bool hasTexture, 
@@ -63,7 +63,8 @@ void Node::init(TextureManager& tManager,
     // Add components.
     for (auto it = components.cbegin(); it != components.cend(); ++it) {
 
-        addComponent(*it);
+        // TODO: it may be useful to keep handle of node as member function.
+        addComponent(*it, handle);
 
     }
 
@@ -297,7 +298,7 @@ void Node::translate(float x, float y) {
 }
 
 
-void Node::addComponent(ComponentId componentId) {
+void Node::addComponent(ComponentId componentId, const NodeHandle& owner) {
 
     // TODO: this check could be quite costly and unnecessary.
     if (mComponents.find(componentId) != mComponents.end()) {
@@ -305,7 +306,7 @@ void Node::addComponent(ComponentId componentId) {
         throw SnakeException("A Node cannot have one than one of one type of commponent");
 
     }
-    mComponents[componentId] = mCManager->createComponent(componentId);
+    mComponents[componentId] = mCManager->createComponent(componentId, owner, *mNManager);
 
 }
 

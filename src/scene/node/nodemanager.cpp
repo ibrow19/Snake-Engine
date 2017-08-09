@@ -58,7 +58,8 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
 
     NodeHandle newHandle;
     Node& newNode = mNodes.create(newHandle);
-    newNode.init(mTManager, 
+    newNode.init(newHandle,
+                 mTManager, 
                  mCManager,
                  *this,
                  nodeType.data.hasTexture, 
