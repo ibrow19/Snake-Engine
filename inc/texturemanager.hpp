@@ -8,6 +8,7 @@
 #include <rapidxml.hpp>
 #include <shader/basic.hpp>
 #include <texture.hpp>
+#include <identifiers.hpp>
 #include <resourcemanager.hpp>
 
 namespace snk {
@@ -15,20 +16,16 @@ namespace snk {
 class TextureManager {
 public:
 
-    typedef unsigned int Id;
-
-public:
-
     TextureManager(unsigned int textureCount, 
                    BasicShader& shader, 
                    const std::string& resDir = ".");
 
     /// Register a texture with specified Id and path.
-    void registerTexture(Id textureId, const std::string& path);
+    void registerTexture(TextureId textureId, const std::string& path);
 
     /// Gets specified texture. If texture is not currently loaded, 
     /// then it must be loaded from file first.
-    Texture& getTexture(Id textureId);
+    Texture& getTexture(TextureId textureId);
 
 private:
 
@@ -48,7 +45,7 @@ private:
 
 private:
 
-    void loadTexture(Id textureId);
+    void loadTexture(TextureId textureId);
     bool parseClip(rapidxml::xml_node<>* node, Texture::clip& newClip);
 
 private:

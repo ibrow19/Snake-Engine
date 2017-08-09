@@ -1,28 +1,28 @@
 #ifndef SNAKE_COMPONENT_HEADER
 #define SNAKE_COMPONENT_HEADER
 
-#include <handle.hpp>
+#include <identifiers.hpp>
 #include <resource.hpp>
 
 namespace snk {
 
-class NodeTag;
-typedef Handle<NodeTag> NodeHandle;
-
 class Component : public Resource {
 public:
 
-    // TODO: initialise parent.
+    // TODO: initialise owner.
     Component();
+
+    // TODO: this function shouldn't be exposed.
+    void setOwner(const NodeHandle& handle);
 
     // init is called when node using this component is initialised.
     virtual void init();
-
     virtual void update(float delta);
 
 protected:
 
-    NodeHandle parentHandle;
+    //NodeManager mNManager;
+    NodeHandle mOwnerHandle;
 
 };
 

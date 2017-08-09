@@ -2,19 +2,23 @@
 #define SNAKE_NODE_HEADER
 
 #include <vector>
+#include <map>
 #include <memory>
 #include <texture.hpp>
 #include <maths/transform.hpp>
 #include <resource.hpp>
+#include <identifiers.hpp>
 #include <texturemanager.hpp>
+#include <scene/component/component.hpp>
+#include <scene/component/componentmanager.hpp>
+#include <scene/node/nodemanager.hpp>
 
 namespace snk {
 
-// Note: using dirty flag with local transform data makes some operations impossible
-//       e.g rotating around a point that is not the origin (translate to point, rotate,
-//       translate back ~ would just appear like a rotation around the origin).
-//       However, it does ensure transformations are always applied in the same order:
-//       Translate to origin -> scale -> rotate -> translate.
+//class TextureManager;
+//class NodeManager;
+//class ComponentManager;
+
 class Node : public Resource {
 public:
 
@@ -22,12 +26,24 @@ public:
 
     void reset();
 
-    void init(TextureManager& tManager, bool hasTexture, TextureManager::Id textureId);
-    void addChild(Node& child);
+    // TODO: less generic ResourceManager could avoid needing to constantly reinitialise
+    //       managers.
+    void init(TextureManager& tManager, 
+              ComponentManager& cManager,
+              NodeManager& nManager,  
+              bool hasTexture, 
+              TextureId textureId,
+              const std::vector<ComponentId>& components);
+    void addChild(const NodeHandle& childHandle);
     void render();
-
-    //void addComponent(ComponentManager::Id componentId);
-    //Component* getComponent(ComponentManager::Id componentId); 
+    
+    // TODO: const getter.
+    /// Get component of specified type T.
+    /// \param componentId Identifier for component type to get.
+    /// \return Pointer to the component or nullptr if node does not own such
+    ///         a component.
+    template<typename T>
+    T* getComponent(ComponentId componentId); 
 
     // Mark the node and its children for removal so that once iteration for
     // updating is finished, the node can be destroyed by node manager.
@@ -67,27 +83,57 @@ public:
 
 private:
 
+    /// Add component to this node.
+    /// \param componentId Id of component to add.
+    void addComponent(ComponentId componentId);
     void render(const Transform& world, bool dirty);
 
 private:
 
-    Node* mParent;
-
     bool mDestroyed;
-
+    bool mHasTexture;
     bool mDirty;
+
+    Transform::TData mLocalData;
     Transform mLocal;
     Transform mWorld;
 
-    Transform::TData mLocalData;
+    TextureId mTextureId;
 
     TextureManager* mTManager;
-    bool mHasTexture;
-    TextureManager::Id mTextureId;
+    ComponentManager* mCManager;
+    NodeManager* mNManager;
 
-    std::vector<Node*> mChildren;
+    //NodeHandle mParent;
+    std::map<ComponentId, ComponentHandle> mComponents;
+    std::vector<NodeHandle> mChildren;
 
 };
+
+
+template<typename T>
+T* Node::getComponent(ComponentId componentId) {
+
+    assert(mTManager != nullptr);
+    assert(mCManager != nullptr);
+    assert(mNManager != nullptr);
+
+    auto found = mComponents.find(componentId);
+    if (found == mComponents.end()) {
+
+        return nullptr;
+
+    }
+    Component& component = mCManager->dereference(found->first, found->second);
+    T* target = dynamic_cast<T*>(&component);
+    if (target == nullptr) {
+
+        throw SnakeException("Using wrong type for component");
+
+    }
+    return target; 
+
+}
 
 } // namespace snk
 

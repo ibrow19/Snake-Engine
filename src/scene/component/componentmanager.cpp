@@ -1,3 +1,4 @@
+#include <scene/component/component.hpp>
 #include <scene/component/componentmanager.hpp>
 
 namespace snk {
@@ -7,7 +8,7 @@ ComponentManager::ComponentManager(unsigned int componentCount)
   mComponents(componentCount) {}
 
 
-ComponentHandle ComponentManager::createComponent(Id componentId) {
+ComponentHandle ComponentManager::createComponent(ComponentId componentId) {
 
     if (componentId >= mComponents.size()) {
 
@@ -29,7 +30,7 @@ ComponentHandle ComponentManager::createComponent(Id componentId) {
 }
 
 
-Component& ComponentManager::dereference(Id componentId, const ComponentHandle& handle) {
+Component& ComponentManager::dereference(ComponentId componentId, const ComponentHandle& handle) {
 
     if (componentId >= mComponents.size()) {
 
@@ -41,7 +42,7 @@ Component& ComponentManager::dereference(Id componentId, const ComponentHandle& 
 }
 
 
-const Component& ComponentManager::dereference(Id componentId, const ComponentHandle& handle) const {
+const Component& ComponentManager::dereference(ComponentId componentId, const ComponentHandle& handle) const {
 
     if (componentId >= mComponents.size()) {
 

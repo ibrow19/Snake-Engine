@@ -23,7 +23,7 @@ TextureManager::TextureManager(unsigned int textureCount,
 }
 
 
-void TextureManager::registerTexture(Id textureId, const std::string& path) {
+void TextureManager::registerTexture(TextureId textureId, const std::string& path) {
 
     if (textureId >= mTextureData.size()) {
 
@@ -49,7 +49,7 @@ void TextureManager::registerTexture(Id textureId, const std::string& path) {
 }
 
 
-Texture& TextureManager::getTexture(Id textureId) {
+Texture& TextureManager::getTexture(TextureId textureId) {
 
     if (textureId >= mTextureData.size()) {
 
@@ -77,7 +77,7 @@ Texture& TextureManager::getTexture(Id textureId) {
 }
 
 
-void TextureManager::loadTexture(Id textureId) { 
+void TextureManager::loadTexture(TextureId textureId) { 
 
     std::string totalPath = mResDir + mTextureData[textureId].path;
     rapidxml::file<> xmlFile(totalPath.c_str());

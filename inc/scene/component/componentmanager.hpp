@@ -2,33 +2,25 @@
 #define SNAKE_COMPONENT_MANAGER_HEADER
 
 #include <vector>
-#include <handle.hpp>
+#include <identifiers.hpp>
 #include <resourcemanager.hpp>
 #include <error/snkexception.hpp>
 #include <scene/component/componentpointer.hpp>
 
 namespace snk {
 
-struct ComponentTag {};
-typedef Handle<ComponentTag> ComponentHandle;
-
 class ComponentManager {
-public:
-
-    typedef unsigned int Id;
-
 public:
 
     ComponentManager(unsigned int componentCount);
 
     template<typename T>
-    void registerComponent(Id componentId);
+    void registerComponent(ComponentId componentId);
 
-    ComponentHandle createComponent(Id componentId);
+    ComponentHandle createComponent(ComponentId componentId);
 
-    // TODO: in Node::getComponent cast to required type.
-    Component& dereference(Id componentId, const ComponentHandle& handle);
-    const Component& dereference(Id componentId, const ComponentHandle& handle) const;
+    Component& dereference(ComponentId componentId, const ComponentHandle& handle);
+    const Component& dereference(ComponentId componentId, const ComponentHandle& handle) const;
 
     void update(float delta); 
 
@@ -55,7 +47,7 @@ private:
 
 
 template<typename T>
-void ComponentManager::registerComponent(Id componentId) {
+void ComponentManager::registerComponent(ComponentId componentId) {
 
     if (componentId >= mComponentTypes.size()) {
 

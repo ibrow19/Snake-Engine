@@ -1,60 +1,100 @@
 #include <cassert>
 #include <scene/node/node.hpp>
+#include <texturemanager.hpp>
+#include <scene/component/componentmanager.hpp>
+#include <scene/node/nodemanager.hpp>
 
 namespace snk {
 
 Node::Node()
-: mParent(nullptr),
-  mDestroyed(false),
+: mDestroyed(false),
+  mHasTexture(false),
   mDirty(true),  // Must be true initially to initialise world transform
+  mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
   mLocal(),
   mWorld(),
-  mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
+  mTextureId(0),
   mTManager(nullptr),
-  mHasTexture(false),
-  mTextureId(0) {}
+  mCManager(nullptr),
+  mNManager(nullptr),
+  //mParent(),
+  mComponents(),
+  mChildren() {}
 
 
 void Node::reset() {
 
-    mParent = nullptr;
     mDestroyed = false;
-    mDirty = true;
+    mHasTexture = false;
+    mDirty = true;  // Must be true initially to initialise world transform
+    mLocalData = Transform::TData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}});
     mLocal = Transform();
     mWorld = Transform();
-    mLocalData = Transform::TData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}});
-    mTManager = nullptr;
-    mHasTexture = false;
     mTextureId = 0;
+    mTManager = nullptr;
+    mCManager = nullptr;
+    mNManager = nullptr;
+    //mParent = NodeHandle();
+    mComponents.clear();
     mChildren.clear();
-
-    // TODO: remove components.
 
 }
 
 
-void Node::init(TextureManager& tManager, bool hasTexture, TextureManager::Id textureId) {
+// TODO: initialise components here.
+void Node::init(TextureManager& tManager, 
+                ComponentManager& cManager,
+                NodeManager& nManager,  
+                bool hasTexture, 
+                TextureId textureId,
+                const std::vector<ComponentId>& components) {
 
     assert (mTManager == nullptr);
-    mTManager = &tManager;
+    assert (mCManager == nullptr);
+    assert (mNManager == nullptr);
+    
     mHasTexture = hasTexture;
     mTextureId = textureId;
 
+    mTManager = &tManager;
+    mCManager = &cManager;
+    mNManager = &nManager;
+
+    // Add components.
+    for (auto it = components.cbegin(); it != components.cend(); ++it) {
+
+        addComponent(*it);
+
+    }
+
+    // Initialise componenets once all of them have been added.
+    for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
+
+        mCManager->dereference(it->first, it->second).init();
+
+    }
+
 }
 
 
-void Node::addChild(Node& child) {
+void Node::addChild(const NodeHandle& childHandle) {
 
+    // Assert to check node is initialised.
     assert(mTManager != nullptr);
-    child.mParent = this;
-    mChildren.push_back(&child);
+    mChildren.push_back(childHandle);
+    //Node child& = mNManager.dereference(childHandle);
+    //if (child.mParent.getCounter() != 0) {
+
+    //    throw SnakeException("Cannot add child that already has a parent");
+
+    //}
+    //child.mParent = mHandle;
 
 }
 
 
 void Node::render() {
 
-    // TODO: use asserts over exceptions in more performance critical areas.
     assert(mTManager != nullptr);
     Transform t;
     render(t, false);
@@ -66,9 +106,18 @@ void Node::destroy() {
 
     assert(mTManager != nullptr);
     mDestroyed = true;
-    for (Node* child : mChildren) {
+    for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
 
-        child->destroy();
+        mNManager->dereference(*it);
+
+    }
+
+    // TODO: Destroying marked nodes should be the last thing that happens. This gives
+    //       destroyed components to use the node's state for actions upon destruction.
+    // Mark components for destruction.
+    for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
+
+        // mCManager.deregerence(it->first, it->second).destroy();
 
     }
 
@@ -248,6 +297,19 @@ void Node::translate(float x, float y) {
 }
 
 
+void Node::addComponent(ComponentId componentId) {
+
+    // TODO: this check could be quite costly and unnecessary.
+    if (mComponents.find(componentId) != mComponents.end()) {
+
+        throw SnakeException("A Node cannot have one than one of one type of commponent");
+
+    }
+    mComponents[componentId] = mCManager->createComponent(componentId);
+
+}
+
+
 void Node::render(const Transform& world, bool dirty) {
 
     assert(mTManager != nullptr);
@@ -269,10 +331,9 @@ void Node::render(const Transform& world, bool dirty) {
         texture.render(mWorld);
 
     }
-    for (Node* child : mChildren) {
+    for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
 
-        assert(child != nullptr);
-        child->render(mWorld, dirty);
+        mNManager->dereference(*it).render(mWorld, dirty);
 
     }
 

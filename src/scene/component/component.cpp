@@ -2,7 +2,9 @@
 
 namespace snk {
 
-Component::Component() {}
+Component::Component() 
+: mOwnerHandle() {}
+
 void Component::init() {}
 void Component::update(float /* delta */) {}
 

@@ -1,6 +1,9 @@
 #include <algorithm>
 #include <functional>
 #include <error/snkexception.hpp>
+#include <texturemanager.hpp>
+#include <scene/component/componentmanager.hpp>
+#include <scene/node/node.hpp>
 #include <scene/node/nodemanager.hpp>
 
 namespace snk {
@@ -11,10 +14,9 @@ NodeManager::NodeManager(unsigned int nodeCount,
 : mTManager(tManager),
   mCManager(cManager),
   mNodeTypes(nodeCount) {}
-  // TODO: could ensure there is at least one node type for manager here.
 
 
-void NodeManager::registerNode(Id nodeId, const NodeData& nodeData) {
+void NodeManager::registerNode(NodeId nodeId, const NodeData& nodeData) {
 
     if (nodeId >= mNodeTypes.size()) {
 
@@ -39,7 +41,7 @@ void NodeManager::registerNode(Id nodeId, const NodeData& nodeData) {
 }
 
 
-NodeHandle NodeManager::createNode(Id nodeId) {
+NodeHandle NodeManager::createNode(NodeId nodeId) {
 
     if (nodeId >= mNodeTypes.size()) {
 
@@ -56,8 +58,14 @@ NodeHandle NodeManager::createNode(Id nodeId) {
 
     NodeHandle newHandle;
     Node& newNode = mNodes.create(newHandle);
-    newNode.init(mTManager, nodeType.data.hasTexture, nodeType.data.textureId);
+    newNode.init(mTManager, 
+                 mCManager,
+                 *this,
+                 nodeType.data.hasTexture, 
+                 nodeType.data.textureId,
+                 nodeType.data.components);
     return newHandle;
+
 }
 
 
