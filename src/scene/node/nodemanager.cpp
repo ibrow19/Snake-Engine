@@ -5,66 +5,23 @@
 #include <scene/component/componentmanager.hpp>
 #include <scene/node/node.hpp>
 #include <scene/node/nodemanager.hpp>
+#include <scene/node/nodefactory.hpp>
 
 namespace snk {
 
-NodeManager::NodeManager(unsigned int nodeCount, 
-                         TextureManager& tManager, 
-                         ComponentManager& cManager) 
+NodeManager::NodeManager(TextureManager& tManager, 
+                         ComponentManager& cManager,
+                         NodeFactory& nFactory)
 : mTManager(tManager),
   mCManager(cManager),
-  mNodeTypes(nodeCount) {}
-
-
-void NodeManager::registerNode(NodeId nodeId, const NodeData& nodeData) {
-
-    if (nodeId >= mNodeTypes.size()) {
-
-        throw SnakeException("Attempting to initialise node type Id which is greater than maximum node Id");
-
-    }
-
-    if (mNodeTypes[nodeId].init) {
-
-        throw SnakeException("Attempting to initialise already initialised node type Id");
-
-    }
-
-    // TODO: possibly add validation of texture here, although invalid texturee Ids will
-    //       get caught when a node of this type is initialised.
-
-    // TODO: component validation.
-   
-    mNodeTypes[nodeId].init = true;
-    mNodeTypes[nodeId].data = nodeData;
-
-}
+  mNFactory(nFactory) {}
 
 
 NodeHandle NodeManager::createNode(NodeId nodeId) {
 
-    if (nodeId >= mNodeTypes.size()) {
-
-        throw SnakeException("Attempting to create node with Id which is greater than maximum node Id");
-
-    }
-
-    NodeType& nodeType = mNodeTypes[nodeId];
-    if (!nodeType.init) {
-
-        throw SnakeException("Attempting to create node with unitialised type");
-    
-    }
-
     NodeHandle newHandle;
     Node& newNode = mNodes.create(newHandle);
-    newNode.init(newHandle,
-                 mTManager, 
-                 mCManager,
-                 *this,
-                 nodeType.data.hasTexture, 
-                 nodeType.data.textureId,
-                 nodeType.data.components);
+    mNFactory.initNode(nodeId, newNode, newHandle, *this);
     return newHandle;
 
 }

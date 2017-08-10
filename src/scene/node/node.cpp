@@ -63,7 +63,7 @@ void Node::init(const NodeHandle& handle,
     // Add components.
     for (auto it = components.cbegin(); it != components.cend(); ++it) {
 
-        // TODO: it may be useful to keep handle of node as member function.
+        // TODO: it may be useful to keep handle of node as member variable.
         addComponent(*it, handle);
 
     }
@@ -118,7 +118,7 @@ void Node::destroy() {
     // Mark components for destruction.
     for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
 
-        // mCManager.deregerence(it->first, it->second).destroy();
+        // mCManager.dereference(it->first, it->second).destroy();
 
     }
 
@@ -300,12 +300,8 @@ void Node::translate(float x, float y) {
 
 void Node::addComponent(ComponentId componentId, const NodeHandle& owner) {
 
-    // TODO: this check could be quite costly and unnecessary.
-    if (mComponents.find(componentId) != mComponents.end()) {
-
-        throw SnakeException("A Node cannot have one than one of one type of commponent");
-
-    }
+    // Node type initialisation should ensure that there are no duplicate components.
+    assert(mComponents.find(componentId) == mComponents.end());
     mComponents[componentId] = mCManager->createComponent(componentId, owner, *mNManager);
 
 }
