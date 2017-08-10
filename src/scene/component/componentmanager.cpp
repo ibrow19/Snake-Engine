@@ -1,11 +1,12 @@
 #include <scene/component/component.hpp>
 #include <scene/component/componentmanager.hpp>
+#include <scene/component/componentfactory.hpp>
 
 namespace snk {
 
-ComponentManager::ComponentManager(unsigned int componentCount) 
-: mComponentTypes(componentCount),
-  mComponents(componentCount) {}
+ComponentManager::ComponentManager(ComponentFactory& cFactory) 
+: mCFactory(cFactory),
+  mComponents(mCFactory.getComponentCount()) {}
 
 
 ComponentHandle ComponentManager::createComponent(ComponentId componentId,
@@ -17,16 +18,11 @@ ComponentHandle ComponentManager::createComponent(ComponentId componentId,
         throw SnakeException("Attempting to create component using Id that is greater than maximum Id");
 
     }
-
-    if (!mComponentTypes[componentId].init) {
-
-        throw SnakeException("Attempting to create component with unitialised type");
-
-    }
     
     ComponentHandle newHandle;
     ComponentPointer& newComponent = mComponents[componentId].create(newHandle);
-    newComponent.setComponent(mComponentTypes[componentId].factory);
+    // TODO: dont need to use factory if component is from ResourceManager pool rather than new.
+    mCFactory.initComponent(componentId, newComponent);
     newComponent.getComponent().init(nManager, owner);
     return newHandle;
 

@@ -9,6 +9,8 @@ ComponentPointer::ComponentPointer()
 
 void ComponentPointer::reset() {
 
+    // TODO: this is currently unnecessary as new components are reassigned using factory on
+    // creation.
     mComponent->reset();
 
 }
@@ -24,7 +26,7 @@ void ComponentPointer::setComponent(const Factory& factory) {
 
 Component& ComponentPointer::getComponent() {
 
-    return *mComponent;
+    return *mComponent; 
 
 }
 

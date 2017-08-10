@@ -2,6 +2,7 @@
 #define SNAKE_NODE_MANAGER_HEADER
 
 #include <identifiers.hpp>
+#include <resourcemanager.hpp>
 
 namespace snk {
 
