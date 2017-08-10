@@ -24,15 +24,15 @@ public:
 public:
 
     NodeFactory(unsigned int nodeCount,
-                TextureManager& tManager,
-                ComponentManager& cManager);
+                TextureManager& tManager);
 
     /// Register components and textures that make up a node.
     void registerNode(NodeId nodeId, const NodeData& nodeData);
     void initNode(NodeId nodeId, 
                   Node& newNode,
                   const NodeHandle& newHandle,
-                  NodeManager& nManager) const;
+                  NodeManager& nManager,
+                  ComponentManager& cManager) const;
 
 private:
 
@@ -46,7 +46,6 @@ private:
 private:
 
     TextureManager& mTManager;
-    ComponentManager& mCManager;
     std::vector<NodeType> mNodeTypes;
 
 };
