@@ -2,6 +2,7 @@
 #define SNAKE_SCENE_MANAGER_HEADER
 
 #include <identifiers.hpp>
+#include <scene/input/ihandlerfactory.hpp>
 #include <scene/scene.hpp>
 
 namespace snk {
@@ -10,13 +11,23 @@ namespace snk {
 class SceneManager {
 public:
 
+    struct SceneData {
+
+        NodeId rootId;
+        IHandlerId iHandlerId;
+
+    };
+
+public:
+
     SceneManager(unsigned int sceneCount,
+                 IHandlerFactory& iFactory,
                  TextureManager& tManager,
                  ComponentFactory& cFactory,
                  NodeFactory& nFactory);
 
     // TODO: more advanced scene initialisation (more than just one node).
-    void registerScene(SceneId sceneId, NodeId rootId);
+    void registerScene(SceneId sceneId, const SceneData& data);
 
     /// Push a new active scene onto the stack.
     /// \param sceneId Id of the new active scene to push onto the stack.
@@ -40,7 +51,7 @@ public:
 
     /// Handle event in the active scene.
     /// \param event the event to handle out.
-    // void handleEvent(SDLEvent& event);
+    void handleEvent(const SDL_Event& event);
 
     /// Render all scenes starting from the bottom of the stack, drawing the active scene last.
     void render();
@@ -69,7 +80,7 @@ private:
     struct SceneType {
 
         bool init = false;
-        NodeId rootId;
+        SceneData data;
 
     };
 
@@ -84,6 +95,7 @@ private:
 
 private:
 
+    IHandlerFactory& mIFactory;
     TextureManager& mTManager;
     ComponentFactory& mCFactory;
     NodeFactory& mNFactory;

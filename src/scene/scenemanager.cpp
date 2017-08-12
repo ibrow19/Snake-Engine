@@ -9,16 +9,18 @@
 namespace snk {
 
 SceneManager::SceneManager(unsigned int sceneCount,
+                           IHandlerFactory& iFactory,
                            TextureManager& tManager,
                            ComponentFactory& cFactory,
                            NodeFactory& nFactory)
-: mTManager(tManager),
+: mIFactory(iFactory),
+  mTManager(tManager),
   mCFactory(cFactory),
   mNFactory(nFactory),
   mSceneTypes(sceneCount) {}
 
 
-void SceneManager::registerScene(SceneId sceneId, NodeId rootId) {
+void SceneManager::registerScene(SceneId sceneId, const SceneData& data) {
 
     if (sceneId >= mSceneTypes.size()) {
 
@@ -33,7 +35,7 @@ void SceneManager::registerScene(SceneId sceneId, NodeId rootId) {
     }
 
     mSceneTypes[sceneId].init = true;
-    mSceneTypes[sceneId].rootId = rootId;
+    mSceneTypes[sceneId].data = data;
 
 }
 
@@ -111,7 +113,15 @@ void SceneManager::handleActions() {
 }
 
 
-// void SceneManager::handleEvent(SDLEvent& event) {}
+void SceneManager::handleEvent(const SDL_Event& event) {
+
+    if (!mSceneStack.empty()) {
+
+        mSceneStack.back().handleEvent(event);
+
+    }
+
+}
 
 
 /// Render all scenes starting from the bottom of the stack, drawing the active scene last.
@@ -154,7 +164,8 @@ void SceneManager::pushScene(SceneId sceneId) {
         throw SnakeException("Attempting to create unitialised scene type");
 
     }
-    mSceneStack.emplace_back(mSceneTypes[sceneId].rootId,
+    mSceneStack.emplace_back(mSceneTypes[sceneId].data.rootId,
+                             mIFactory.createIHandler(mSceneTypes[sceneId].data.iHandlerId),
                              mTManager,
                              mCFactory,
                              mNFactory);

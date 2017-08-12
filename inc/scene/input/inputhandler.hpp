@@ -15,7 +15,7 @@ public:
 
     virtual ~InputHandler() {}
 
-    virtual void HandleEvent(const SDL_Event& event, CommandQueue& queue) = 0;
+    virtual void handleEvent(const SDL_Event& event, CommandQueue& queue) = 0;
 
 };
 

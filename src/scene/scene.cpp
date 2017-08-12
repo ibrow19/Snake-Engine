@@ -10,20 +10,32 @@
 namespace snk {
 
 Scene::Scene(NodeId rootId,
+             std::unique_ptr<InputHandler> iHandler,
              TextureManager& tManager,
              ComponentFactory& cFactory,
              NodeFactory& nFactory)
-: mCManager(cFactory),
+: mIHandler(std::move(iHandler)),
+  mCManager(cFactory),
   mNManager(tManager,
             mCManager,
             nFactory),
   mRootHandle(mNManager.createNode(rootId)) {}
+
+
+void Scene::handleEvent(const SDL_Event& event) {
+
+    assert(mIHandler != nullptr);
+    mIHandler->handleEvent(event, mCQueue);
+
+}
+
 
 void Scene::update(float delta) {
     
     mCManager.update(delta);
 
 }
+
 
 void Scene::render() {
 
