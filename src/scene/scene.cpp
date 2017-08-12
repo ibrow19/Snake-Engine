@@ -9,14 +9,15 @@
 
 namespace snk {
 
-Scene::Scene(TextureManager& tManager,
+Scene::Scene(NodeId rootId,
+             TextureManager& tManager,
              ComponentFactory& cFactory,
              NodeFactory& nFactory)
-: mRootHandle(),
-  mCManager(cFactory),
+: mCManager(cFactory),
   mNManager(tManager,
             mCManager,
-            nFactory) {}
+            nFactory),
+  mRootHandle(mNManager.createNode(rootId)) {}
 
 void Scene::update(float delta) {
     
@@ -30,12 +31,5 @@ void Scene::render() {
     mNManager.dereference(mRootHandle).render();
 
 };
-
-
-void Scene::setRoot(NodeId rootId) {
-
-    mRootHandle = mNManager.createNode(rootId); 
-
-}
 
 } // namespace snk

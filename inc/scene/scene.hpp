@@ -15,7 +15,8 @@ class NodeFactory;
 class Scene {
 public:
 
-    Scene(TextureManager& tManager,
+    Scene(NodeId rootId,
+          TextureManager& tManager,
           ComponentFactory& cFactory,
           NodeFactory& nFactory);
 
@@ -23,14 +24,12 @@ public:
     void update(float delta);
     void render();
 
-    void setRoot(NodeId rootId);
-
 private:
     
-    NodeHandle mRootHandle;
-
     ComponentManager mCManager;
     NodeManager mNManager;
+
+    NodeHandle mRootHandle;
 
 };
 
