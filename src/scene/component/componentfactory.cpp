@@ -20,7 +20,7 @@ void ComponentFactory::initComponent(ComponentId componentId,
 
     }
     
-    newComponent.setComponent(mComponentTypes[componentId].factory);
+    newComponent.setComponent(mComponentTypes[componentId].factory());
 
 }
 

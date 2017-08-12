@@ -23,10 +23,14 @@ public:
 
 private:
 
+    typedef std::function<std::unique_ptr<Component>()> Factory;
+
+private:
+
     struct ComponentType {
 
         bool init = false;
-        ComponentPointer::Factory factory;
+        Factory factory;
 
     };
 

@@ -11,14 +11,10 @@ namespace snk {
 class ComponentPointer : public Resource {
 public:
 
-    typedef std::function<std::unique_ptr<Component>()> Factory;
-
-public:
-
     ComponentPointer();
     void reset();
 
-    void setComponent(const Factory& factory);
+    void setComponent(std::unique_ptr<Component> component);
     Component& getComponent();
     const Component& getComponent() const;
 

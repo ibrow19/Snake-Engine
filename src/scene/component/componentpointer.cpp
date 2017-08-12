@@ -16,10 +16,10 @@ void ComponentPointer::reset() {
 }
 
 
-void ComponentPointer::setComponent(const Factory& factory) {
+void ComponentPointer::setComponent(std::unique_ptr<Component> component) {
 
     assert(mComponent == nullptr);
-    mComponent = factory();
+    mComponent = std::move(component);
 
 }
 
