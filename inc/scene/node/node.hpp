@@ -102,6 +102,8 @@ private:
     NodeManager* mNManager;
 
     //NodeHandle mParent;
+
+    // TODO: use more efficient structure for component lookup (e.g hashmap).
     std::map<ComponentId, ComponentHandle> mComponents;
     std::vector<NodeHandle> mChildren;
 

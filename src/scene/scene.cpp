@@ -32,6 +32,12 @@ void Scene::handleEvent(const SDL_Event& event) {
 
 void Scene::update(float delta) {
     
+    Command command;
+    while (mCQueue.pollCommands(command)) {
+
+        mCManager.handleCommand(command);
+
+    }
     mCManager.update(delta);
 
 }

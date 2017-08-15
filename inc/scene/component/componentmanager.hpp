@@ -10,6 +10,7 @@
 namespace snk {
 
 class ComponentFactory;
+class Command;
 
 class ComponentManager {
 public:
@@ -23,6 +24,7 @@ public:
     Component& dereference(ComponentId componentId, const ComponentHandle& handle);
     const Component& dereference(ComponentId componentId, const ComponentHandle& handle) const;
 
+    void handleCommand(Command& command);
     void update(float delta); 
 
 private:

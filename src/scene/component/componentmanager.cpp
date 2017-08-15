@@ -1,6 +1,7 @@
 #include <scene/component/component.hpp>
 #include <scene/component/componentmanager.hpp>
 #include <scene/component/componentfactory.hpp>
+#include <scene/input/command.hpp>
 
 namespace snk {
 
@@ -50,6 +51,23 @@ const Component& ComponentManager::dereference(ComponentId componentId, const Co
 
     }
     return mComponents[componentId].dereference(handle).getComponent();
+
+}
+
+
+void ComponentManager::handleCommand(Command& command) {
+
+    if (command.getId() >= mComponents.size()) {
+
+        throw SnakeException("Command with component Id out of bounds");
+
+    }
+    ResourceManager<ComponentPointer, ComponentTag>& targets = mComponents[command.getId()];
+    for (auto it = targets.begin(); it != targets.end(); ++it) {
+
+        command.execute(it->getComponent());
+
+    }
 
 }
 
