@@ -107,6 +107,10 @@ private:
     /// Whether vsync should be used when rendering.
     bool mVsync;
 
+    /// The maximum delta acceptable for an update.
+    /// used to avoid large timesteps creating errors in logic.
+    float mMaxDelta;
+
     TextureManager mTManager;
     IHandlerFactory mIFactory;
     ComponentFactory mCFactory;

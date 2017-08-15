@@ -26,6 +26,7 @@ Game::Game(unsigned int textureCount,
   mContext(nullptr),
   mRunning(false),
   mVsync(true),
+  mMaxDelta(1.f/30.f),
   mTManager(textureCount, "res/texture"),
   mIFactory(iHandlerCount),
   mCFactory(componentCount),
@@ -70,7 +71,15 @@ void Game::run() {
         float delta = timer.getTime();
         timer.start();
 
+
         // Update game world with time passed since last update.
+        // Fixed update: Update in steps no largerthan max delta to avoid errors in logic.
+        while (delta > mMaxDelta) {
+
+            update(mMaxDelta);
+            delta -= mMaxDelta;
+            
+        }
         update(delta);
 
         // Draw the game world.
