@@ -21,8 +21,8 @@ public:
 public:
 
     SceneManager(unsigned int sceneCount,
-                 IHandlerFactory& iFactory,
                  TextureManager& tManager,
+                 IHandlerFactory& iFactory,
                  ComponentFactory& cFactory,
                  NodeFactory& nFactory);
 
@@ -95,14 +95,14 @@ private:
 
 private:
 
-    IHandlerFactory& mIFactory;
     TextureManager& mTManager;
+    IHandlerFactory& mIFactory;
     ComponentFactory& mCFactory;
     NodeFactory& mNFactory;
 
     std::vector<SceneType> mSceneTypes;
 
-    std::vector<StackAction> mActionQueue;
+    std::queue<StackAction> mActionQueue;
     std::vector<Scene> mSceneStack;  
 
 };

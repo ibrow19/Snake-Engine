@@ -21,7 +21,7 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
 
     NodeHandle newHandle;
     Node& newNode = mNodes.create(newHandle);
-    mNFactory.initNode(nodeId, newNode, newHandle, *this, mCManager);
+    mNFactory.initNode(nodeId, newNode, newHandle, mTManager, mCManager, *this);
     return newHandle;
 
 }

@@ -9,12 +9,12 @@
 namespace snk {
 
 SceneManager::SceneManager(unsigned int sceneCount,
-                           IHandlerFactory& iFactory,
                            TextureManager& tManager,
+                           IHandlerFactory& iFactory,
                            ComponentFactory& cFactory,
                            NodeFactory& nFactory)
-: mIFactory(iFactory),
-  mTManager(tManager),
+: mTManager(tManager),
+  mIFactory(iFactory),
   mCFactory(cFactory),
   mNFactory(nFactory),
   mSceneTypes(sceneCount) {}
@@ -43,14 +43,14 @@ void SceneManager::registerScene(SceneId sceneId, const SceneData& data) {
 void SceneManager::push(SceneId sceneId) {
 
     StackAction action({Push, sceneId});
-    mActionQueue.push_back(action);
+    mActionQueue.push(action);
 
 }
 
 void SceneManager::pop() {
 
     StackAction action({Pop, 0});
-    mActionQueue.push_back(action);
+    mActionQueue.push(action);
 
 }
 
@@ -58,7 +58,7 @@ void SceneManager::pop() {
 void SceneManager::replace(SceneId sceneId) {
 
     StackAction action({Replace, sceneId});
-    mActionQueue.push_back(action);
+    mActionQueue.push(action);
 
 }
 
@@ -66,7 +66,7 @@ void SceneManager::replace(SceneId sceneId) {
 void SceneManager::clear() {
 
     StackAction action({Clear, 0});
-    mActionQueue.push_back(action);
+    mActionQueue.push(action);
 
 }
 
@@ -144,8 +144,8 @@ bool SceneManager::pollActions(StackAction& action) {
 
     }
 
-    action = mActionQueue.back();
-    mActionQueue.pop_back();
+    action = mActionQueue.front();
+    mActionQueue.pop();
     return true;
 
 }
@@ -165,8 +165,8 @@ void SceneManager::pushScene(SceneId sceneId) {
 
     }
     mSceneStack.emplace_back(mSceneTypes[sceneId].data.rootId,
-                             mIFactory.createIHandler(mSceneTypes[sceneId].data.iHandlerId),
                              mTManager,
+                             mIFactory.createIHandler(mSceneTypes[sceneId].data.iHandlerId),
                              mCFactory,
                              mNFactory);
 

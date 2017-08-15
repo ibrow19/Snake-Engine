@@ -8,10 +8,8 @@
 
 namespace snk {
 
-NodeFactory::NodeFactory(unsigned int nodeCount, 
-                         TextureManager& tManager)
-: mTManager(tManager),
-  mNodeTypes(nodeCount) {}
+NodeFactory::NodeFactory(unsigned int nodeCount)
+: mNodeTypes(nodeCount) {}
 
 
 void NodeFactory::registerNode(NodeId nodeId, const NodeData& nodeData) {
@@ -47,8 +45,9 @@ void NodeFactory::registerNode(NodeId nodeId, const NodeData& nodeData) {
 void NodeFactory::initNode(NodeId nodeId, 
                            Node& newNode,
                            const NodeHandle& newHandle,
-                           NodeManager& nManager,
-                           ComponentManager& cManager) const {
+                           TextureManager& tManager,
+                           ComponentManager& cManager,
+                           NodeManager& nManager) const {
 
     if (nodeId >= mNodeTypes.size()) {
 
@@ -64,7 +63,7 @@ void NodeFactory::initNode(NodeId nodeId,
     }
 
     newNode.init(newHandle,
-                 mTManager, 
+                 tManager, 
                  cManager,
                  nManager,
                  nodeType.data.hasTexture, 

@@ -5,13 +5,13 @@
 #include <memory>
 #include <identifiers.hpp>
 #include <scene/input/inputhandler.hpp>
+#include <scene/component/componentmanager.hpp>
+#include <scene/node/nodemanager.hpp>
 
 namespace snk {
 
 class Node;
 class TextureManager;
-class ComponentManager;
-class NodeManager;
 class ComponentFactory;
 class NodeFactory;
 
@@ -19,8 +19,8 @@ class Scene {
 public:
 
     Scene(NodeId rootId,
-          std::unique_ptr<InputHandler> iHandler,
           TextureManager& tManager,
+          std::unique_ptr<InputHandler> iHandler,
           ComponentFactory& cFactory,
           NodeFactory& nFactory);
 

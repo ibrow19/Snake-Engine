@@ -43,19 +43,21 @@ target_link_libraries(${LIB_NAME} ${GLEW_LIBRARIES}
                                   ${SDL2_IMAGE_LIBRARIES}
                                   ${SDL2_TTF_LIBRARIES})
 
-# Test executable for experimenting with engine.
-set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
-set(TEST_EXE_SOURCES ${TEST_DIR}/main.cpp)
-set(TEST_EXE_NAME "game")
+# Demo executable for experimenting with engine.
+set(DEMO_DIR ${PROJECT_SOURCE_DIR}/demo)
+file(GLOB_RECURSE DEMO_SOURCES ${DEMO_DIR}/*.cpp)
+set(DEMO_NAME "game")
+include_directories(${DEMO_DIR})
 
-add_executable(${TEST_EXE_NAME} ${TEST_EXE_SOURCES})
-target_link_libraries(${TEST_EXE_NAME} ${LIB_NAME})
+add_executable(${DEMO_NAME} ${DEMO_SOURCES})
+target_link_libraries(${DEMO_NAME} ${LIB_NAME})
 
 # Copy resources to binary directory.
 set(RES_DIR ${PROJECT_SOURCE_DIR}/res)
 file(COPY ${RES_DIR} DESTINATION ${PROJECT_BINARY_DIR})
 
 # Unit tests executables.
+set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 enable_testing()
 add_definitions(-DBOOST_TEST_DYN_LINK) 
 add_definitions(-DBOOST_TEST_MAIN) 

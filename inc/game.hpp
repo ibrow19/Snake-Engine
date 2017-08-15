@@ -3,6 +3,12 @@
 
 #include <string>
 #include <SDL.h>
+#include <identifiers.hpp>
+#include <texturemanager.hpp>
+#include <scene/input/ihandlerfactory.hpp>
+#include <scene/component/componentfactory.hpp>
+#include <scene/node/nodefactory.hpp>
+#include <scene/scenemanager.hpp>
 
 namespace snk {
 
@@ -10,7 +16,12 @@ namespace snk {
 class Game {
 public:
 
-    Game();
+    Game(unsigned int textureCount,
+         unsigned int iHandlerCount,
+         unsigned int componentCount,
+         unsigned int nodeCount,
+         unsigned int sceneCount);
+
     ~Game();
 
     /// Runs the game until it is finsished
@@ -34,6 +45,17 @@ public:
     /// Set whether vsync is used (Renderer uses vsync by default).
     /// \param vsync Whether vsync should be used.
     void setVSync(bool vsync);
+
+    void setTexturePath(const std::string& texturePath);
+
+    void registerTexture(TextureId textureId, const std::string& path);
+    template<typename T>
+    void registerIHandler(IHandlerId iHandlerId);
+    template<typename T>
+    void registerComponent(ComponentId componentId);
+    void registerNode(NodeId nodeId, const NodeFactory::NodeData& data);
+    void registerScene(SceneId sceneId, const SceneManager::SceneData& data);
+    void setInitialScene(SceneId sceneId);
 
 private:
 
@@ -85,7 +107,30 @@ private:
     /// Whether vsync should be used when rendering.
     bool mVsync;
 
+    TextureManager mTManager;
+    IHandlerFactory mIFactory;
+    ComponentFactory mCFactory;
+    NodeFactory mNFactory;
+    SceneManager mSManager;
+
+
 };
+
+
+template<typename T>
+void Game::registerIHandler(IHandlerId iHandlerId) {
+
+    mIFactory.registerIHandler<T>(iHandlerId);
+
+}
+
+
+template<typename T>
+void Game::registerComponent(ComponentId componentId) {
+
+    mCFactory.registerComponent<T>(componentId);
+
+}
 
 } // namespace snk
 

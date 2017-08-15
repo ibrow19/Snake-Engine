@@ -1,17 +1,15 @@
 #include <error/snkexception.hpp>
 #include <texturemanager.hpp>
-#include <scene/component/componentmanager.hpp>
 #include <scene/component/componentfactory.hpp>
 #include <scene/node/node.hpp>
-#include <scene/node/nodemanager.hpp>
 #include <scene/node/nodefactory.hpp>
 #include <scene/scene.hpp>
 
 namespace snk {
 
 Scene::Scene(NodeId rootId,
-             std::unique_ptr<InputHandler> iHandler,
              TextureManager& tManager,
+             std::unique_ptr<InputHandler> iHandler,
              ComponentFactory& cFactory,
              NodeFactory& nFactory)
 : mIHandler(std::move(iHandler)),

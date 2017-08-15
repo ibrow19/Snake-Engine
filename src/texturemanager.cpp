@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -7,18 +8,22 @@
 
 namespace snk {
 
-TextureManager::TextureManager(unsigned int textureCount,
-                               BasicShader& shader, 
-                               const std::string& resDir)
-: mShader(shader),
-  mResDir(resDir + '/'),
-  mTextureData(textureCount) {
-      
-    if (textureCount == 0) {
+TextureManager::TextureManager(unsigned int textureCount)
+: mShader(nullptr),
+  mDefaultPath(""),
+  mTextureData(textureCount) {}
 
-        throw SnakeException("Texture manager must be able to hold at least one texture");
 
-    }
+void TextureManager::setShader(BasicShader& shader) {
+
+    mShader = &shader;
+
+}
+
+
+void TextureManager::setDefaultPath(const std::string& texturePath) {
+
+    mDefaultPath = texturePath + '/';
 
 }
 
@@ -79,7 +84,10 @@ Texture& TextureManager::getTexture(TextureId textureId) {
 
 void TextureManager::loadTexture(TextureId textureId) { 
 
-    std::string totalPath = mResDir + mTextureData[textureId].path;
+    std::cout << "Loading texture" << std::endl;
+    assert(mShader != nullptr);
+
+    std::string totalPath = mDefaultPath + mTextureData[textureId].path;
     rapidxml::file<> xmlFile(totalPath.c_str());
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
@@ -102,7 +110,7 @@ void TextureManager::loadTexture(TextureId textureId) {
     TextureHandle newHandle;
     Texture& newTexture = mTextures.create(newHandle);
     mTextureData[textureId].handle = newHandle;
-    newTexture.init(mShader, mResDir + attr->value());
+    newTexture.init(*mShader, mDefaultPath + attr->value());
 
     bool valid = true;
     Texture::clip newClip = {0.f, 0.f, 0.f, 0.f};

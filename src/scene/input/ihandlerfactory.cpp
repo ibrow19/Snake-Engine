@@ -7,7 +7,6 @@ IHandlerFactory::IHandlerFactory(unsigned int iHandlerCount)
 
 
 std::unique_ptr<InputHandler> IHandlerFactory::createIHandler(IHandlerId iHandlerId) {
-
     
     if (iHandlerId >= mIHandlerTypes.size()) {
 

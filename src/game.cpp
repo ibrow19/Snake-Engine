@@ -1,19 +1,23 @@
 #include <cassert>
-#include <cstdio>
 #include <iostream>
-#include "error/glewexception.hpp"
+#include <error/glewexception.hpp>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
-#include "error/sdlexception.hpp"
-#include "error/glexception.hpp"
-#include "shader/basic.hpp"
-#include "timer.hpp"
-#include "game.hpp"
-#include "texture.hpp"
+#include <error/sdlexception.hpp>
+#include <error/glexception.hpp>
+#include <shader/basic.hpp>
+#include <timer.hpp>
+#include <game.hpp>
+#include <scene/node/node.hpp>
+#include <scene/node/nodemanager.hpp>
 
 namespace snk {
 
-Game::Game() 
+Game::Game(unsigned int textureCount,
+           unsigned int iHandlerCount,
+           unsigned int componentCount,
+           unsigned int nodeCount,
+           unsigned int sceneCount)
 : mTitle(""),
   mWidth(1240),
   mHeight(720),
@@ -21,7 +25,12 @@ Game::Game()
   mWin(nullptr),
   mContext(nullptr),
   mRunning(false),
-  mVsync(true) {
+  mVsync(true),
+  mTManager(textureCount),
+  mIFactory(iHandlerCount),
+  mCFactory(componentCount),
+  mNFactory(nodeCount),
+  mSManager(sceneCount, mTManager, mIFactory, mCFactory, mNFactory) {
 
     initSDL();
 
@@ -38,18 +47,19 @@ Game::~Game() {
 
 void Game::run() {
 
-    // Create window.
+    std::cout << "running.." << std::endl;
+
+    // Create window and GL context.
     createWin();
+    
+    // Create shader to use for rendering.
+    BasicShader shader(mWidth, mHeight);
+    mTManager.setShader(shader);
 
     Timer timer;
     timer.start();
 
-    // Shader and texture for rendering test.
-    BasicShader s(mWidth, mHeight);
-    Texture t(s, "res/texture/texture.png");
-
-    printf("running...\n");
-
+    // TODO: fixed gameloop.
     mRunning = true;
     while (mRunning) {
 
@@ -64,12 +74,7 @@ void Game::run() {
         update(delta);
 
         // Draw the game world.
-        //render();
-
-        // Test rendering.
-        glClear(GL_COLOR_BUFFER_BIT);
-        t.render();
-        SDL_GL_SwapWindow(mWin);
+        render();
 
         // Check errors once per loop.
         GLenum error = glGetError();
@@ -84,12 +89,90 @@ void Game::run() {
     // Destroy window.
     destroyWin();
 
+    // TODO: clear textures from textureManager as they no longer have a valid shader.
+
+}
+
+
+void Game::setTitle(const std::string& title) {
+
+    mTitle = title;
+
+}
+
+
+void Game::setWinSize(int x, int y) {
+
+    mWidth = x;
+    mHeight = y;
+
+}
+
+
+void Game::setFullScreen(bool full) {
+
+    if (full) {
+
+        mWinFlags |= SDL_WINDOW_FULLSCREEN;
+        assert(mWinFlags & SDL_WINDOW_FULLSCREEN);
+
+    } else {
+
+        mWinFlags &= ~SDL_WINDOW_FULLSCREEN;
+        assert(!(mWinFlags & SDL_WINDOW_FULLSCREEN));
+
+    }
+
+}
+
+
+void Game::setVSync(bool vsync) {
+
+    mVsync = vsync;
+
+}
+
+
+void Game::setTexturePath(const std::string& texturePath) {
+
+    mTManager.setDefaultPath(texturePath);
+
+}
+
+
+void Game::registerTexture(TextureId textureId, const std::string& path) {
+
+    mTManager.registerTexture(textureId, path);
+
+}
+
+
+void Game::registerNode(NodeId nodeId, const NodeFactory::NodeData& data) {
+
+    mNFactory.registerNode(nodeId, data);
+
+}
+
+
+void Game::registerScene(SceneId sceneId, const SceneManager::SceneData& data) {
+
+    mSManager.registerScene(sceneId, data);
+
+}
+
+
+void Game::setInitialScene(SceneId sceneId) {
+
+    mSManager.clear();
+    mSManager.push(sceneId);
+    mSManager.handleActions();
+
 }
 
 
 void Game::initSDL() const {
 
-    printf("initialising SDL...\n");
+    std::cout << "initialising SDL.." << std::endl;
 
     bool success = true;
 
@@ -126,12 +209,10 @@ void Game::initSDL() const {
 
 void Game::exitSDL() const {
 
-    printf("exiting...\n");
+    std::cout << "exiting.." << std::endl;
 
     IMG_Quit();
     SDL_Quit();
-
-    printf("finished\n");
 
 }
 
@@ -219,15 +300,21 @@ void Game::handleEvents() {
     while (mRunning && SDL_PollEvent(&event)) {
 
         mRunning = event.type != SDL_QUIT;
+        if (event.type != SDL_QUIT) {
+
+            mSManager.handleEvent(event);
+
+        }
 
     }
 
 }
 
 
-void Game::update(float /*delta*/) {
+void Game::update(float delta) {
 
-    // TODO: implement.
+    mSManager.update(delta);
+    mSManager.handleActions();
 
 }
 
@@ -235,48 +322,10 @@ void Game::update(float /*delta*/) {
 void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT);
-
+    
+    mSManager.render();
 
     SDL_GL_SwapWindow(mWin);
-
-}
-
-
-void Game::setTitle(const std::string& title) {
-
-    mTitle = title;
-
-}
-
-
-void Game::setWinSize(int x, int y) {
-
-    mWidth = x;
-    mHeight = y;
-
-}
-
-
-void Game::setFullScreen(bool full) {
-
-    if (full) {
-
-        mWinFlags |= SDL_WINDOW_FULLSCREEN;
-        assert(mWinFlags & SDL_WINDOW_FULLSCREEN);
-
-    } else {
-
-        mWinFlags &= ~SDL_WINDOW_FULLSCREEN;
-        assert(!(mWinFlags & SDL_WINDOW_FULLSCREEN));
-
-    }
-
-}
-
-
-void Game::setVSync(bool vsync) {
-
-    mVsync = vsync;
 
 }
 

@@ -16,9 +16,10 @@ namespace snk {
 class TextureManager {
 public:
 
-    TextureManager(unsigned int textureCount, 
-                   BasicShader& shader, 
-                   const std::string& resDir = ".");
+    TextureManager(unsigned int textureCount);
+
+    void setShader(BasicShader& shader);
+    void setDefaultPath(const std::string& texturePath);
 
     /// Register a texture with specified Id and path.
     void registerTexture(TextureId textureId, const std::string& path);
@@ -50,8 +51,8 @@ private:
 
 private:
 
-    BasicShader& mShader;
-    std::string mResDir;
+    BasicShader* mShader;
+    std::string mDefaultPath;
     std::vector<TextureData> mTextureData;
 
     ResourceManager<Texture, TextureTag> mTextures;
