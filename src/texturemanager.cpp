@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -8,9 +7,10 @@
 
 namespace snk {
 
-TextureManager::TextureManager(unsigned int textureCount)
+TextureManager::TextureManager(unsigned int textureCount, 
+                               const std::string& defaultPath)
 : mShader(nullptr),
-  mDefaultPath(""),
+  mDefaultPath(defaultPath + '/'),
   mTextureData(textureCount) {}
 
 
@@ -84,7 +84,6 @@ Texture& TextureManager::getTexture(TextureId textureId) {
 
 void TextureManager::loadTexture(TextureId textureId) { 
 
-    std::cout << "Loading texture" << std::endl;
     assert(mShader != nullptr);
 
     std::string totalPath = mDefaultPath + mTextureData[textureId].path;

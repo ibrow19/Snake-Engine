@@ -16,7 +16,6 @@ int main() {
                        scene::Id::Count);
 
         game.setTitle("Game");
-        game.setTexturePath("res/texture");
         game.registerTexture(texture::Id::Test, "texture.xml");
         game.registerIHandler<TestIHandler>(iHandler::Id::Test);
         game.registerComponent<TestComponent>(component::Id::Test1);
