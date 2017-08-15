@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<texture path="texture.png">
+    <clip left="0" top="0" width="300" height= "300"/>
+    <clip left="150" top="150" width="300" height= "200"/>
+</texture>
