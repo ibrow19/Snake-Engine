@@ -21,7 +21,12 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
 
     NodeHandle newHandle;
     Node& newNode = mNodes.create(newHandle);
-    mNFactory.initNode(nodeId, newNode, newHandle, mTManager, mCManager, *this);
+    const NodeData& data = mNFactory.getNodeData(nodeId);
+    newNode.init(newHandle,
+                 mTManager, 
+                 mCManager,
+                 *this,
+                 data);
     return newHandle;
 
 }

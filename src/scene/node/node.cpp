@@ -45,23 +45,21 @@ void Node::init(const NodeHandle& handle,
                 TextureManager& tManager, 
                 ComponentManager& cManager,
                 NodeManager& nManager,  
-                bool hasTexture, 
-                TextureId textureId,
-                const std::vector<ComponentId>& components) {
+                const NodeData& data) {
 
     assert (mTManager == nullptr);
     assert (mCManager == nullptr);
     assert (mNManager == nullptr);
     
-    mHasTexture = hasTexture;
-    mTextureId = textureId;
+    mHasTexture = data.hasTexture;
+    mTextureId = data.textureId;
 
     mTManager = &tManager;
     mCManager = &cManager;
     mNManager = &nManager;
 
     // Add components.
-    for (auto it = components.cbegin(); it != components.cend(); ++it) {
+    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
 
         // TODO: it may be useful to keep handle of node as member variable.
         addComponent(*it, handle);
@@ -69,27 +67,22 @@ void Node::init(const NodeHandle& handle,
     }
 
     // Initialise componenets once all of them have been added.
-    for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
+    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
 
-        mCManager->dereference(it->first, it->second).init();
+        mCManager->dereference(*it, mComponents[*it]).init();
 
     }
 
 }
 
 
-void Node::addChild(const NodeHandle& childHandle) {
+void Node::addChild(NodeId nodeId) {
 
     // Assert to check node is initialised.
     assert(mTManager != nullptr);
-    mChildren.push_back(childHandle);
-    //Node child& = mNManager.dereference(childHandle);
-    //if (child.mParent.getCounter() != 0) {
+    assert(mNManager != nullptr);
 
-    //    throw SnakeException("Cannot add child that already has a parent");
-
-    //}
-    //child.mParent = mHandle;
+    mChildren.push_back(mNManager->createNode(nodeId));
 
 }
 

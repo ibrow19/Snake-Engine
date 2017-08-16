@@ -12,6 +12,7 @@
 #include <scene/component/component.hpp>
 #include <scene/component/componentmanager.hpp>
 #include <scene/node/nodemanager.hpp>
+#include <scene/node/nodedata.hpp>
 
 namespace snk {
 
@@ -28,10 +29,14 @@ public:
               TextureManager& tManager, 
               ComponentManager& cManager,
               NodeManager& nManager,  
-              bool hasTexture, 
-              TextureId textureId,
-              const std::vector<ComponentId>& components);
-    void addChild(const NodeHandle& childHandle);
+              const NodeData& data);
+
+    // TODO: potentially return new node handle to caryr out initialisation operations.
+    /// Add a child node to this node.
+    /// \param nodeId Id of node type to add child.
+    void addChild(NodeId nodeId);
+
+    /// Render this node and its children.
     void render();
     
     // TODO: const getter.
@@ -82,7 +87,14 @@ private:
 
     /// Add component to this node.
     /// \param componentId Id of component to add.
+    /// \param owner the handle of this node to be used by the component. 
     void addComponent(ComponentId componentId, const NodeHandle& owner);
+
+    /// Render this node and then it's children.
+    /// \param world the transform the node needs to combine with its local transform to get the
+    ///        global transform.
+    /// \param dirty whether the transform along the path to  this node has changed
+    ///        since the last render.
     void render(const Transform& world, bool dirty);
 
 private:

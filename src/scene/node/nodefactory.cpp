@@ -42,33 +42,22 @@ void NodeFactory::registerNode(NodeId nodeId, const NodeData& nodeData) {
 }
 
 
-void NodeFactory::initNode(NodeId nodeId, 
-                           Node& newNode,
-                           const NodeHandle& newHandle,
-                           TextureManager& tManager,
-                           ComponentManager& cManager,
-                           NodeManager& nManager) const {
+const NodeData& NodeFactory::getNodeData(NodeId nodeId) const {
 
     if (nodeId >= mNodeTypes.size()) {
 
-        throw SnakeException("Attempting to create node with Id which is greater than maximum node Id");
+        throw SnakeException("Attempting to get node data with Id which is greater than maximum node Id");
 
     }
 
     const NodeType& nodeType = mNodeTypes[nodeId];
     if (!nodeType.init) {
 
-        throw SnakeException("Attempting to create node with unitialised type");
+        throw SnakeException("Attempting to get node data with unitialised type");
     
     }
 
-    newNode.init(newHandle,
-                 tManager, 
-                 cManager,
-                 nManager,
-                 nodeType.data.hasTexture, 
-                 nodeType.data.textureId,
-                 nodeType.data.components);
+    return nodeType.data;
 
 }
 

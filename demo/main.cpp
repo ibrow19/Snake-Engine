@@ -21,7 +21,7 @@ int main() {
         game.registerComponent<TestComponent>(component::Id::Test1);
         game.registerComponent<TestComponent2>(component::Id::Test2);
 
-        snk::NodeFactory::NodeData nData;
+        snk::NodeData nData;
         nData.hasTexture = true;
         nData.textureId = texture::Id::Test;
         nData.components.push_back(component::Id::Test1);

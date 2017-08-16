@@ -53,7 +53,7 @@ public:
     void registerIHandler(IHandlerId iHandlerId);
     template<typename T>
     void registerComponent(ComponentId componentId);
-    void registerNode(NodeId nodeId, const NodeFactory::NodeData& data);
+    void registerNode(NodeId nodeId, const NodeData& data);
     void registerScene(SceneId sceneId, const SceneManager::SceneData& data);
     void setInitialScene(SceneId sceneId);
 

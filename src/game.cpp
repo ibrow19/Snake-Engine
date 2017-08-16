@@ -156,7 +156,7 @@ void Game::registerTexture(TextureId textureId, const std::string& path) {
 }
 
 
-void Game::registerNode(NodeId nodeId, const NodeFactory::NodeData& data) {
+void Game::registerNode(NodeId nodeId, const NodeData& data) {
 
     mNFactory.registerNode(nodeId, data);
 

@@ -2,6 +2,7 @@
 #define SNAKE_NODE_FACTORY_HEADER
 
 #include <identifiers.hpp>
+#include <scene/node/nodedata.hpp>
 
 namespace snk {
 
@@ -13,26 +14,11 @@ class NodeManager;
 class NodeFactory {
 public:
 
-    struct NodeData {
-
-        bool hasTexture = false;
-        TextureId textureId;
-        std::vector<ComponentId> components;
-
-    };
-
-public:
-
     NodeFactory(unsigned int nodeCount);
 
     /// Register components and textures that make up a node.
     void registerNode(NodeId nodeId, const NodeData& nodeData);
-    void initNode(NodeId nodeId, 
-                  Node& newNode,
-                  const NodeHandle& newHandle,
-                  TextureManager& tManager,
-                  ComponentManager& cManager,
-                  NodeManager& nManager) const;
+    const NodeData& getNodeData(NodeId nodeId) const;
 
 private:
 
