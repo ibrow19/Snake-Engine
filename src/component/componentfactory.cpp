@@ -8,8 +8,7 @@ ComponentFactory::ComponentFactory(unsigned int componentCount)
 : mComponentTypes(componentCount) {}
 
 
-void ComponentFactory::initComponent(ComponentId componentId,
-                                     ComponentPointer& newComponent) {
+std::unique_ptr<Component> ComponentFactory::createComponent(ComponentId componentId) const {
 
     // ComponentManager should have carried out this checks.
     assert(componentId < mComponentTypes.size());
@@ -20,7 +19,7 @@ void ComponentFactory::initComponent(ComponentId componentId,
 
     }
     
-    newComponent.setComponent(mComponentTypes[componentId].factory());
+    return mComponentTypes[componentId].factory();
 
 }
 

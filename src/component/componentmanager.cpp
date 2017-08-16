@@ -23,7 +23,7 @@ ComponentHandle ComponentManager::createComponent(ComponentId componentId,
     ComponentHandle newHandle;
     ComponentPointer& newComponent = mComponents[componentId].create(newHandle);
     // TODO: dont need to use factory if component is from ResourceManager pool rather than new.
-    mCFactory.initComponent(componentId, newComponent);
+    newComponent.setComponent(mCFactory.createComponent(componentId));
     newComponent.getComponent().init(nManager, owner);
     return newHandle;
 

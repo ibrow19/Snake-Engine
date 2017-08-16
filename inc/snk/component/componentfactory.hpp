@@ -1,11 +1,12 @@
 #ifndef SNAKE_COMPONENT_FACTORY_HEADER
 #define SNAKE_COMPONENT_FACTORY_HEADER
 
+#include <memory>
 #include <vector>
 #include <snk/identifiers.hpp>
 #include <snk/resource/resourcemanager.hpp>
 #include <snk/error/snkexception.hpp>
-#include <snk/component/componentpointer.hpp>
+#include <snk/component/component.hpp>
 
 namespace snk {
 
@@ -16,8 +17,7 @@ public:
 
     template<typename T>
     void registerComponent(ComponentId componentId);
-    void initComponent(ComponentId componentId,
-                       ComponentPointer& newComponent);
+    std::unique_ptr<Component> createComponent(ComponentId componentId) const;
 
     unsigned int getComponentCount() const;
 
