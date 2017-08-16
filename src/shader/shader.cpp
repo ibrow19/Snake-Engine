@@ -1,8 +1,8 @@
 #include <fstream>
 #include <GL/glew.h>
-#include <error/snkexception.hpp>
-#include <error/glexception.hpp>
-#include <shader/shader.hpp>
+#include <snk/error/snkexception.hpp>
+#include <snk/error/glexception.hpp>
+#include <snk/shader/shader.hpp>
 
 namespace snk {
 

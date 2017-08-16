@@ -1,6 +1,6 @@
 #include <cmath>
 #include <iostream>
-#include <maths/transform.hpp>
+#include <snk/maths/transform.hpp>
 
 namespace snk {
 

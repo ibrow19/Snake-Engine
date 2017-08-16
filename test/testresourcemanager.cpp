@@ -1,8 +1,8 @@
 #define BOOST_TEST_MODULE resourcemanager
 
 #include <boost/test/included/unit_test.hpp>
-#include <resourcemanager.hpp>
-#include <resource.hpp>
+#include <snk/resource/resourcemanager.hpp>
+#include <snk/resource/resource.hpp>
 
 // Handle tag.
 struct TestTag {};

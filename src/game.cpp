@@ -1,15 +1,14 @@
 #include <cassert>
 #include <iostream>
-#include <error/glewexception.hpp>
+#include <snk/error/glewexception.hpp>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
-#include <error/sdlexception.hpp>
-#include <error/glexception.hpp>
-#include <shader/basic.hpp>
-#include <timer.hpp>
-#include <game.hpp>
-#include <scene/node/node.hpp>
-#include <scene/node/nodemanager.hpp>
+#include <snk/error/sdlexception.hpp>
+#include <snk/error/glexception.hpp>
+#include <snk/shader/basic.hpp>
+#include <snk/node/node.hpp>
+#include <snk/timer.hpp>
+#include <snk/game.hpp>
 
 namespace snk {
 

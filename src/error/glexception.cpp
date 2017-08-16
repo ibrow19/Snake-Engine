@@ -1,4 +1,4 @@
-#include <error/glexception.hpp>
+#include <snk/error/glexception.hpp>
 
 namespace snk {
 

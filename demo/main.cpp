@@ -1,6 +1,6 @@
 #include <iostream>
-#include <game.hpp>
-#include <error/snkexception.hpp>
+#include <snk/game.hpp>
+#include <snk/error/snkexception.hpp>
 #include "component.hpp"
 #include "inputhandler.hpp"
 

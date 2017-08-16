@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <error/sdlexception.hpp>
+#include <snk/error/sdlexception.hpp>
 
 namespace snk {
 

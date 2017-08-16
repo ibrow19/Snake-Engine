@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <iostream>
-#include <error/glexception.hpp>
-#include <shader/basic.hpp>
+#include <snk/error/glexception.hpp>
+#include <snk/shader/basic.hpp>
 
 namespace snk {
 

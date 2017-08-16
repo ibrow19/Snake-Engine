@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE vector
 
 #include <boost/test/included/unit_test.hpp>
-#include <maths/vector.hpp>
+#include <snk/maths/vector.hpp>
 
 struct Vectors {
 

@@ -1,8 +1,9 @@
 #ifndef DEMO_COMPONENT_HEADER
 #define DEMO_COMPONENT_HEADER
 
-#include <scene/component/component.hpp>
-#include <scene/node/node.hpp>
+#include <snk/component/component.hpp>
+#include <snk/node/node.hpp>
+#include "identifiers.hpp"
 
 class TestComponent : public snk::Component {
 public:

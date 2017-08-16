@@ -1,4 +1,4 @@
-#include <error/snkexception.hpp>
+#include <snk/error/snkexception.hpp>
 
 namespace snk {
 

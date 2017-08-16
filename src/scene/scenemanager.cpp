@@ -1,10 +1,10 @@
-#include <texturemanager.hpp>
-#include <scene/component/componentfactory.hpp>
-#include <scene/component/componentmanager.hpp>
-#include <scene/node/nodefactory.hpp>
-#include <scene/node/nodemanager.hpp>
-#include <scene/node/node.hpp>
-#include <scene/scenemanager.hpp>
+#include <snk/texture/texturemanager.hpp>
+#include <snk/component/componentfactory.hpp>
+#include <snk/component/componentmanager.hpp>
+#include <snk/node/nodefactory.hpp>
+#include <snk/node/nodemanager.hpp>
+#include <snk/node/node.hpp>
+#include <snk/scene/scenemanager.hpp>
 
 namespace snk {
 

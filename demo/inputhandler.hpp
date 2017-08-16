@@ -1,7 +1,7 @@
 #ifndef DEMO_INPUT_HANDLER_HEADER
 #define DEMO_INPUT_HANDLER_HEADER
 
-#include <scene/input/inputhandler.hpp>
+#include <snk/input/inputhandler.hpp>
 #include "identifiers.hpp"
 #include "component.hpp"
 

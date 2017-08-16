@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <error/glewexception.hpp>
+#include <snk/error/glewexception.hpp>
 
 namespace snk {
 

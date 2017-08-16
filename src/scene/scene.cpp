@@ -1,9 +1,9 @@
-#include <error/snkexception.hpp>
-#include <texturemanager.hpp>
-#include <scene/component/componentfactory.hpp>
-#include <scene/node/node.hpp>
-#include <scene/node/nodefactory.hpp>
-#include <scene/scene.hpp>
+#include <snk/error/snkexception.hpp>
+#include <snk/texture/texturemanager.hpp>
+#include <snk/component/componentfactory.hpp>
+#include <snk/node/node.hpp>
+#include <snk/node/nodefactory.hpp>
+#include <snk/scene/scene.hpp>
 
 namespace snk {
 
