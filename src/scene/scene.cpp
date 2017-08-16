@@ -12,10 +12,10 @@ Scene::Scene(NodeId rootId,
              std::unique_ptr<InputHandler> iHandler,
              ComponentFactory& cFactory,
              NodeFactory& nFactory)
-: mIHandler(std::move(iHandler)),
+: mTManager(tManager),
+  mIHandler(std::move(iHandler)),
   mCManager(cFactory),
-  mNManager(tManager,
-            mCManager,
+  mNManager(mCManager,
             nFactory),
   mRootHandle(mNManager.createNode(rootId)) {}
 
@@ -44,7 +44,7 @@ void Scene::update(float delta) {
 void Scene::render() {
 
     assert(mRootHandle.getCounter() != 0);
-    mNManager.dereference(mRootHandle).render();
+    mNManager.dereference(mRootHandle).render(mTManager, mNManager);
 
 };
 

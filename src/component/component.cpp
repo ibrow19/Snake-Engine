@@ -1,18 +1,23 @@
 #include <snk/node/node.hpp>
 #include <snk/node/nodemanager.hpp>
 #include <snk/component/component.hpp>
+#include <snk/component/componentmanager.hpp>
 
 namespace snk {
 
 Component::Component() 
-: mNManager(nullptr),
+: mCManager(nullptr),
+  mNManager(nullptr),
   mOwnerHandle() {}
 
 Component::~Component() {}
 
-void Component::init(NodeManager& manager, const NodeHandle& owner) {
+void Component::init(ComponentManager& cManager,
+                     NodeManager& nManager, 
+                     const NodeHandle& owner) {
 
-    mNManager = &manager;
+    mCManager = &cManager;
+    mNManager = &nManager;
     mOwnerHandle = owner;
 
 }
@@ -25,6 +30,7 @@ void Component::update(float /* delta */) {}
 
 Node& Component::getOwner() {
 
+    assert(mCManager != nullptr);
     assert(mNManager != nullptr);
     return mNManager->dereference(mOwnerHandle);
 

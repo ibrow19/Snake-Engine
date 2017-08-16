@@ -10,6 +10,12 @@ public:
 
     void reset() {}
 
+    void init() {
+
+        getOwner().addChild(mNManager->createNode(node::Id::Test2));
+
+    }
+
     void update(float delta) {
 
         getOwner().rotate(delta * -100.f);

@@ -8,7 +8,6 @@ namespace snk {
 
 class Node;
 class Component;
-class TextureManager;
 class ComponentManager;
 class NodeFactory;
 
@@ -17,8 +16,7 @@ class NodeManager {
 public:
 
     /// Initialise with how many different kind of nodes there will be.
-    NodeManager(TextureManager& tManager, 
-                ComponentManager& cManager,
+    NodeManager(ComponentManager& cManager,
                 NodeFactory& nFactory);
 
     /// Create a node of the specified type.
@@ -32,7 +30,6 @@ public:
 
 private:
 
-    TextureManager& mTManager;
     ComponentManager& mCManager;
     NodeFactory& mNFactory;
 

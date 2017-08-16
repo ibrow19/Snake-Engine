@@ -30,8 +30,9 @@ public:
 
 private:
 
-    std::unique_ptr<InputHandler> mIHandler;
     
+    TextureManager& mTManager;
+    std::unique_ptr<InputHandler> mIHandler;
     ComponentManager mCManager;
     NodeManager mNManager;
 

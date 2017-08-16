@@ -9,11 +9,9 @@
 
 namespace snk {
 
-NodeManager::NodeManager(TextureManager& tManager, 
-                         ComponentManager& cManager,
+NodeManager::NodeManager(ComponentManager& cManager,
                          NodeFactory& nFactory)
-: mTManager(tManager),
-  mCManager(cManager),
+: mCManager(cManager),
   mNFactory(nFactory) {}
 
 
@@ -22,11 +20,21 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
     NodeHandle newHandle;
     Node& newNode = mNodes.create(newHandle);
     const NodeData& data = mNFactory.getNodeData(nodeId);
-    newNode.init(newHandle,
-                 mTManager, 
-                 mCManager,
-                 *this,
-                 data);
+    if (data.hasTexture) {
+
+        newNode.setTexture(data.textureId);
+
+    }
+    for (auto it = data.components.begin(); it != data.components.end(); ++it) {
+
+        newNode.addComponent(*it, mCManager.createComponent(*this, *it, newHandle));
+
+    }
+    for (auto it = data.components.begin(); it != data.components.end(); ++it) {
+
+        mCManager.dereference(*it, newNode.getComponent(*it)).init();
+
+    }
     return newHandle;
 
 }

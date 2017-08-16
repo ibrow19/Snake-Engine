@@ -23,29 +23,35 @@ public:
 
     void reset();
 
-    // TODO: less generic ResourceManager could avoid needing to constantly reinitialise
-    //       managers.
-    void init(const NodeHandle& handle,
-              TextureManager& tManager, 
-              ComponentManager& cManager,
-              NodeManager& nManager,  
-              const NodeData& data);
+    //void init(const NodeHandle& handle,
+    //          const NodeData& data);
 
-    // TODO: potentially return new node handle to caryr out initialisation operations.
+    /// Set the texture used by this node.
+    void setTexture(TextureId textureId);
+
     /// Add a child node to this node.
-    /// \param nodeId Id of node type to add child.
-    void addChild(NodeId nodeId);
+    void addChild(const NodeHandle& handle);
+
+    /// Add a component node to this node.
+    void addComponent(ComponentId componentId, const ComponentHandle& handle);
+
+    // TODO: decide whether handles are gonna be passed by value or not.
+    bool hasComponent(ComponentId componentId) const;
+    ComponentHandle getComponent(ComponentId componentId) const;
 
     /// Render this node and its children.
-    void render();
+    /// \param tManager texture manager to use for drawing textures.
+    /// \param nManager node manager to use for drawing children.
+    void render(TextureManager& tManager, NodeManager& nManager);
+
+
     
-    // TODO: const getter.
     /// Get component of specified type T.
     /// \param componentId Identifier for component type to get.
     /// \return Pointer to the component or nullptr if node does not own such
     ///         a component.
-    template<typename T>
-    T* getComponent(ComponentId componentId); 
+    //template<typename T>
+    //T* getComponent(ComponentId componentId); 
 
     // Mark the node and its children for removal so that once iteration for
     // updating is finished, the node can be destroyed by node manager.
@@ -85,17 +91,17 @@ public:
 
 private:
 
-    /// Add component to this node.
-    /// \param componentId Id of component to add.
-    /// \param owner the handle of this node to be used by the component. 
-    void addComponent(ComponentId componentId, const NodeHandle& owner);
-
     /// Render this node and then it's children.
+    /// \param tManager texture manager to use for getting textures to draw.
+    /// \param nManager node maanger to get children to draw.
     /// \param world the transform the node needs to combine with its local transform to get the
     ///        global transform.
     /// \param dirty whether the transform along the path to  this node has changed
     ///        since the last render.
-    void render(const Transform& world, bool dirty);
+    void render(TextureManager& tManager,
+                NodeManager& nManager,
+                const Transform& world, 
+                bool dirty);
 
 private:
 
@@ -109,42 +115,11 @@ private:
 
     TextureId mTextureId;
 
-    TextureManager* mTManager;
-    ComponentManager* mCManager;
-    NodeManager* mNManager;
-
-    //NodeHandle mParent;
-
     // TODO: use more efficient structure for component lookup (e.g hashmap).
     std::map<ComponentId, ComponentHandle> mComponents;
     std::vector<NodeHandle> mChildren;
 
 };
-
-
-template<typename T>
-T* Node::getComponent(ComponentId componentId) {
-
-    assert(mTManager != nullptr);
-    assert(mCManager != nullptr);
-    assert(mNManager != nullptr);
-
-    auto found = mComponents.find(componentId);
-    if (found == mComponents.end()) {
-
-        return nullptr;
-
-    }
-    Component& component = mCManager->dereference(found->first, found->second);
-    T* target = dynamic_cast<T*>(&component);
-    if (target == nullptr) {
-
-        throw SnakeException("Using wrong type for component");
-
-    }
-    return target; 
-
-}
 
 } // namespace snk
 

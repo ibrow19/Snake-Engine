@@ -10,9 +10,9 @@ ComponentManager::ComponentManager(ComponentFactory& cFactory)
   mComponents(mCFactory.getComponentCount()) {}
 
 
-ComponentHandle ComponentManager::createComponent(ComponentId componentId,
-                                                  const NodeHandle& owner,
-                                                  NodeManager& nManager) {
+ComponentHandle ComponentManager::createComponent(NodeManager& nManager,
+                                                  ComponentId componentId,
+                                                  const NodeHandle& owner) {
 
     if (componentId >= mComponents.size()) {
 
@@ -24,7 +24,7 @@ ComponentHandle ComponentManager::createComponent(ComponentId componentId,
     ComponentPointer& newComponent = mComponents[componentId].create(newHandle);
     // TODO: dont need to use factory if component is from ResourceManager pool rather than new.
     newComponent.setComponent(mCFactory.createComponent(componentId));
-    newComponent.getComponent().init(nManager, owner);
+    newComponent.getComponent().init(*this, nManager, owner);
     return newHandle;
 
 }

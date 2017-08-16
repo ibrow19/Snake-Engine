@@ -14,10 +14,6 @@ Node::Node()
   mLocal(),
   mWorld(),
   mTextureId(0),
-  mTManager(nullptr),
-  mCManager(nullptr),
-  mNManager(nullptr),
-  //mParent(),
   mComponents(),
   mChildren() {}
 
@@ -31,96 +27,118 @@ void Node::reset() {
     mLocal = Transform();
     mWorld = Transform();
     mTextureId = 0;
-    mTManager = nullptr;
-    mCManager = nullptr;
-    mNManager = nullptr;
-    //mParent = NodeHandle();
     mComponents.clear();
     mChildren.clear();
 
 }
 
 
-void Node::init(const NodeHandle& handle,
-                TextureManager& tManager, 
-                ComponentManager& cManager,
-                NodeManager& nManager,  
-                const NodeData& data) {
+void Node::setTexture(TextureId textureId) {
 
-    assert (mTManager == nullptr);
-    assert (mCManager == nullptr);
-    assert (mNManager == nullptr);
-    
-    mHasTexture = data.hasTexture;
-    mTextureId = data.textureId;
-
-    mTManager = &tManager;
-    mCManager = &cManager;
-    mNManager = &nManager;
-
-    // Add components.
-    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
-
-        // TODO: it may be useful to keep handle of node as member variable.
-        addComponent(*it, handle);
-
-    }
-
-    // Initialise componenets once all of them have been added.
-    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
-
-        mCManager->dereference(*it, mComponents[*it]).init();
-
-    }
+    mHasTexture = true;
+    mTextureId = textureId;
 
 }
 
 
-void Node::addChild(NodeId nodeId) {
+void Node::addChild(const NodeHandle& handle) {
 
-    // Assert to check node is initialised.
-    assert(mTManager != nullptr);
-    assert(mNManager != nullptr);
-
-    mChildren.push_back(mNManager->createNode(nodeId));
+    mChildren.push_back(handle);
 
 }
 
 
-void Node::render() {
+void Node::addComponent(ComponentId componentId, const ComponentHandle& handle) {
 
-    assert(mTManager != nullptr);
-    Transform t;
-    render(t, false);
+    mComponents[componentId] = handle;
+
+}
+
+
+bool Node::hasComponent(ComponentId componentId) const {
+
+    auto found = mComponents.find(componentId);
+    if (found == mComponents.end()) {
+
+        return false;
+
+    }
+    return true;
+
+}
+
+
+ComponentHandle Node::getComponent(ComponentId componentId) const {
+
+    if (!hasComponent(componentId)) {
+
+        throw SnakeException("Attempting to get component node does not have");
+
+    }
+    return mComponents.at(componentId);
+
+}
+
+
+//void Node::init(const NodeHandle& handle,
+//                const NodeData& data) {
+//
+//    mHasTexture = data.hasTexture;
+//    mTextureId = data.textureId;
+//
+//    mTManager = &tManager;
+//    mCManager = &cManager;
+//    mNManager = &nManager;
+//
+//    // Add components.
+//    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
+//
+//        // TODO: it may be useful to keep handle of node as member variable.
+//        addComponent(*it, handle);
+//
+//    }
+//
+//    // Initialise componenets once all of them have been added.
+//    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
+//
+//        mCManager->dereference(*it, mComponents[*it]).init();
+//
+//    }
+//
+//}
+
+
+void Node::render(TextureManager& tManager, NodeManager& nManager) {
+
+    Transform transform;
+    render(tManager, nManager, transform, false);
 
 }
 
 
 void Node::destroy() {
 
-    assert(mTManager != nullptr);
-    mDestroyed = true;
-    for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
+    //mDestroyed = true;
+    //for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
 
-        mNManager->dereference(*it);
+    //    mNManager->dereference(*it);
 
-    }
+    //}
 
-    // TODO: Destroying marked nodes should be the last thing that happens. This gives
-    //       destroyed components to use the node's state for actions upon destruction.
-    // Mark components for destruction.
-    for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
+    //// TODO: Destroying marked nodes should be the last thing that happens. This gives
+    ////       destroyed components to use the node's state for actions upon destruction.
+    //// Mark components for destruction.
+    //for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
 
-        // mCManager.dereference(it->first, it->second).destroy();
+    //    // mCManager.dereference(it->first, it->second).destroy();
 
-    }
+    //}
 
 }
 
 
 bool Node::isDestroyed() const {
 
-    assert(mTManager != nullptr);
     return mDestroyed;
 
 }
@@ -129,7 +147,6 @@ bool Node::isDestroyed() const {
 // Origin
 const Point2f& Node::getOrigin() const {
 
-    assert(mTManager != nullptr);
     return mLocalData.origin;
 
 }
@@ -137,7 +154,6 @@ const Point2f& Node::getOrigin() const {
 
 void Node::setOrigin(Point2f origin) {
 
-    assert(mTManager != nullptr);
     setOrigin(origin.x, origin.y);
 
 }
@@ -145,7 +161,6 @@ void Node::setOrigin(Point2f origin) {
 
 void Node::setOrigin(float x, float y) {
 
-    assert(mTManager != nullptr);
     mLocalData.origin.x = x;
     mLocalData.origin.y = y;
     mDirty = true;
@@ -155,7 +170,6 @@ void Node::setOrigin(float x, float y) {
 // Scale
 const Vector2f& Node::getScale() const {
 
-    assert(mTManager != nullptr);
     return mLocalData.scale;
 
 }
@@ -163,7 +177,6 @@ const Vector2f& Node::getScale() const {
 
 void Node::setScale(float factor) {
 
-    assert(mTManager != nullptr);
     setScale(factor, factor);
 
 }
@@ -171,7 +184,6 @@ void Node::setScale(float factor) {
 
 void Node::setScale(const Vector2f& factor) {
 
-    assert(mTManager != nullptr);
     setScale(factor.x, factor.y);
 
 }
@@ -179,7 +191,6 @@ void Node::setScale(const Vector2f& factor) {
 
 void Node::setScale(float x, float y) {
 
-    assert(mTManager != nullptr);
     mLocalData.scale.x = x;
     mLocalData.scale.y = y;
     mDirty = true;
@@ -189,7 +200,6 @@ void Node::setScale(float x, float y) {
 
 void Node::scale(float factor) {
 
-    assert(mTManager != nullptr);
     setScale(factor * mLocalData.scale.x, factor * mLocalData.scale.y);
 
 }
@@ -197,7 +207,6 @@ void Node::scale(float factor) {
 
 void Node::scale(const Vector2f& factor) {
 
-    assert(mTManager != nullptr);
     setScale(factor.x * mLocalData.scale.x, factor.y * mLocalData.scale.y);
 
 }
@@ -205,7 +214,6 @@ void Node::scale(const Vector2f& factor) {
 
 void Node::scale(float x, float y) {
 
-    assert(mTManager != nullptr);
     setScale(x * mLocalData.scale.x, y * mLocalData.scale.y);
 
 }
@@ -214,7 +222,6 @@ void Node::scale(float x, float y) {
 // Rotate.
 float Node::getRotation() const {
 
-    assert(mTManager != nullptr);
     return mLocalData.angle;
 
 }
@@ -222,7 +229,6 @@ float Node::getRotation() const {
 
 void Node::setRotation(float angle) {
 
-    assert(mTManager != nullptr);
     // Calculate angle modulo 360.
     while (angle >= 360.f) {
 
@@ -242,7 +248,6 @@ void Node::setRotation(float angle) {
 
 void Node::rotate(float angle) {
 
-    assert(mTManager != nullptr);
     setRotation(mLocalData.angle + angle);
 
 }
@@ -251,7 +256,6 @@ void Node::rotate(float angle) {
 // Translation.
 const Vector2f& Node::getTranslation() const {
 
-    assert(mTManager != nullptr);
     return mLocalData.translation;
 
 }
@@ -259,7 +263,6 @@ const Vector2f& Node::getTranslation() const {
 
 void Node::setTranslation(const Vector2f& v) {
 
-    assert(mTManager != nullptr);
     setTranslation(v.x, v.y);
 
 }
@@ -267,7 +270,6 @@ void Node::setTranslation(const Vector2f& v) {
 
 void Node::setTranslation(float x, float y) {
 
-    assert(mTManager != nullptr);
     mLocalData.translation.x = x;
     mLocalData.translation.y = y;
     mDirty = true;
@@ -277,7 +279,6 @@ void Node::setTranslation(float x, float y) {
 
 void Node::translate(const Vector2f& v) {
 
-    assert(mTManager != nullptr);
     setTranslation(v.x + mLocalData.translation.x, v.y + mLocalData.translation.y);
 
 }
@@ -285,24 +286,25 @@ void Node::translate(const Vector2f& v) {
 
 void Node::translate(float x, float y) {
 
-    assert(mTManager != nullptr);
     setTranslation(x + mLocalData.translation.x, y + mLocalData.translation.y);
 
 }
 
 
-void Node::addComponent(ComponentId componentId, const NodeHandle& owner) {
+//void Node::addComponent(ComponentId componentId, const NodeHandle& owner) {
+//
+//    // Node type initialisation should ensure that there are no duplicate components.
+//    assert(mComponents.find(componentId) == mComponents.end());
+//    mComponents[componentId] = mCManager->createComponent(componentId, owner, *mNManager);
+//
+//}
 
-    // Node type initialisation should ensure that there are no duplicate components.
-    assert(mComponents.find(componentId) == mComponents.end());
-    mComponents[componentId] = mCManager->createComponent(componentId, owner, *mNManager);
 
-}
+void Node::render(TextureManager& tManager,
+                  NodeManager& nManager,
+                  const Transform& world, 
+                  bool dirty) {
 
-
-void Node::render(const Transform& world, bool dirty) {
-
-    assert(mTManager != nullptr);
     if (mDirty) {
 
         mLocal = Transform(mLocalData);
@@ -317,13 +319,13 @@ void Node::render(const Transform& world, bool dirty) {
     }
     if (mHasTexture) {
 
-        Texture& texture = mTManager->getTexture(mTextureId);
+        Texture& texture = tManager.getTexture(mTextureId);
         texture.render(mWorld);
 
     }
     for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
 
-        mNManager->dereference(*it).render(mWorld, dirty);
+        nManager.dereference(*it).render(tManager, nManager, mWorld, dirty);
 
     }
 
