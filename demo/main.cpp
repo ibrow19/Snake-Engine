@@ -32,7 +32,7 @@ int main() {
         nData.components.push_back(component::Id::Test2);
         game.registerNode(node::Id::Test2, nData);
 
-        snk::SceneManager::SceneData sData;
+        snk::SceneData sData;
         sData.rootId = node::Id::Test1;
         sData.iHandlerId = iHandler::Id::Test;
         game.registerScene(scene::Id::Test, sData);

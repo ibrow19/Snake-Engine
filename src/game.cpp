@@ -163,7 +163,7 @@ void Game::registerNode(NodeId nodeId, const NodeData& data) {
 }
 
 
-void Game::registerScene(SceneId sceneId, const SceneManager::SceneData& data) {
+void Game::registerScene(SceneId sceneId, const SceneData& data) {
 
     mSManager.registerScene(sceneId, data);
 

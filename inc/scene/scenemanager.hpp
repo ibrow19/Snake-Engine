@@ -4,20 +4,12 @@
 #include <identifiers.hpp>
 #include <scene/input/ihandlerfactory.hpp>
 #include <scene/scene.hpp>
+#include <scene/scenedata.hpp>
 
 namespace snk {
 
 /// Controls creation and management of scenes and delegates updates and events to them.
 class SceneManager {
-public:
-
-    struct SceneData {
-
-        NodeId rootId;
-        IHandlerId iHandlerId;
-
-    };
-
 public:
 
     SceneManager(unsigned int sceneCount,

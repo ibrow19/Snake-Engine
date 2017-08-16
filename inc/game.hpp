@@ -54,7 +54,7 @@ public:
     template<typename T>
     void registerComponent(ComponentId componentId);
     void registerNode(NodeId nodeId, const NodeData& data);
-    void registerScene(SceneId sceneId, const SceneManager::SceneData& data);
+    void registerScene(SceneId sceneId, const SceneData& data);
     void setInitialScene(SceneId sceneId);
 
 private:
