@@ -9,11 +9,11 @@ namespace snk {
 Node::Node()
 : mDestroyed(false),
   mHasTexture(false),
+  mTextureId(0),
   mDirty(true),  // Must be true initially to initialise world transform
   mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
   mLocal(),
   mWorld(),
-  mTextureId(0),
   mComponents(),
   mChildren() {}
 

@@ -59,7 +59,6 @@ void Game::run() {
     Timer timer;
     timer.start();
 
-    // TODO: fixed gameloop.
     mRunning = true;
     while (mRunning) {
 
@@ -69,7 +68,6 @@ void Game::run() {
         // Get time past since last update and restart timer.
         float delta = timer.getTime();
         timer.start();
-
 
         // Update game world with time passed since last update.
         // Fixed update: Update in steps no largerthan max delta to avoid errors in logic.
@@ -288,6 +286,10 @@ void Game::createWin() {
     } else {
 
         glClearColor(1.f, 1.f, 1.f, 1.f);
+
+        // Note: explicitly setting viewport not necessary on initialisation
+        // but is necessary on window resizes.
+        glViewport(0, 0, mWidth, mHeight);
 
     }
 

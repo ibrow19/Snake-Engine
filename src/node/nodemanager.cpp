@@ -15,6 +15,7 @@ NodeManager::NodeManager(ComponentManager& cManager,
   mNFactory(nFactory) {}
 
 
+// TODO: might be nicer to pass componentmanager to this function rather than have as member.
 NodeHandle NodeManager::createNode(NodeId nodeId) {
 
     NodeHandle newHandle;
@@ -27,7 +28,7 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
     }
     for (auto it = data.components.begin(); it != data.components.end(); ++it) {
 
-        newNode.addComponent(*it, mCManager.createComponent(*this, *it, newHandle));
+        newNode.addComponent(*it, mCManager.createComponent(*it, newHandle));
 
     }
     for (auto it = data.components.begin(); it != data.components.end(); ++it) {

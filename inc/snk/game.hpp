@@ -24,7 +24,7 @@ public:
 
     ~Game();
 
-    /// Runs the game until it is finsished
+    /// Runs the game until it is finished
     void run();
 
     // Options configuration.

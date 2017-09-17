@@ -2,16 +2,18 @@
 #include <snk/component/componentmanager.hpp>
 #include <snk/component/componentfactory.hpp>
 #include <snk/input/command.hpp>
+#include <snk/scene/scene.hpp>
 
 namespace snk {
 
-ComponentManager::ComponentManager(ComponentFactory& cFactory) 
-: mCFactory(cFactory),
+ComponentManager::ComponentManager(Scene& scene,
+                                   ComponentFactory& cFactory) 
+: mScene(scene),
+  mCFactory(cFactory),
   mComponents(mCFactory.getComponentCount()) {}
 
 
-ComponentHandle ComponentManager::createComponent(NodeManager& nManager,
-                                                  ComponentId componentId,
+ComponentHandle ComponentManager::createComponent(ComponentId componentId,
                                                   const NodeHandle& owner) {
 
     if (componentId >= mComponents.size()) {
@@ -24,7 +26,7 @@ ComponentHandle ComponentManager::createComponent(NodeManager& nManager,
     ComponentPointer& newComponent = mComponents[componentId].create(newHandle);
     // TODO: dont need to use factory if component is from ResourceManager pool rather than new.
     newComponent.setComponent(mCFactory.createComponent(componentId));
-    newComponent.getComponent().init(*this, nManager, owner);
+    newComponent.getComponent().init(mScene.getContext(), owner);
     return newHandle;
 
 }

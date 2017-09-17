@@ -14,9 +14,13 @@ Scene::Scene(NodeId rootId,
              NodeFactory& nFactory)
 : mTManager(tManager),
   mIHandler(std::move(iHandler)),
-  mCManager(cFactory),
+  mCManager(*this,
+            cFactory),
   mNManager(mCManager,
             nFactory),
+  mContext({mTManager,
+            mCManager,
+            mNManager}),
   mRootHandle(mNManager.createNode(rootId)) {}
 
 
@@ -47,5 +51,12 @@ void Scene::render() {
     mNManager.dereference(mRootHandle).render(mTManager, mNManager);
 
 };
+
+
+Context& Scene::getContext() {
+
+    return mContext;
+
+}
 
 } // namespace snk

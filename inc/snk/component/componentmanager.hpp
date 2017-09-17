@@ -11,14 +11,15 @@ namespace snk {
 
 class ComponentFactory;
 class Command;
+class Scene;
 
 class ComponentManager {
 public:
 
-    ComponentManager(ComponentFactory& cFactory);
+    ComponentManager(Scene& scene,
+                     ComponentFactory& cFactory);
 
-    ComponentHandle createComponent(NodeManager& nManager,
-                                    ComponentId componentId,
+    ComponentHandle createComponent(ComponentId componentId,
                                     const NodeHandle& owner);
 
     Component& dereference(ComponentId componentId, const ComponentHandle& handle);
@@ -34,6 +35,7 @@ public:
 
 private:
     
+    Scene& mScene;
     ComponentFactory& mCFactory;
 
     // TODO: specialise ComponentPointer resourcemanager iterator to getComponent on dereference.

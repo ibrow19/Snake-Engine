@@ -6,18 +6,15 @@
 namespace snk {
 
 Component::Component() 
-: mCManager(nullptr),
-  mNManager(nullptr),
+: mContext(nullptr),
   mOwnerHandle() {}
 
 Component::~Component() {}
 
-void Component::init(ComponentManager& cManager,
-                     NodeManager& nManager, 
+void Component::init(Context& context,
                      const NodeHandle& owner) {
 
-    mCManager = &cManager;
-    mNManager = &nManager;
+    mContext = &context;
     mOwnerHandle = owner;
 
 }
@@ -28,11 +25,17 @@ void Component::init() {}
 void Component::update(float /* delta */) {}
 
 
+Context& Component::getContext() {
+
+    assert(mContext != nullptr);
+    return *mContext;
+
+}
+
+
 Node& Component::getOwner() {
 
-    assert(mCManager != nullptr);
-    assert(mNManager != nullptr);
-    return mNManager->dereference(mOwnerHandle);
+    return getContext().nManager.dereference(mOwnerHandle);
 
 }
 

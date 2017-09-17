@@ -3,6 +3,7 @@
 
 #include <snk/identifiers.hpp>
 #include <snk/resource/resource.hpp>
+#include <snk/context.hpp>
 
 namespace snk {
 
@@ -18,9 +19,8 @@ public:
     virtual ~Component();
 
     // TODO: this function shouldn't be exposed.
-    /// Initialise newly created component with owner and manager.
-    void init(ComponentManager& cManager, 
-              NodeManager& nManager, 
+    /// Initialise newly created component with owner and scene for fetching context.
+    void init(Context& context, 
               const NodeHandle& owner);
 
     // init is called when node using this component is initialised.
@@ -29,17 +29,12 @@ public:
 
 protected:
 
+    Context& getContext();
     Node& getOwner();
-
-protected:
-
-    // TODO: make functions to interact with these rather than giving users direct access to them.
-    // TODO: might not need component manager ref.
-    ComponentManager* mCManager;
-    NodeManager* mNManager;
 
 private:
 
+    Context* mContext;
     NodeHandle mOwnerHandle;
 
 };

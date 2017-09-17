@@ -7,6 +7,7 @@
 #include <snk/input/inputhandler.hpp>
 #include <snk/component/componentmanager.hpp>
 #include <snk/node/nodemanager.hpp>
+#include <snk/context.hpp>
 
 namespace snk {
 
@@ -28,13 +29,16 @@ public:
     void update(float delta);
     void render();
 
+    Context& getContext();
+
 private:
 
-    
     TextureManager& mTManager;
     std::unique_ptr<InputHandler> mIHandler;
     ComponentManager mCManager;
     NodeManager mNManager;
+
+    Context mContext;
 
     NodeHandle mRootHandle;
 
