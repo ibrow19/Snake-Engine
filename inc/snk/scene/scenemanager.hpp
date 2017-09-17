@@ -1,6 +1,7 @@
 #ifndef SNAKE_SCENE_MANAGER_HEADER
 #define SNAKE_SCENE_MANAGER_HEADER
 
+#include <memory>
 #include <snk/identifiers.hpp>
 #include <snk/input/ihandlerfactory.hpp>
 #include <snk/scene/scene.hpp>
@@ -95,7 +96,11 @@ private:
     std::vector<SceneType> mSceneTypes;
 
     std::queue<StackAction> mActionQueue;
-    std::vector<Scene> mSceneStack;  
+
+    // Note: Indirection to scenes required so that changes in scene stack
+    // does not cause relocation of scenes in memory invalidating pointers to
+    // them and their managers.
+    std::vector<std::unique_ptr<Scene>> mSceneStack;  
 
 };
 

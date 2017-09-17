@@ -74,7 +74,7 @@ void SceneManager::update(float delta) {
 
     if (!mSceneStack.empty()) {
 
-        mSceneStack.back().update(delta);
+        mSceneStack.back()->update(delta);
 
     }
 
@@ -117,7 +117,7 @@ void SceneManager::handleEvent(const SDL_Event& event) {
 
     if (!mSceneStack.empty()) {
 
-        mSceneStack.back().handleEvent(event);
+        mSceneStack.back()->handleEvent(event);
 
     }
 
@@ -129,7 +129,7 @@ void SceneManager::render() {
 
     for (auto it = mSceneStack.begin(); it != mSceneStack.end(); ++it) {
 
-        it->render();
+        (*it)->render();
 
     }
 
@@ -164,11 +164,11 @@ void SceneManager::pushScene(SceneId sceneId) {
         throw SnakeException("Attempting to create unitialised scene type");
 
     }
-    mSceneStack.emplace_back(mSceneTypes[sceneId].data.rootId,
-                             mTManager,
-                             mIFactory.createIHandler(mSceneTypes[sceneId].data.iHandlerId),
-                             mCFactory,
-                             mNFactory);
+    mSceneStack.emplace_back(new Scene(mSceneTypes[sceneId].data.rootId,
+                                       mTManager,
+                                       mIFactory.createIHandler(mSceneTypes[sceneId].data.iHandlerId),
+                                       mCFactory,
+                                       mNFactory));
 
 }
 
