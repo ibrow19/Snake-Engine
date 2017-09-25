@@ -2,6 +2,7 @@
 #define SNAKE_RESOURCE_MANAGER_HEADER
 
 #include <iterator>
+#include <vector>
 #include <cstddef>
 #include <snk/error/snkexception.hpp>
 #include <snk/resource/handle.hpp>

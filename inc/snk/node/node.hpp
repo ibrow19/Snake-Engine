@@ -36,25 +36,10 @@ public:
 
     // TODO: decide whether handles are gonna be passed by value or not.
     bool hasComponent(ComponentId componentId) const;
-    ComponentHandle getComponent(ComponentId componentId) const;
+    const ComponentHandle& getComponent(ComponentId componentId) const;
 
-    /// Get component of specified type T.
-    /// \param componentId Identifier for component type to get.
-    /// \return Pointer to the component or nullptr if node does not own such
-    ///         a component.
-    //template<typename T>
-    //T* getComponent(ComponentId componentId); 
-
-private:
-
-    bool mDestroyed;
-
-/// TODO: following will become part of texture component.
-public:
-
-    //void init(const NodeHandle& handle,
-    //          const NodeData& data);
-
+    /* Texture functions */
+    
     /// Set the texture used by this node.
     void setTexture(TextureId textureId);
 
@@ -63,28 +48,7 @@ public:
     /// \param nManager node manager to use for drawing children.
     void render(TextureManager& tManager, NodeManager& nManager);
 
-private:
-
-    /// Render this node and then it's children.
-    /// \param tManager texture manager to use for getting textures to draw.
-    /// \param nManager node maanger to get children to draw.
-    /// \param world the transform the node needs to combine with its local transform to get the
-    ///        global transform.
-    /// \param dirty whether the transform along the path to  this node has changed
-    ///        since the last render.
-    void render(TextureManager& tManager,
-                NodeManager& nManager,
-                const Transform& world, 
-                bool dirty);
-
-
-private:
-
-    bool mHasTexture;
-    TextureId mTextureId;
-
-/// TODO: following will become part of transform component.
-public:
+    /* Transform functions */
 
     /// Add a child node to this node.
     void addChild(const NodeHandle& handle);
@@ -120,7 +84,26 @@ public:
 
 private:
 
+    /// Render this node and then it's children.
+    /// \param tManager texture manager to use for getting textures to draw.
+    /// \param nManager node manager to get children to draw.
+    /// \param world the transform the node needs to combine with its local transform to get the
+    ///        global transform.
+    /// \param dirty whether the transform along the path to  this node has changed
+    ///        since the last render.
+    void render(TextureManager& tManager,
+                NodeManager& nManager,
+                const Transform& world, 
+                bool dirty);
+
+
+private:
+
+    bool mDestroyed;
+    bool mHasTexture;
     bool mDirty;
+
+    TextureId mTextureId;
 
     Transform::TData mLocalData;
     Transform mLocal;

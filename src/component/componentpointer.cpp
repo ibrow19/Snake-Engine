@@ -1,4 +1,5 @@
 #include <cassert>
+#include <snk/component/component.hpp>
 #include <snk/component/componentpointer.hpp>
 
 namespace snk {

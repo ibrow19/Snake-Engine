@@ -12,7 +12,7 @@ public:
 
     void init() {
 
-        getOwner().addChild(getContext().nManager.createNode(node::Id::Test2));
+        addChild(node::Id::Test2);
 
     }
 

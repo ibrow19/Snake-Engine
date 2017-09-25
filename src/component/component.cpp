@@ -9,10 +9,11 @@ Component::Component()
 : mContext(nullptr),
   mOwnerHandle() {}
 
+
 Component::~Component() {}
 
-void Component::init(Context& context,
-                     const NodeHandle& owner) {
+
+void Component::init(Context& context, const NodeHandle& owner) {
 
     mContext = &context;
     mOwnerHandle = owner;
@@ -25,17 +26,40 @@ void Component::init() {}
 void Component::update(float /* delta */) {}
 
 
-Context& Component::getContext() {
+Node& Component::getOwner() {
 
     assert(mContext != nullptr);
-    return *mContext;
+    return mContext->nManager.dereference(mOwnerHandle);
 
 }
 
 
-Node& Component::getOwner() {
+const NodeHandle& Component::getOwnerHandle() const {
 
-    return getContext().nManager.dereference(mOwnerHandle);
+    return mOwnerHandle;
+
+}
+
+
+bool Component::hasComponent(const NodeHandle& ownerHandle, ComponentId componentId) {
+
+    assert(mContext != nullptr);
+    return mContext->nManager.dereference(ownerHandle).hasComponent(componentId);
+
+}
+
+
+bool Component::hasComponent(ComponentId componentId) {
+
+    return hasComponent(mOwnerHandle, componentId);
+
+}
+
+
+void Component::addChild(NodeId nodeId) {
+
+    assert(mContext != nullptr);
+    mContext->nManager.dereference(mOwnerHandle).addChild(mContext->nManager.createNode(nodeId));
 
 }
 

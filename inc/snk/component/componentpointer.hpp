@@ -3,9 +3,10 @@
 
 #include <memory>
 #include <functional>
-#include <snk/component/component.hpp>
 
 namespace snk {
+
+class Component;
 
 /// Indirect Component Resource that can point to any component subclass.
 class ComponentPointer : public Resource {

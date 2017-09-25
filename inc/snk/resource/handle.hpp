@@ -11,6 +11,7 @@ namespace snk {
 /// Handle for resources.
 /// Template Tag to allow different handle types for different resources for 
 /// compile time safety.
+/// A null handle has the counter zero.
 template<typename Tag>
 class Handle {
 public:

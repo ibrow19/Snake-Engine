@@ -9,8 +9,8 @@ namespace snk {
 Node::Node()
 : mDestroyed(false),
   mHasTexture(false),
-  mTextureId(0),
   mDirty(true),  // Must be true initially to initialise world transform
+  mTextureId(0),
   mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
   mLocal(),
   mWorld(),
@@ -68,7 +68,7 @@ bool Node::hasComponent(ComponentId componentId) const {
 }
 
 
-ComponentHandle Node::getComponent(ComponentId componentId) const {
+const ComponentHandle& Node::getComponent(ComponentId componentId) const {
 
     if (!hasComponent(componentId)) {
 
@@ -78,34 +78,6 @@ ComponentHandle Node::getComponent(ComponentId componentId) const {
     return mComponents.at(componentId);
 
 }
-
-
-//void Node::init(const NodeHandle& handle,
-//                const NodeData& data) {
-//
-//    mHasTexture = data.hasTexture;
-//    mTextureId = data.textureId;
-//
-//    mTManager = &tManager;
-//    mCManager = &cManager;
-//    mNManager = &nManager;
-//
-//    // Add components.
-//    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
-//
-//        // TODO: it may be useful to keep handle of node as member variable.
-//        addComponent(*it, handle);
-//
-//    }
-//
-//    // Initialise componenets once all of them have been added.
-//    for (auto it = data.components.cbegin(); it != data.components.cend(); ++it) {
-//
-//        mCManager->dereference(*it, mComponents[*it]).init();
-//
-//    }
-//
-//}
 
 
 void Node::render(TextureManager& tManager, NodeManager& nManager) {
