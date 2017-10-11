@@ -26,6 +26,8 @@ add_definitions(-Wall -Wextra -std=c++11)
 
 # Include directories for library.
 set(INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/inc 
+                 ${GLEW_INCLUDE_DIR}
+                 ${OpenGL_INCLUDE_DIRS}
                  ${SDL2_INCLUDE_DIR}
                  ${SDL2_IMAGE_INCLUDE_DIRS}
                  ${RAPIDXML_INCLUDE_DIR})
