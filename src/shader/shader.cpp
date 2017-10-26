@@ -137,9 +137,9 @@ GLuint loadShader(const std::string& path, GLenum type) {
 
 std::string getContents(const std::string& path) {
 
-    std::ifstream inFile(path, std::ios::in);
-
-    if (!inFile) {
+    std::ifstream inFile;
+    inFile.open(path);
+    if (!inFile.is_open()) {
 
         // Exception.
         throw SnakeException("Failed to open file: " + path);
@@ -148,9 +148,10 @@ std::string getContents(const std::string& path) {
 
     std::string contents;
     std::string line;
-    while (!inFile.eof()) {
 
-        std::getline(inFile, line);
+    // TODO: test.
+    while (std::getline(inFile, line)) {
+        
         contents += (line + '\n');
 
     }
@@ -161,9 +162,10 @@ std::string getContents(const std::string& path) {
 }
 
 
+// TODO: test.
 std::string getProgramLog(GLuint programId) {
 
-    if (!glIsProgram) {
+    if (!glIsProgram(programId)) {
 
         throw SnakeException("Querying program log with invalid Id");
 
@@ -190,7 +192,7 @@ std::string getProgramLog(GLuint programId) {
 
 std::string getShaderLog(GLuint shaderId) {
 
-    if (!glIsShader) {
+    if (!glIsShader(shaderId)) {
 
         throw SnakeException("Querying shader log with invalid Id");
 

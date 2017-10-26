@@ -2,7 +2,7 @@
 
 namespace snk {
 
-IHandlerFactory::IHandlerFactory(unsigned int iHandlerCount) 
+IHandlerFactory::IHandlerFactory(IHandlerId iHandlerCount) 
 : mIHandlerTypes(iHandlerCount) {}
 
 

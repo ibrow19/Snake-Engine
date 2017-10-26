@@ -8,7 +8,7 @@
 
 namespace snk {
 
-SceneManager::SceneManager(unsigned int sceneCount,
+SceneManager::SceneManager(SceneId sceneCount,
                            TextureManager& tManager,
                            IHandlerFactory& iFactory,
                            ComponentFactory& cFactory,

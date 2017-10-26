@@ -13,13 +13,13 @@ namespace snk {
 class ComponentFactory {
 public:
 
-    ComponentFactory(unsigned int componentCount);
+    ComponentFactory(ComponentId componentCount);
 
     template<typename T>
     void registerComponent(ComponentId componentId);
     std::unique_ptr<Component> createComponent(ComponentId componentId) const;
 
-    unsigned int getComponentCount() const;
+    ComponentId getComponentCount() const;
 
 private:
 

@@ -16,11 +16,11 @@ namespace snk {
 class Game {
 public:
 
-    Game(unsigned int textureCount,
-         unsigned int iHandlerCount,
-         unsigned int componentCount,
-         unsigned int nodeCount,
-         unsigned int sceneCount);
+    Game(TextureId textureCount,
+         IHandlerId iHandlerCount,
+         ComponentId componentCount,
+         NodeId nodeCount,
+         SceneId sceneCount);
 
     ~Game();
 
@@ -116,7 +116,6 @@ private:
     ComponentFactory mCFactory;
     NodeFactory mNFactory;
     SceneManager mSManager;
-
 
 };
 

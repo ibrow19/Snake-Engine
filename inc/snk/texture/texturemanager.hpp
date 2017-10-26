@@ -16,7 +16,7 @@ namespace snk {
 class TextureManager {
 public:
 
-    TextureManager(unsigned int textureCount,
+    TextureManager(TextureId textureCount,
                    const std::string& defaultPath);
 
     void setShader(BasicShader& shader);

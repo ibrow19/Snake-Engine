@@ -7,7 +7,7 @@
 
 namespace snk {
 
-TextureManager::TextureManager(unsigned int textureCount, 
+TextureManager::TextureManager(TextureId textureCount, 
                                const std::string& defaultPath)
 : mShader(nullptr),
   mDefaultPath(defaultPath + '/'),

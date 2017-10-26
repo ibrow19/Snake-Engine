@@ -74,7 +74,7 @@ void Texture::addClip(const clip& newClip) {
 }
 
 
-void Texture::setClip(unsigned int clipIndex) {
+void Texture::setClip(ClipId clipIndex) {
 
     assert(clipIndex < mClips.size());
 
@@ -123,10 +123,12 @@ void Texture::setClip(unsigned int clipIndex) {
 }
 
 
-void Texture::render(const Transform& model, unsigned int clip) {
+void Texture::render(const Transform& model, ClipId clip) {
 
     assert(mShader != nullptr);
     mShader->setModel(model);
+
+    // Set new clip if changed.
     if (mCurrentClip != clip) {
 
         setClip(clip);
@@ -214,6 +216,9 @@ void Texture::initVbo() {
     // Allocate two vertex buffers. One for vertex positions and one for texture coordinates.
     glGenBuffers(2, mVboId);
 
+    // TODO: consider alternate approach for clips that doesn't involve constantly 
+    //       altering buffer contents.
+    // Using DYNAMIC_DRAW as buffer must be changed for different clips.
     // Fill first buffer with vertex positions.
     glBindBuffer(GL_ARRAY_BUFFER, mVboId[0]);
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(VertexPos), vertices, GL_DYNAMIC_DRAW);

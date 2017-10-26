@@ -12,11 +12,11 @@
 
 namespace snk {
 
-Game::Game(unsigned int textureCount,
-           unsigned int iHandlerCount,
-           unsigned int componentCount,
-           unsigned int nodeCount,
-           unsigned int sceneCount)
+Game::Game(TextureId textureCount,
+           IHandlerId iHandlerCount,
+           ComponentId componentCount,
+           NodeId nodeCount,
+           SceneId sceneCount)
 : mTitle(""),
   mWidth(1240),
   mHeight(720),
@@ -178,7 +178,7 @@ void Game::setInitialScene(SceneId sceneId) {
 
 void Game::initSDL() const {
 
-    std::cout << "initialising SDL.." << std::endl;
+    std::cout << "initialising SDL..." << std::endl;
 
     bool success = true;
 
@@ -193,7 +193,6 @@ void Game::initSDL() const {
     } else {
 
         // Set OpenGl version as 3.2 core.
-        // TODO: possibly define version numbers somewhere.
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
@@ -234,9 +233,10 @@ void Game::createWin() {
 
     }
 
+    int anchorFlag = SDL_WINDOWPOS_UNDEFINED;
     mWin = SDL_CreateWindow(mTitle.c_str(),
-                            SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED,
+                            anchorFlag,
+                            anchorFlag,
                             mWidth,
                             mHeight,
                             mWinFlags);

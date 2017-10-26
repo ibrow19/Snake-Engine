@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <snk/shader/basic.hpp>
 #include <snk/resource/resource.hpp>
+#include <snk/identifiers.hpp>
 
 namespace snk {
 
@@ -41,7 +42,7 @@ public:
     /// Render transformed texture clip.
     /// \param model transform to use for rendering.
     /// \param clip texture clip to render.
-    void render(const Transform& model, unsigned int clip = 0);
+    void render(const Transform& model, ClipId clip = 0);
 
 private:
 
@@ -62,7 +63,7 @@ private:
 private:
 
     void loadFromFile(const std::string& path);
-    void setClip(unsigned int clip);
+    void setClip(ClipId clip);
     void initVbo();
     void initIbo();
     void destroyTexture();
@@ -88,7 +89,7 @@ private:
     GLuint mWidth;
     GLuint mHeight;
 
-    unsigned int mCurrentClip;
+    ClipId mCurrentClip;
     std::vector<clip> mClips;
 
 };

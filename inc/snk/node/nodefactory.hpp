@@ -14,7 +14,7 @@ class NodeManager;
 class NodeFactory {
 public:
 
-    NodeFactory(unsigned int nodeCount);
+    NodeFactory(NodeId nodeCount);
 
     /// Register components and textures that make up a node.
     void registerNode(NodeId nodeId, const NodeData& nodeData);

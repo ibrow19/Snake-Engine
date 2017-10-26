@@ -4,7 +4,7 @@
 
 namespace snk {
 
-ComponentFactory::ComponentFactory(unsigned int componentCount) 
+ComponentFactory::ComponentFactory(ComponentId componentCount) 
 : mComponentTypes(componentCount) {}
 
 
@@ -24,7 +24,7 @@ std::unique_ptr<Component> ComponentFactory::createComponent(ComponentId compone
 }
 
 
-unsigned int ComponentFactory::getComponentCount() const {
+ComponentId ComponentFactory::getComponentCount() const {
 
     return mComponentTypes.size();
 

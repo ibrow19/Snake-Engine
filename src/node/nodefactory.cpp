@@ -8,7 +8,7 @@
 
 namespace snk {
 
-NodeFactory::NodeFactory(unsigned int nodeCount)
+NodeFactory::NodeFactory(NodeId nodeCount)
 : mNodeTypes(nodeCount) {}
 
 

@@ -5,7 +5,7 @@
 
 namespace snk {
 
-// Timer to record time passed using SDL.
+/// Timer to record time passed using SDL.
 class Timer {
 public:
 

@@ -12,7 +12,7 @@ namespace snk {
 class IHandlerFactory {
 public:
 
-    IHandlerFactory(unsigned int iHandlerCount);
+    IHandlerFactory(IHandlerId iHandlerCount);
 
     template<typename T>
     void registerIHandler(IHandlerId iHandlerId);

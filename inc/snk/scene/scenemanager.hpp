@@ -13,7 +13,7 @@ namespace snk {
 class SceneManager {
 public:
 
-    SceneManager(unsigned int sceneCount,
+    SceneManager(SceneId sceneCount,
                  TextureManager& tManager,
                  IHandlerFactory& iFactory,
                  ComponentFactory& cFactory,
