@@ -26,7 +26,6 @@ public:
 
     // TODO: Add conversion of  NPOT textures to use POT space.
     Texture();
-    ~Texture();
 
     void reset();
 
@@ -43,6 +42,8 @@ public:
     /// \param model transform to use for rendering.
     /// \param clip texture clip to render.
     void render(const Transform& model, ClipId clip = 0);
+
+    void destroy();
 
 private:
 
@@ -66,7 +67,6 @@ private:
     void setClip(ClipId clip);
     void initVbo();
     void initIbo();
-    void destroyTexture();
 
 private:
 
@@ -75,7 +75,6 @@ private:
     /// Vertex array object ID.
     GLuint mVaoId;
 
-    // TODO: these could be split into separate variables for clarity.
     /// Vertex buffer object ID.
     /// Stores attributes: vertex positions and texture coordinates.
     GLuint mVboId[2];

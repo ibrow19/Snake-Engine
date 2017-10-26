@@ -25,6 +25,12 @@ public:
     /// Register a texture with specified Id and path.
     void registerTexture(TextureId textureId, const std::string& path);
 
+    // Load all initialised textures.
+    void loadTextures();
+
+    // Unload all loaded textures.
+    void unloadTextures();
+
     /// Gets specified texture. If texture is not currently loaded, 
     /// then it must be loaded from file first.
     Texture& getTexture(TextureId textureId);

@@ -56,6 +56,10 @@ void Game::run() {
     BasicShader shader(mWidth, mHeight);
     mTManager.setShader(shader);
 
+    // TODO: load textures based on scene rather than loading every texture all the time.
+    // Load all textures.
+    mTManager.loadTextures();
+
     Timer timer;
     timer.start();
 
@@ -91,11 +95,12 @@ void Game::run() {
         }
 
     }
+
+    // Unload all loaded textures when finished.
+    mTManager.unloadTextures();
     
     // Destroy window.
     destroyWin();
-
-    // TODO: clear textures from textureManager as they no longer have a valid shader.
 
 }
 

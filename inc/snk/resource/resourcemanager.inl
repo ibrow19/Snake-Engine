@@ -43,16 +43,34 @@ Resource& ResourceManager<Resource, Tag>::create(ResHandle& handle) {
 template<typename Resource, typename Tag>
 void ResourceManager<Resource, Tag>::destroy(const ResHandle& handle) {
 
+    if (handle.getIndex() < mResources.size()) {
+
+        StoredResource& res = mResources[handle.getIndex()];
+        if (res.counter == handle.getCounter()) {
+
+            res.counter = 0;
+            res.resource.reset();
+
+        }
+
+    }
+
+}
+
+
+template<typename Resource, typename Tag>
+void ResourceManager<Resource, Tag>::checkDestroy(const ResHandle& handle) {
+
     if (handle.getIndex() >= mResources.size()) {
 
-        throw SnakeException("Handle index out of bounds");
+        throw SnakeException("Handle index out of bounds for resource destruction");
 
     }
 
     StoredResource& res = mResources[handle.getIndex()];
     if (res.counter != handle.getCounter()) {
 
-        throw SnakeException("Handle counter does not match");
+        throw SnakeException("Handle counter does not match for resource destruction");
 
     }
 
@@ -62,9 +80,6 @@ void ResourceManager<Resource, Tag>::destroy(const ResHandle& handle) {
 }
 
 
-// TODO: compare exception approach for invalid handles to returning nullptr on failure.
-//       current implementation assumes zero cost exceptions are faster than potetntial
-//       branch misprediction from checking nullptr.
 template<typename Resource, typename Tag>
 Resource& ResourceManager<Resource, Tag>::dereference(const ResHandle& handle) {
 
@@ -90,6 +105,35 @@ template<typename Resource, typename Tag>
 const Resource& ResourceManager<Resource, Tag>::dereference(const ResHandle& handle) const {
 
     return const_cast<ResourceManager<Resource, Tag>*>(this)->dereference(handle);
+
+}
+
+
+template<typename Resource, typename Tag>
+Resource* ResourceManager<Resource, Tag>::getPointer(const ResHandle& handle) {
+
+    if (handle.getIndex() >= mResources.size()) {
+
+        return nullptr;
+
+    }
+
+    StoredResource& res = mResources[handle.getIndex()];
+    if (res.counter != handle.getCounter()) {
+
+        return nullptr;
+
+    }
+
+    return &(res.resource);
+
+}
+
+
+template<typename Resource, typename Tag>
+const Resource* ResourceManager<Resource, Tag>::getPointer(const ResHandle& handle) const {
+
+    return const_cast<ResourceManager<Resource, Tag>*>(this)->getPointer(handle);
 
 }
 

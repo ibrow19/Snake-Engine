@@ -45,10 +45,20 @@ public:
     /// \return the created resource to carry out additional initialisation.
     Resource& create(ResHandle& handle);
 
+    /// Destroy resource. If handle is invalid then does nothing.
     void destroy(const ResHandle& handle);
+
+    /// Destroy resource. Throw exception if handle is invalid.
+    void checkDestroy(const ResHandle& handle);
 
     Resource& dereference(const ResHandle& handle);
     const Resource& dereference(const ResHandle& handle) const;
+
+    // Pointer methods work like dereference but return nullptr on failure
+    // rather than throwing an exception.
+    // Useful for when it is known that resource could be missing.
+    Resource* getPointer(const ResHandle& handle);
+    const Resource* getPointer(const ResHandle& handle) const;
 
     iterator begin();
     iterator end();

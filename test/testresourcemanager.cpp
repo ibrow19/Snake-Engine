@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(destroy1) {
     manager.create(h); 
     manager.destroy(h);
     BOOST_CHECK_THROW(manager.dereference(h), snk::SnakeException);
-    BOOST_CHECK_THROW(manager.destroy(h), snk::SnakeException);
+    BOOST_CHECK_THROW(manager.checkDestroy(h), snk::SnakeException);
 
 }
 
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(destroy2) {
 
     TestHandle h(143827, 21387);
     BOOST_CHECK_THROW(manager.dereference(h), snk::SnakeException);
-    BOOST_CHECK_THROW(manager.destroy(h), snk::SnakeException);
+    BOOST_CHECK_THROW(manager.checkDestroy(h), snk::SnakeException);
 
 }
 

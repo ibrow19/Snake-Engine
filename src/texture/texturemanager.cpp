@@ -54,6 +54,38 @@ void TextureManager::registerTexture(TextureId textureId, const std::string& pat
 }
 
 
+void TextureManager::loadTextures() {
+
+    for (TextureId i = 0; i < mTextureData.size(); ++i) {
+
+        TextureData& data = mTextureData[i];
+        if (data.init) {
+
+            Texture* texture = mTextures.getPointer(data.handle);
+            if (texture == nullptr) {
+
+                loadTexture(i);
+
+            }
+
+        }
+
+    }
+
+}
+
+
+void TextureManager::unloadTextures() {
+
+    for (auto it = mTextureData.begin(); it != mTextureData.end(); ++it) {
+
+        mTextures.destroy(it->handle);
+
+    }
+
+}
+
+
 Texture& TextureManager::getTexture(TextureId textureId) {
 
     if (textureId >= mTextureData.size()) {
@@ -68,15 +100,16 @@ Texture& TextureManager::getTexture(TextureId textureId) {
 
     }
 
-    try {
-
-        return mTextures.dereference(mTextureData[textureId].handle);
-
-    } catch (SnakeException& e) {
+    Texture* texture = mTextures.getPointer(data.handle);
+    if (texture == nullptr) {
 
         loadTexture(textureId);
-        return mTextures.dereference(mTextureData[textureId].handle);
-        
+        return mTextures.dereference(data.handle);
+
+    } else {
+
+        return *texture;
+
     }
 
 }

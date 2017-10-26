@@ -19,16 +19,9 @@ Texture::Texture()
   mCurrentClip(0) {}
 
 
-Texture::~Texture() {
-
-    destroyTexture();
-
-}
-
-
 void Texture::reset() {
 
-    destroyTexture();
+    destroy();
     mShader = nullptr;
     mVaoId = 0;
     mVboId[0] = 0;
@@ -247,7 +240,7 @@ void Texture::initIbo() {
 }
 
 
-void Texture::destroyTexture() {
+void Texture::destroy() {
 
     glDeleteVertexArrays(1, &mVaoId); 
     glDeleteBuffers(2, mVboId); 
