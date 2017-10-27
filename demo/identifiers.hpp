@@ -1,11 +1,14 @@
 #ifndef DEMO_IDENTIFIER_HEADER
 #define DEMO_IDENTIFIER_HEADER
 
+#include <snk/identifiers.hpp>
+
 namespace texture {
 
-enum Id {
+enum Id : snk::TextureId {
 
-    Test,
+    Ship,
+    Turret,
     Count
 
 };
@@ -15,9 +18,9 @@ enum Id {
 
 namespace iHandler {
 
-enum Id {
+enum Id : snk::IHandlerId {
 
-    Test,
+    Input,
     Count
 
 };
@@ -27,10 +30,12 @@ enum Id {
 
 namespace component {
 
-enum Id {
+enum Id : snk::ComponentId {
 
-    Test1,
-    Test2,
+    Ship,
+    Turret,
+    TurretRotation,
+    ShipRotation,
     Count
 
 };
@@ -40,10 +45,10 @@ enum Id {
 
 namespace node {
 
-enum Id {
+enum Id : snk::NodeId {
 
-    Test1,
-    Test2,
+    Ship,
+    Turret,
     Count
 
 };
@@ -53,9 +58,9 @@ enum Id {
 
 namespace scene {
 
-enum Id {
+enum Id : snk::SceneId {
 
-    Test,
+    Scene,
     Count
 
 };
