@@ -72,7 +72,7 @@ const ComponentHandle& Node::getComponent(ComponentId componentId) const {
 
     if (!hasComponent(componentId)) {
 
-        throw SnakeException("Attempting to get component node does not have");
+        throw SnakeException("Attempting to get component that node does not have");
 
     }
     return mComponents.at(componentId);
@@ -263,15 +263,6 @@ void Node::translate(float x, float y) {
 }
 
 
-//void Node::addComponent(ComponentId componentId, const NodeHandle& owner) {
-//
-//    // Node type initialisation should ensure that there are no duplicate components.
-//    assert(mComponents.find(componentId) == mComponents.end());
-//    mComponents[componentId] = mCManager->createComponent(componentId, owner, *mNManager);
-//
-//}
-
-
 void Node::render(TextureManager& tManager,
                   NodeManager& nManager,
                   const Transform& world, 
@@ -295,9 +286,13 @@ void Node::render(TextureManager& tManager,
         texture.render(mWorld);
 
     }
+
+    // Factor out origin translation for children.
+    Transform originless(mWorld);
+    originless.translate(mLocalData.origin);
     for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
 
-        nManager.dereference(*it).render(tManager, nManager, mWorld, dirty);
+        nManager.dereference(*it).render(tManager, nManager, originless, dirty);
 
     }
 
