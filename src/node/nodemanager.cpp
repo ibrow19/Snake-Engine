@@ -24,6 +24,7 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
     if (data.hasTexture) {
 
         newNode.setTexture(data.textureId);
+        //std::cout << "Set Texture" << std::endl;
 
     }
     for (auto it = data.components.begin(); it != data.components.end(); ++it) {
@@ -33,7 +34,9 @@ NodeHandle NodeManager::createNode(NodeId nodeId) {
     }
     for (auto it = data.components.begin(); it != data.components.end(); ++it) {
 
-        mCManager.dereference(*it, newNode.getComponent(*it)).init();
+        // Note: cant use newNode here in case new component creates
+        //       more nodes invalidating reference.
+        mCManager.dereference(*it, mNodes.dereference(newHandle).getComponent(*it)).init();
 
     }
     return newHandle;
