@@ -290,6 +290,9 @@ void Game::createWin() {
     // Upon success initialise the window clear color.
     } else {
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+
         glClearColor(1.f, 1.f, 1.f, 1.f);
 
         // Note: explicitly setting viewport not necessary on initialisation
