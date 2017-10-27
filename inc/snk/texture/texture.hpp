@@ -45,6 +45,14 @@ public:
 
     void destroy();
 
+    /// Get the width of a clip.
+    /// \param clipId Id of clip to get width of.
+    float getWidth(ClipId clipId = 0) const;
+
+    /// Get the height of a clip.
+    /// \param clipId Id of clip to get height of.
+    float getHeight(ClipId clipId = 0) const;
+
 private:
 
     struct VertexPos {

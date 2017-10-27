@@ -133,6 +133,22 @@ void Texture::render(const Transform& model, ClipId clip) {
 }
 
 
+float Texture::getWidth(ClipId clipId) const {
+
+    assert(clipId < mClips.size());
+    return mClips[clipId].width;
+
+}
+
+
+float Texture::getHeight(ClipId clipId) const {
+
+    assert(clipId < mClips.size());
+    return mClips[clipId].height;
+
+}
+
+
 void Texture::loadFromFile(const std::string& path) {
 
     SDL_Surface* loaded = IMG_Load(path.c_str());
