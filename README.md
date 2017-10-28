@@ -347,7 +347,8 @@ and components.
 ```
 
 Finally, the scene must be initialised with the input handler to use and the node
-to act as the root in its scene graph. The scene is then set as the initial scene.
+to act as the root in its scene graph. Similar to nodes, the scene properties are
+defined with the `snk::SceneData` struct. The scene is then set as the initial scene.
 
 ```cpp
     snk::SceneData sData;
@@ -360,7 +361,7 @@ to act as the root in its scene graph. The scene is then set as the initial scen
 While just a single scene is used in this example, the engine supports multiple
 scenes and transitions between them.
 
-Finally, the game is run
+Finally, can be run.
 
 ```cpp
     game.run();
