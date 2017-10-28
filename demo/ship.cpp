@@ -1,15 +1,23 @@
 #include "ship.hpp"
 
-void ShipComponent::reset() {}
+ShipComponent::ShipComponent()
+: mSpeed(0.f),
+  mBoost(false) {}
+
+
+void ShipComponent::reset() {
+
+    mSpeed = 0.f;
+    mBoost = false;
+    
+}
 
 
 void ShipComponent::init() {
 
-    mSpeed = 0.f;
-    mBoost = false;
     getOwner().setClip(clip::Ship::Body);
     getOwner().setOrigin(40.f, 50.f);
-    getOwner().translate(600.f, 400.f);
+    getOwner().setTranslation(600.f, 400.f);
     addChild(node::Id::Turret);
 
 }

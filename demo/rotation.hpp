@@ -10,8 +10,8 @@
 class RotationComponent : public snk::Component {
 public:
 
+    RotationComponent();
     void reset();
-    void init();
     void update(float delta);
     void setRight(bool right);
     void setLeft(bool left);

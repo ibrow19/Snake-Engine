@@ -1,10 +1,12 @@
 #include "rotation.hpp"
 
-void RotationComponent::reset() {}
+RotationComponent::RotationComponent()
+: mRight(false),
+  mLeft(false) {}
 
 
-void RotationComponent::init() {
-
+void RotationComponent::reset() {
+    
     mRight = false;
     mLeft = false;
 

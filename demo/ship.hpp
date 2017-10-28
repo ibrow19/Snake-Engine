@@ -12,6 +12,7 @@
 class ShipComponent : public snk::Component {
 public:
 
+    ShipComponent();
     void reset();
     void init();
     void update(float delta);
