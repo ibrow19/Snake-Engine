@@ -25,6 +25,7 @@ void ShipComponent::init() {
 
 void ShipComponent::update(float delta) {
 
+    // Accelerate if boosting.
     if (mBoost) {
 
         mSpeed += SHIP_ACCELERATION * delta;
@@ -36,12 +37,14 @@ void ShipComponent::update(float delta) {
 
     }
 
+    // Update position based on speed and rotation.
     snk::Transform r;
     r.rotate(getOwner().getRotation());
     snk::Vector2f velocity(0.f, -mSpeed);
     velocity = r * velocity;
     getOwner().translate(velocity);
 
+    // Decelerate.
     mSpeed -= SHIP_DECELERATION * delta;
     if (mSpeed < 0.f) {
 
