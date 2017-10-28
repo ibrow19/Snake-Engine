@@ -25,7 +25,6 @@ public:
 
     // Mark the node and its children for removal so that once iteration for
     // updating is finished, the node can be destroyed by node manager.
-    // TODO: call component destroy methods.
     void destroy();
     
     // Check if node is marked for removal.
@@ -34,7 +33,6 @@ public:
     /// Add a component node to this node.
     void addComponent(ComponentId componentId, const ComponentHandle& handle);
 
-    // TODO: decide whether handles are gonna be passed by value or not.
     bool hasComponent(ComponentId componentId) const;
     const ComponentHandle& getComponent(ComponentId componentId) const;
 
@@ -42,6 +40,9 @@ public:
     
     /// Set the texture used by this node.
     void setTexture(TextureId textureId);
+    
+    /// Set the texture clip used by this node.
+    void setClip(ClipId clipId);
 
     /// Render this node and its children.
     /// \param tManager texture manager to use for drawing textures.
@@ -81,7 +82,6 @@ public:
     void translate(const Vector2f& v);
     void translate(float x, float y);
 
-
 private:
 
     /// Render this node and then it's children.
@@ -104,6 +104,7 @@ private:
     bool mDirty;
 
     TextureId mTextureId;
+    ClipId mClipId;
 
     Transform::TData mLocalData;
     Transform mLocal;

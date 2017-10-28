@@ -11,6 +11,7 @@ Node::Node()
   mHasTexture(false),
   mDirty(true),  // Must be true initially to initialise world transform
   mTextureId(0),
+  mClipId(0),
   mLocalData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}}),
   mLocal(),
   mWorld(),
@@ -22,11 +23,12 @@ void Node::reset() {
 
     mDestroyed = false;
     mHasTexture = false;
-    mDirty = true;  // Must be true initially to initialise world transform
+    mDirty = true;
     mLocalData = Transform::TData({{0.f, 0.f}, 0.f, {1.f, 1.f}, {0.f, 0.f}});
     mLocal = Transform();
     mWorld = Transform();
     mTextureId = 0;
+    mClipId = 0;
     mComponents.clear();
     mChildren.clear();
 
@@ -37,6 +39,14 @@ void Node::setTexture(TextureId textureId) {
 
     mHasTexture = true;
     mTextureId = textureId;
+
+}
+
+
+void Node::setClip(ClipId clipId) {
+
+    assert(mHasTexture);
+    mClipId = clipId;
 
 }
 
@@ -88,23 +98,12 @@ void Node::render(TextureManager& tManager, NodeManager& nManager) {
 }
 
 
+// TODO: implement.
 void Node::destroy() {
 
-    //mDestroyed = true;
-    //for (auto it = mChildren.begin(); it != mChildren.end(); ++it) {
+    mDestroyed = true;
 
-    //    mNManager->dereference(*it);
-
-    //}
-
-    //// TODO: Destroying marked nodes should be the last thing that happens. This gives
-    ////       destroyed components to use the node's state for actions upon destruction.
-    //// Mark components for destruction.
-    //for (auto it = mComponents.begin(); it != mComponents.end(); ++it) {
-
-    //    // mCManager.dereference(it->first, it->second).destroy();
-
-    //}
+    // Mark components for destruction.
 
 }
 
@@ -283,7 +282,7 @@ void Node::render(TextureManager& tManager,
     if (mHasTexture) {
 
         Texture& texture = tManager.getTexture(mTextureId);
-        texture.render(mWorld);
+        texture.render(mWorld, mClipId);
 
     }
 
