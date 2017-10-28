@@ -19,14 +19,20 @@ int main() {
                        scene::Id::Count);
 
         game.setTitle("Game");
+
+        // Register textures.
         game.registerTexture(texture::Id::Ship, "ship.xml");
-        game.registerTexture(texture::Id::Turret, "turret.xml");
+
+        // Register Input handler.
         game.registerIHandler<Input>(iHandler::Id::Input);
+
+        // Register Components.
         game.registerComponent<ShipComponent>(component::Id::Ship);
         game.registerComponent<TurretComponent>(component::Id::Turret);
         game.registerComponent<RotationComponent>(component::Id::ShipRotation);
         game.registerComponent<RotationComponent>(component::Id::TurretRotation);
 
+        // Register ship node.
         snk::NodeData nData;
         nData.hasTexture = true;
         nData.textureId = texture::Id::Ship;
@@ -34,12 +40,14 @@ int main() {
         nData.components.push_back(component::Id::ShipRotation);
         game.registerNode(node::Id::Ship, nData);
 
+        // Register turret node.
         nData.components.clear();
-        nData.textureId = texture::Id::Turret;
+        nData.textureId = texture::Id::Ship;
         nData.components.push_back(component::Id::Turret);
         nData.components.push_back(component::Id::TurretRotation);
         game.registerNode(node::Id::Turret, nData);
 
+        // Initialise scene.
         snk::SceneData sData;
         sData.rootId = node::Id::Ship;
         sData.iHandlerId = iHandler::Id::Input;

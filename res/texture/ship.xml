@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<texture path="ship.png">
+    <clip left="0" top="0" width="80" height= "100"/>
+    <clip left="80" top="0" width="30" height= "60"/>
+</texture>

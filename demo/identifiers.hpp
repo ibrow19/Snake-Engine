@@ -8,6 +8,19 @@ namespace texture {
 enum Id : snk::TextureId {
 
     Ship,
+    Count
+
+};
+
+}
+
+
+namespace clip {
+
+enum Ship : snk::ClipId {
+
+    All,
+    Body,
     Turret,
     Count
 
