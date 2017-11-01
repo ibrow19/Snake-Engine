@@ -40,7 +40,7 @@ void ShipComponent::update(float delta) {
     // Update position based on speed and rotation.
     snk::Transform r;
     r.rotate(getOwner().getRotation());
-    snk::Vector2f velocity(0.f, -mSpeed);
+    snk::Vector2f velocity(0.f, -mSpeed * delta);
     velocity = r * velocity;
     getOwner().translate(velocity);
 
