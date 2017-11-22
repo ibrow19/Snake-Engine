@@ -50,13 +50,15 @@ Once built the demo can be run from the `build` directory with:
 Following is an introduction to how the engine works and how to use it with
 example code from the basic demo provided. The source code for the demo can be
 found in the `demo` directory. The demo has the player control a spaceship
-with a rotatable turret attached on top.
+with a rotatable turret attached on top. The spaceship can be controlled
+with `a`, `d` and `w`. The turret can be rotated with the left and right
+arrow keys.
 
 ### Nodes
 Each game object in the Snake Engine is a node in the scene graph. The scene
 graph is a tree that represents the current game state. Each node has
 a transformation representing its current translation, rotation and scale.
-A nodes global transform is equal to its own transform combined with the
+A node's global transform is equal to its own transform combined with the
 transformation of its parents in the scene graph back up to the root. 
 This means a node's children's transformations are relative to its own 
 transformation.  This is useful for defining relationships between game 
@@ -66,14 +68,14 @@ that nodes are rendered, each child is rendered in front of its parent.
 The demo involves a turret attached to a spaceship. This is a classic example
 of where the scene graph can be useful. The spaceship node attaches the
 turret node as a child. Then, whenever the spaceship moves, the turret
-automatically moves and rotates with it as the scene graph that the turret's
-position is always relative to the ship.
+automatically moves and rotates with it as the scene graph ensures that the 
+turret's position is always relative to the ship.
 
 ### Components
 On its own each node just consists of an arbitrary transformation. Logic and
 actions can be added to a node through components. In the demo there
 are three components. The `ShipComponent` defines behaviour unique to the spaceship
-body, the `TurretComponent` defines behaviour unique to the turret. The 
+body and the `TurretComponent` defines behaviour unique to the turret. The 
 `RotationComponent` defines rotation actions used by both the ship body and
 the turret. To define a valid component, it must be a subclass of the
 `snk::Component` class. Following is a description of what a component should
@@ -100,7 +102,7 @@ void ShipComponent::reset() {
 }
 ```
 Components can optionally implement an `init` function that is called just after the node
-the component is part of has been constructed (All of its components have been attached).
+the component is part of has been constructed (all of its components have been attached).
 This allows the component to carry out any initial actions on the node or other components.
 The component cannot carry out these operations involving its owner node in its constructor
 or `reset` function as when each of them are called the component has not yet been bound to 
@@ -177,7 +179,7 @@ void ShipComponent::setBoost(bool boost) {
 Identifiers for nodes and components (and more or less everything in the Snake Engine)
 are just indices. This can make it difficult to keep track of what code does
 and which nodes and components have which ID. Therefore it is recommended to use
-enumerations of each ID to make thing clearer. The `demo/identifiers.hpp` file
+enumerations of each ID to make code clearer. The `demo/identifiers.hpp` file
 shows an example of how this can be done. For example, each node identifier
 to be used is defined in an enum:
 
@@ -201,7 +203,7 @@ to the total number of different nodes. This is useful when initialising the Eng
 as it must be initialised with the total different types of nodes, components, textures etc.
 
 ### Textures
-In order to display our game objects we need textures to display them. By default,
+In order to display game objects, textures are required to display them. By default,
 the engine expects textures to be in the `res/texture` directory. Each texture
 requires an accompanying XML file defining properties of the texture. The XML
 file must define the relative path of the image to use for that texture and may
@@ -270,7 +272,7 @@ void Input::handleEvent(const SDL_Event& event, snk::CommandQueue& queue) {
 them into `Command` objects that can be understood by the game. These
 commands are added to the `CommandQueue` which holds all the commands
 that need to be processed in the current game scene. For example,
-in the above snippet when the 'w' key is pressed, a command causing
+in the above snippet when the `w` key is pressed, a command causing
 the spaceship to boost is added to the queue. That command is
 defined as follows:
 
@@ -361,7 +363,7 @@ defined with the `snk::SceneData` struct. The scene is then set as the initial s
 While just a single scene is used in this example, the engine supports multiple
 scenes and transitions between them.
 
-Finally, can be run.
+Finally, the game can be run.
 
 ```cpp
     game.run();

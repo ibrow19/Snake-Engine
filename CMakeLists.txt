@@ -48,7 +48,7 @@ target_link_libraries(${LIB_NAME} ${GLEW_LIBRARIES}
 # Demo executable for experimenting with engine.
 set(DEMO_DIR ${PROJECT_SOURCE_DIR}/demo)
 file(GLOB_RECURSE DEMO_SOURCES ${DEMO_DIR}/*.cpp)
-set(DEMO_NAME "game")
+set(DEMO_NAME "demo")
 include_directories(${DEMO_DIR})
 
 add_executable(${DEMO_NAME} ${DEMO_SOURCES})
